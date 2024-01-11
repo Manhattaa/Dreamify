@@ -9,7 +9,7 @@ namespace Dreamify.Services
 {
     public interface IArtistsHelper
     {
-        public IResult AddArtist(int artistId, string name, int genreId, ArtistDto artistDto);
+        public IResult AddArtist(int genreId, ArtistDto artistDto, IArtistsHelper artistHelper);
 
 
         public IResult GetArtists();
@@ -23,7 +23,7 @@ namespace Dreamify.Services
             artistContext = context;
         }
 
-        public IResult AddArtist(int artistId, string name, int genreId, ArtistDto artistDto)
+        public IResult AddArtist(int genreId, ArtistDto artistDto, IArtistsHelper artistHelper)
         {
             try
             {

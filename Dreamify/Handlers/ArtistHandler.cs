@@ -11,6 +11,17 @@ namespace Dreamify.Handlers
 
         // Post artists
 
+        public IResult AddArtist(int genreId, ArtistDto artistDto, IArtistsHelper artistHelper)
+        {
+            artistHelper.AddArtist(genreId, artistDto, artistHelper);
+            return Results.StatusCode((int)HttpStatusCode.Created);
+        }
+        public IResult GetArtist(IArtistsHelper artistHelper)
+        {
+            artistHelper.GetArtists();
+            return Results.StatusCode((int)HttpStatusCode.OK);
+        }
+
         // Post songs
         public static IResult AddSong(int artistId, int genreId, SongDto song, ISongsHelper songHelper)
         {
