@@ -5,6 +5,8 @@ namespace Dreamify.Services
     public interface IArtistsHelper
     {
         public IResult AddArtistToDb(ApplicationContext context);
+
+        public IResult GetArtists(ApplicationContext context);
     }
 
     public class ArtistsHelper : IArtistsHelper
