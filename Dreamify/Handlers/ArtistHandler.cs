@@ -17,5 +17,11 @@ namespace Dreamify.Handlers
             songHelper.AddSong(artistId, genreId, song);
             return Results.StatusCode((int)HttpStatusCode.Created);
         }
+
+        public static IResult GetSong(ISongsHelper songHelper)
+        {
+            songHelper.GetSongs();
+            return Results.StatusCode((int)HttpStatusCode.OK);
+        }
     }
 }
