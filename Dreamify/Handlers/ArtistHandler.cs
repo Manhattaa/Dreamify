@@ -7,21 +7,25 @@ namespace Dreamify.Handlers
 {
     public class ArtistHandler
     {
-        // Post genres
+        // Genres
 
-        // Post artists
+        // Artists
 
-        // Post songs
+        // Songs
         public static IResult AddSong(int artistId, int genreId, SongDto song, ISongsHelper songHelper)
         {
             songHelper.AddSong(artistId, genreId, song);
             return Results.StatusCode((int)HttpStatusCode.Created);
         }
 
-        public static IResult GetSong(ISongsHelper songHelper)
+        public static IResult GetSongs(ISongsHelper songHelper)
         {
-            songHelper.GetSongs();
-            return Results.StatusCode((int)HttpStatusCode.OK);
+            return Results.Json(songHelper.GetSongs());
+        }
+
+        public static IResult GetUserSongs(int userId, ISongsHelper songHelper)
+        {
+            return Results.Json(songHelper.GetUserSongs(userId));
         }
     }
 }
