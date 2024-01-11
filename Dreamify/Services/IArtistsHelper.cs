@@ -1,19 +1,67 @@
 ﻿using Dreamify.Data;
+using Dreamify.Models.Dtos;
+using Dreamify.Models;
+using Dreamify.Models.ViewModels;
+using System.Net;
+using Microsoft.EntityFrameworkCore;
 
 namespace Dreamify.Services
 {
     public interface IArtistsHelper
     {
-        public IResult AddArtistToDb(ApplicationContext context);
+        public IResult AddArtist(int artistId, string name, int genreId, ArtistDto artistDto);
 
-        public IResult GetArtists(ApplicationContext context);
+
+        public IResult GetArtists();
     }
 
     public class ArtistsHelper : IArtistsHelper
     {
-        public IResult AddSongtoDb(ApplicationContext context)
+        private ApplicationContext artistContext { get; set; }
+        public ArtistsHelper(ApplicationContext context)
         {
-            return Results.Ok();
+            artistContext = context;
+        }
+
+        public IResult AddArtist(int artistId, string name, int genreId, ArtistDto artistDto)
+        {
+            try
+            {
+                Genre genre = artistContext.Genres.Where(g => g.GenreId == genreId).Single();
+
+                Artist artist = new Artist()
+                {
+                    Name = artistDto.Name,
+                    Description = artistDto.Description,
+                    Genre = genre
+                };
+
+                artistContext.Artists.Add(artist);
+                artistContext.SaveChanges();
+
+                return Results.StatusCode((int)HttpStatusCode.Created);
+            }
+            catch (Exception ex)
+            {
+                return Results.Text(ex.Message);
+            }
+        }
+        public IResult GetArtists()
+        {
+            try
+            {
+                List<ArtistsViewModel> artists = artistContext.Artists
+                    .Select(a => new ArtistsViewModel
+                    {
+                        Name = a.Name,
+                    })
+                    .ToList();
+                return Results.Json(artists);
+            }
+            catch (Exception ex)
+            {
+                return Results.Text(ex.Message);
+            }
+            }
         }
     }
-}
