@@ -2,6 +2,7 @@
 using Dreamify.Models;
 using Dreamify.Models.Dtos;
 using Dreamify.Models.ViewModels;
+using Microsoft.EntityFrameworkCore;
 using System.Net;
 
 namespace Dreamify.Services
@@ -10,8 +11,8 @@ namespace Dreamify.Services
     public interface ISongsHelper
     {
         public IResult AddSong(int artistId, int genreId, SongDto songDto);
-
         public IResult GetSongs();
+        public IResult GetUserSongs(int userId);
     }
 
     public class SongsHelper : ISongsHelper
@@ -63,6 +64,7 @@ namespace Dreamify.Services
         {
             try
             {
+                // Create list of all songs 
                 List<SongsViewModel> songs = _context.Songs
                     .Select(s => new SongsViewModel
                     {
@@ -71,6 +73,41 @@ namespace Dreamify.Services
                     .ToList();
 
                 return Results.Json(songs);
+            }
+            catch (Exception ex)
+            {
+                return Results.Text(ex.Message);
+            }
+        }
+
+        public IResult GetUserSongs(int userId)
+        {
+            try
+            {
+                // Get user and their songs from id
+                User user = _context.Users
+                .Include(u => u.Songs)
+                .Where(u => u.UserId == userId)
+                .Single();
+
+                if (user == null) 
+                    return Results.NotFound($"No user found with id {userId}");
+
+
+                // Create viewmodel consisting of username and a list of all songs
+                UserSongsViewModel userSongs = new UserSongsViewModel
+                {
+                    Username = user.Username,
+                    Songs = user.Songs
+                    .Select(u => new SongsViewModel
+                    {
+                        Title= u.Title,
+                    })
+                    .ToList()
+                };
+
+
+                return Results.Json(userSongs);
             }
             catch (Exception ex)
             {
