@@ -1,6 +1,7 @@
 ﻿using Dreamify.Data;
 using Dreamify.Models;
 using Dreamify.Models.Dtos;
+using Dreamify.Models.ViewModels;
 using System.Net;
 
 namespace Dreamify.Services
@@ -9,6 +10,8 @@ namespace Dreamify.Services
     public interface ISongsHelper
     {
         public IResult AddSong(int artistId, int genreId, SongDto songDto);
+
+        public IResult GetSongs();
     }
 
     public class SongsHelper : ISongsHelper
@@ -49,6 +52,25 @@ namespace Dreamify.Services
                 _context.SaveChanges();
 
                 return Results.StatusCode((int)HttpStatusCode.Created);
+            }
+            catch (Exception ex)
+            {
+                return Results.Text(ex.Message);
+            }
+        }
+
+        public IResult GetSongs()
+        {
+            try
+            {
+                List<SongsViewModel> songs = _context.Songs
+                    .Select(s => new SongsViewModel
+                    {
+                        Title = s.Title,
+                    })
+                    .ToList();
+
+                return Results.Json(songs);
             }
             catch (Exception ex)
             {
