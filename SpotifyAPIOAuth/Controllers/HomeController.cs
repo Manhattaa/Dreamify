@@ -10,7 +10,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace ConsumeSpotifyWebAPI.Controllers
+namespace SpotifyAPIOAuth.Controllers
 {
     public class HomeController : Controller
     {
