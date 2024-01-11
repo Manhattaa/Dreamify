@@ -8,6 +8,7 @@ namespace SpotifyAPIOAuth.Services
     {
         private readonly HttpClient _httpClient;
 
+        //Declaring HTTPClient within Constructor for the injection
         public SpotifyService(HttpClient httpClient)
         {
             _httpClient = httpClient;
