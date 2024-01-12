@@ -21,6 +21,9 @@ namespace Dreamify
             app.MapGet("/songs", ArtistHandler.GetSongs);
             app.MapGet("/users/{userId}/songs", ArtistHandler.GetUserSongs);
             app.MapPost("/artists/{artistId}/genre/{genreId}/songs", ArtistHandler.AddSong);
+            app.MapPost("/users/{userId}/artists/{artistId}", UserHandler.ConnectUserToArtist);
+            app.MapPost("/users/{userId}/genres/{genreId}", UserHandler.ConnectUserToGenre);
+            app.MapPost("/users/{userId}/songs/{songId}", UserHandler.ConnectUserToSong);
 
             app.Run();
         }
