@@ -18,6 +18,8 @@ namespace Dreamify
 
             app.MapGet("/", () => "Hello World!");
 
+            app.MapGet("/songs", ArtistHandler.GetSongs);
+            app.MapGet("/users/{userId}/songs", ArtistHandler.GetUserSongs);
             app.MapPost("/artists/{artistId}/genre/{genreId}/songs", ArtistHandler.AddSong);
 
             app.Run();
