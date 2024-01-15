@@ -67,7 +67,7 @@ dotnet build
 * /user/{userId} - **Get a Specific User**
 * /user/{userId}/artists - **Get a Specific User and Artists**
 * /user/{userId}/genres - **Get a Specific User and Interests**
-* /user/{userId}/songs - **Get a Specific User and Tracks**
+* /user/{userId}/songs - **Get a Specific User and Songs**
 
   
 * /artists - **Get all Artists**
@@ -77,7 +77,7 @@ dotnet build
 
 * /user/{userId}/artist/{artistId} - **Link a Specific User and Artist**
 * /user/{userId}/genre/{genreId} - **Link a Specific User to a Genre**
-* /user/{userId}/tracks/{songId} - **Link a Specific User and Song**
+* /user/{userId}/songs/{songId} - **Link a Specific User and Song**
 
 
 * /artists/{artistId}/genre/{genreId}/songs
