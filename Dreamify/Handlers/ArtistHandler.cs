@@ -1,7 +1,8 @@
-﻿using Dreamify.Data;
-using Dreamify.Models.Dtos;
+﻿using Dreamify.Models.Dtos;
 using Dreamify.Services;
 using System.Net;
+using Dreamify.Data;
+using Dreamify.Models;
 
 namespace Dreamify.Handlers
 {
@@ -11,10 +12,23 @@ namespace Dreamify.Handlers
 
         // Post artists
 
-        public IResult AddArtist(int genreId, ArtistDto artistDto, IArtistsHelper artistHelper)
+        public IResult AddArtist(ApplicationContext context, string personId, ArtistDto artistDto)
         {
-            artistHelper.AddArtist(genreId, artistDto, artistHelper);
-            return Results.StatusCode((int)HttpStatusCode.Created);
+            try
+            {
+                Artist artist = new Artist
+                {
+                    Name = artistDto.Name,
+                    Description = artistDto.Description
+                };
+                context.Artists.Add(artist);
+                context.SaveChanges();
+                return Results.Ok($"Artist {artist.Name} has been added to the database.");
+            }
+            catch (Exception ex)
+            {
+                return Results.Text($"404: Not found! {ex}");
+            }
         }
         public IResult GetArtist(IArtistsHelper artistHelper)
         {
