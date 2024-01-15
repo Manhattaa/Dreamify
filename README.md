@@ -26,9 +26,9 @@ Using the following instructions will get you the project up and running on your
 
 - [.NET SDK](https://dotnet.microsoft.com/download) (version .NET 6)
 - [Entity Framework Core](https://docs.microsoft.com/en-us/ef/core/):
-  * EntityFrameworkCore (version 6.0.24)
-  * EntityFrameworkCore.SqlServer (version 6.0.24)
-  * EntityFrameworkCore.Tools (version 6.0.24)
+  * EntityFrameworkCore (version 6.0.25)
+  * EntityFrameworkCore.SqlServer (version 6.0.25)
+  * EntityFrameworkCore.Tools (version 6.0.25)
 
 - An API development program such as [Postman](https://www.postman.com//). [Docker](https://www.docker.com/), [Swagger](https://swagger.io/), or our personal choice: [Insomnia](https://insomnia.rest/)
 
