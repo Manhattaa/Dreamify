@@ -15,7 +15,8 @@ namespace Dreamify.Handlers
         {
             Task<string> GetAccessToken();
         }
-        public class SpotifyHandler : ISpotifyHandler
+        //Change the SpotifyHandler name to SpotifyHandlerImp (Short for implementation) since the enclosing names cannot be the same as the original class
+        public class SpotifyHandlerImp : ISpotifyHandler
         {
             private string _clientId;
             private string _clientSecret;
@@ -23,12 +24,15 @@ namespace Dreamify.Handlers
             private DateTime _hourlyToken;
             private string _accessToken;
 
-            public SpotifyHandler(string clientId, string clientSecret) : this(new HttpClient(), clientId, clientSecret)
+            //if you only want to provide clientId and clientSecret and use the default HTTPClient i'll use the first constructor
+            public SpotifyHandlerImp(string clientId, string clientSecret) : this(new HttpClient(), clientId, clientSecret)
             {
 
             }
 
-            public SpotifyHandler(string clientId, string clientSecret, HttpClient httpClient)
+            //If you want to use your own clientId or clientSecret
+
+            public SpotifyHandlerImp(string clientId, string clientSecret, HttpClient httpClient)
             {
                 _httpClient = httpClient;
                 _clientId = clientId;
@@ -67,7 +71,8 @@ namespace Dreamify.Handlers
                 var response = await _httpClient.SendAsync(request);
                 response.EnsureSuccessStatusCode();
 
-                // Unwraps the response and returns the new token.
+                //We need to read the response. it gets returned as a Stream (https://learn.microsoft.com/en-us/dotnet/api/system.io.stream?view=net-8.0)
+                //We then deserialize it to get an object that we can actually use.
                 var responseString = await response.Content.ReadAsStringAsync();
                 var authResult = JsonSerializer.Deserialize<AuthResult>(responseString);
 
