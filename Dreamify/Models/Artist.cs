@@ -9,7 +9,7 @@ namespace Dreamify.Models
         public string Name { get; set; }
         public string? Description { get; set; }
 
-        ICollection<User> Users { get; set;}
-        ICollection<Song> Songs { get; set;}
+        public ICollection<User> Users { get; set;}
+        public ICollection<Song> Songs { get; set;}
     }
 }

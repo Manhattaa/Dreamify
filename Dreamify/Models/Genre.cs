@@ -8,7 +8,7 @@ namespace Dreamify.Models
         public int GenreId { get; set; }
         public string Title { get; set; }
 
-        ICollection<User> Users { get;}
-        ICollection<Song> Songs { get;}
+        public ICollection<User> Users { get;}
+        public ICollection<Song> Songs { get;}
     }
 }
