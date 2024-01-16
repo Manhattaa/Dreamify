@@ -25,7 +25,7 @@ namespace Dreamify.Handlers
             private string _accessToken;
 
             //if you only want to provide clientId and clientSecret and use the default HTTPClient i'll use the first constructor
-            public SpotifyHandlerImp(string clientId, string clientSecret) : this(new HttpClient(), clientId, clientSecret)
+            public SpotifyHandlerImp(string clientId, string clientSecret) : this(clientId, clientSecret, new HttpClient())
             {
 
             }
