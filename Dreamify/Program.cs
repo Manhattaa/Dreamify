@@ -1,6 +1,8 @@
 using Dreamify.Data;
-using Dreamify.Handlers;
+using Dreamify.Models;
 using Dreamify.Services;
+using Dreamify.Handlers;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 
 namespace Dreamify
@@ -14,11 +16,14 @@ namespace Dreamify
             builder.Services.AddDbContext<ApplicationContext>(options => options.UseSqlServer(connectionString));
             builder.Services.AddScoped<ISongsHelper, SongsHelper>();
             builder.Services.AddScoped<IUsersHelper, UsersHelper>();
-
             var app = builder.Build();
+
 
             app.MapGet("/", () => "Hello World!");
 
+            app.MapGet("/users", UserHandler.GetUser);
+            app.MapGet("/user/{userId}", UserHandler.GetUser);
+            app.MapPost("/user", UserHandler.AddUser);
             app.MapGet("/songs", ArtistHandler.GetSongs);
             app.MapGet("/users/{userId}/songs", ArtistHandler.GetUserSongs);
             app.MapPost("/artists/{artistId}/genre/{genreId}/songs", ArtistHandler.AddSong);
@@ -28,6 +33,7 @@ namespace Dreamify
 
             app.MapPost("/artists", ArtistHandler.AddArtist);
             app.MapGet("/artists/{artistId}", ArtistHandler.GetArtist);
+          
             app.Run();
         }
     }
