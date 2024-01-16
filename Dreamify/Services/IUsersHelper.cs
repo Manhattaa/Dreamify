@@ -1,5 +1,6 @@
 ﻿using Dreamify.Data;
 using Dreamify.Models;
+using Microsoft.EntityFrameworkCore;
 using System.Net;
 
 namespace Dreamify.Services
@@ -9,7 +10,6 @@ namespace Dreamify.Services
         public IResult ConnectUserToArtist(int userId, int artistId);
         public IResult ConnectUserToGenre(int userId, int genreId);
         public IResult ConnectUserToSong(int userId, int songId);
-
     }
 
     public class UsersHelper : IUsersHelper
@@ -27,7 +27,9 @@ namespace Dreamify.Services
             try
             {
                 // Get user, and artist from IDs
-                User user = _context.Users.Where(u => u.UserId == userId).Single();
+                User user = _context.Users
+                    .Include(u => u.Artists)
+                    .Where(u => u.UserId == userId).Single();
                 Artist artist = _context.Artists.Where(a => a.ArtistId == artistId).Single();
 
                 // Check if null
@@ -56,7 +58,10 @@ namespace Dreamify.Services
             try
             {
                 // Get user, and genre from IDs
-                User user = _context.Users.Where(u => u.UserId == userId).Single();
+                User user = _context.Users
+                    .Include(u => u.Genres)
+                    .Where(u => u.UserId == userId).Single();
+
                 Genre genre = _context.Genres.Where(g => g.GenreId == genreId).Single();
 
                 // Check if null
@@ -83,7 +88,10 @@ namespace Dreamify.Services
             try
             {
                 // Get user, and song from IDs
-                User user = _context.Users.Where(u => u.UserId == userId).Single();
+                User user = _context.Users
+                    .Include(u => u.Songs)
+                    .Where(u => u.UserId == userId).Single();
+
                 Song song = _context.Songs.Where(s => s.SongId == songId).Single();
 
                 // Check if null
