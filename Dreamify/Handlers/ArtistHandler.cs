@@ -12,7 +12,7 @@ namespace Dreamify.Handlers
 
         // Post artists
 
-        public IResult AddArtist(ApplicationContext context, string personId, ArtistDto artistDto)
+        public static IResult AddArtist(ApplicationContext context, string personId, ArtistDto artistDto)
         {
             try
             {
@@ -30,7 +30,7 @@ namespace Dreamify.Handlers
                 return Results.Text($"404: Not found! {ex}");
             }
         }
-        public IResult GetArtist(IArtistsHelper artistHelper)
+        public static IResult GetArtist(IArtistsHelper artistHelper)
         {
             artistHelper.GetArtists();
             return Results.StatusCode((int)HttpStatusCode.OK);
