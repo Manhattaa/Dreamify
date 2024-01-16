@@ -13,6 +13,7 @@ namespace Dreamify
             string connectionString = builder.Configuration.GetConnectionString("ApplicationContext");
             builder.Services.AddDbContext<ApplicationContext>(options => options.UseSqlServer(connectionString));
             builder.Services.AddScoped<ISongsHelper, SongsHelper>();
+            builder.Services.AddScoped<IUsersHelper, UsersHelper>();
 
             var app = builder.Build();
 
@@ -21,6 +22,9 @@ namespace Dreamify
             app.MapGet("/songs", ArtistHandler.GetSongs);
             app.MapGet("/users/{userId}/songs", ArtistHandler.GetUserSongs);
             app.MapPost("/artists/{artistId}/genre/{genreId}/songs", ArtistHandler.AddSong);
+            app.MapPost("/users/{userId}/artists/{artistId}", UserHandler.ConnectUserToArtist);
+            app.MapPost("/users/{userId}/genres/{genreId}", UserHandler.ConnectUserToGenre);
+            app.MapPost("/users/{userId}/songs/{songId}", UserHandler.ConnectUserToSong);
 
             app.MapPost("/artists", ArtistHandler.AddArtist);
             app.MapGet("/artists/{artistId}", ArtistHandler.GetArtist);
