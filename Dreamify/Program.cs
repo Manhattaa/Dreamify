@@ -13,6 +13,7 @@ namespace Dreamify
             string connectionString = builder.Configuration.GetConnectionString("ApplicationContext");
             builder.Services.AddDbContext<ApplicationContext>(options => options.UseSqlServer(connectionString));
             builder.Services.AddScoped<ISongsHelper, SongsHelper>();
+            builder.Services.AddScoped<IUsersHelper, UsersHelper>();
 
             var app = builder.Build();
 
