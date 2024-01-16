@@ -8,7 +8,17 @@ namespace Dreamify.Handlers
 {
     public class UserHandler
     {
-        // Post usernames
+
+        public static IResult GetUser(int? userId, IUsersHelper usersHelper)
+        {
+            return usersHelper.GetUser(userId);
+        }
+
+        public static IResult AddUser(UsersDto usersDto, IUsersHelper usersHelper)
+        {
+            return usersHelper.AddUser(usersDto);
+        }
+
         public static IResult ConnectUserToArtist(int userId, int artistId, IUsersHelper userHelper)
         {
             return userHelper.ConnectUserToArtist(userId, artistId);  // Temp change this later
@@ -23,5 +33,6 @@ namespace Dreamify.Handlers
         {
             return userHelper.ConnectUserToSong(userId, songId);  // Temp change this later
         }
+
     }
 }
