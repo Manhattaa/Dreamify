@@ -9,47 +9,83 @@ namespace Dreamify.Services
 {
     public interface IUsersHelper
     {
-        public IResult AddUserToDb(UsersDto usersDto);
-        public IResult GetUserFromDb();
+        public IResult AddUser(UsersDto usersDto);
+        public IResult GetUser(int? userId);
     }
 
     public class UsersHelper : IUsersHelper
     {
-        private ApplicationContext _context;
+        public ApplicationContext _context;
 
         public UsersHelper(ApplicationContext context)
         {
             _context = context;
         }
-        public IResult AddUserToDb(UsersDto usersDto)
+
+        public IResult AddUser(UsersDto usersDto)
         {
-           
-            User user = new User()
+            try
             {
-                Username = usersDto.Username,
-            };
+                User user = new User()
+                {
+                    Username = usersDto.Username,
+                    
+                };
 
-            _context.Users.Add(user);
+                _context.Users.Add(user);
 
-            _context.SaveChanges();
+                _context.SaveChanges();
 
-            return Results.StatusCode((int)HttpStatusCode.Created);
-
-
+                return Results.StatusCode((int)HttpStatusCode.Created);
+            }
+            catch (Exception ex)
+            {
+                
+                return Results.Text($"Error adding user to the database: {ex.Message}");
+            }
         }
 
-        public IResult GetUserfromDb()
+        public IResult GetUser(int? userId)
         {
-            var user = _context.Users()
-            .Select(u => new UsersViewModel()
+            try
             {
-                Username = u.UserName,
-            })
-            .ToList();
+                List<UsersViewModel> users;
 
+                if (userId == null)
+                {
+                    users = _context.Users
+                    .Select(u => new UsersViewModel
+                    {
+                        Username = u.Username,
+
+                    })
+                    .ToList();
+                } 
+                else
+                {
+                    users = _context.Users
+                    .Where(u => u.UserId == userId)
+                    .Select(u => new UsersViewModel
+                    {
+                        Username = u.Username,
+
+                    }) 
+                    .ToList();
+                    
+                }
+                
+
+                return Results.Json(users);
+            }
+            catch (Exception ex)
+            {
+                
+                return Results.Text($"Error retrieving users from the database: {ex.Message}");
+            }
         }
 
-  
+        
+
     }
 
 }

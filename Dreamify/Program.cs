@@ -1,5 +1,8 @@
 using Dreamify.Data;
+using Dreamify.Models;
 using Dreamify.Services;
+using Dreamify.Handlers;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 
 namespace Dreamify
@@ -16,6 +19,13 @@ namespace Dreamify
 
 
             app.MapGet("/", () => "Hello World!");
+
+
+            app.MapGet("/users", UserHandler.GetUser);
+            app.MapGet("/user/{userId}", UserHandler.GetUser);
+            app.MapPost("/user", UserHandler.AddUser);
+
+
 
             app.Run();
         }
