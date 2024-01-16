@@ -16,7 +16,7 @@ using Dreamify;
 namespace DreamifyTests
 {
     [TestClass]
-    internal class ISongsHelperTests
+    public class ISongsHelperTests
     {
         [TestMethod]
         public void GetSongs_ReturnsListOfSongs()
