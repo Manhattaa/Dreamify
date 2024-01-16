@@ -3,6 +3,7 @@ using Dreamify.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Dreamify.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    partial class ApplicationContextModelSnapshot : ModelSnapshot
+    [Migration("20240111170656_UserSongMMRelationship")]
+    partial class UserSongMMRelationship
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -20,21 +22,6 @@ namespace Dreamify.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
-
-            modelBuilder.Entity("ArtistUser", b =>
-                {
-                    b.Property<int>("ArtistsArtistId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("UsersUserId")
-                        .HasColumnType("int");
-
-                    b.HasKey("ArtistsArtistId", "UsersUserId");
-
-                    b.HasIndex("UsersUserId");
-
-                    b.ToTable("ArtistUser");
-                });
 
             modelBuilder.Entity("Dreamify.Models.Artist", b =>
                 {
@@ -117,61 +104,16 @@ namespace Dreamify.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("GenreUser", b =>
-                {
-                    b.Property<int>("GenresGenreId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("UsersUserId")
-                        .HasColumnType("int");
-
-                    b.HasKey("GenresGenreId", "UsersUserId");
-
-                    b.HasIndex("UsersUserId");
-
-                    b.ToTable("GenreUser");
-                });
-
-            modelBuilder.Entity("SongUser", b =>
-                {
-                    b.Property<int>("SongsSongId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("UsersUserId")
-                        .HasColumnType("int");
-
-                    b.HasKey("SongsSongId", "UsersUserId");
-
-                    b.HasIndex("UsersUserId");
-
-                    b.ToTable("SongUser");
-                });
-
-            modelBuilder.Entity("ArtistUser", b =>
-                {
-                    b.HasOne("Dreamify.Models.Artist", null)
-                        .WithMany()
-                        .HasForeignKey("ArtistsArtistId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Dreamify.Models.User", null)
-                        .WithMany()
-                        .HasForeignKey("UsersUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("Dreamify.Models.Song", b =>
                 {
                     b.HasOne("Dreamify.Models.Artist", "Artist")
-                        .WithMany("Songs")
+                        .WithMany()
                         .HasForeignKey("ArtistId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Dreamify.Models.Genre", "Genre")
-                        .WithMany("Songs")
+                        .WithMany()
                         .HasForeignKey("GenreId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -179,46 +121,6 @@ namespace Dreamify.Migrations
                     b.Navigation("Artist");
 
                     b.Navigation("Genre");
-                });
-
-            modelBuilder.Entity("GenreUser", b =>
-                {
-                    b.HasOne("Dreamify.Models.Genre", null)
-                        .WithMany()
-                        .HasForeignKey("GenresGenreId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Dreamify.Models.User", null)
-                        .WithMany()
-                        .HasForeignKey("UsersUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("SongUser", b =>
-                {
-                    b.HasOne("Dreamify.Models.Song", null)
-                        .WithMany()
-                        .HasForeignKey("SongsSongId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Dreamify.Models.User", null)
-                        .WithMany()
-                        .HasForeignKey("UsersUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Dreamify.Models.Artist", b =>
-                {
-                    b.Navigation("Songs");
-                });
-
-            modelBuilder.Entity("Dreamify.Models.Genre", b =>
-                {
-                    b.Navigation("Songs");
                 });
 #pragma warning restore 612, 618
         }
