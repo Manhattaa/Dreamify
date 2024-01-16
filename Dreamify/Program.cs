@@ -32,7 +32,7 @@ namespace Dreamify
             app.MapPost("/users/{userId}/songs/{songId}", UserHandler.ConnectUserToSong);
 
             app.MapPost("/artists", ArtistHandler.AddArtist);
-            app.MapGet("/artists/{artistId}", ArtistHandler.GetArtist);
+            //app.MapGet("/artists/{artistId}", ArtistHandler.GetArtist);
           
             app.Run();
         }
