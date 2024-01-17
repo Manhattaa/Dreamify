@@ -12,7 +12,7 @@ namespace Dreamify.Services
     {
         public IResult AddSong(int artistId, int genreId, SongDto songDto);
         public IResult GetSongs();
-        public IResult GetUserSongs(int userId);
+        public UserSongsViewModel GetUserSongs(int userId);
     }
 
     public class SongsHelper : ISongsHelper
@@ -80,39 +80,33 @@ namespace Dreamify.Services
             }
         }
 
-        public IResult GetUserSongs(int userId)
+        // This is correctly formatted and structured
+        public UserSongsViewModel GetUserSongs(int userId)
         {
-            try
+           
+            // Get user and their songs from id
+            User user = _context.Users
+            .Include(u => u.Songs)
+            .Where(u => u.UserId == userId)
+            .Single();
+
+            if (user == null)
+                throw new Exception();
+
+
+            // Create viewmodel consisting of username and a list of all songs
+            UserSongsViewModel userSongs = new UserSongsViewModel
             {
-                // Get user and their songs from id
-                User user = _context.Users
-                .Include(u => u.Songs)
-                .Where(u => u.UserId == userId)
-                .Single();
-
-                if (user == null) 
-                    return Results.NotFound($"No user found with id {userId}");
-
-
-                // Create viewmodel consisting of username and a list of all songs
-                UserSongsViewModel userSongs = new UserSongsViewModel
+                Username = user.Username,
+                Songs = user.Songs
+                .Select(u => new SongsViewModel
                 {
-                    Username = user.Username,
-                    Songs = user.Songs
-                    .Select(u => new SongsViewModel
-                    {
-                        Title= u.Title,
-                    })
-                    .ToList()
-                };
+                    Title= u.Title,
+                })
+                .ToList()
+            };
 
-
-                return Results.Json(userSongs);
-            }
-            catch (Exception ex)
-            {
-                return Results.Text(ex.Message);
-            }
+            return userSongs;
         }
 
     }
