@@ -48,9 +48,17 @@ namespace Dreamify.Handlers
             return Results.Json(songHelper.GetSongs());
         }
 
+        // This is correctly formatted and structured
         public static IResult GetUserSongs(int userId, ISongsHelper songHelper)
         {
-            return Results.Json(songHelper.GetUserSongs(userId));
+            try
+            {
+                return Results.Json(songHelper.GetUserSongs(userId));
+            }
+            catch (Exception ex) 
+            {
+                return Results.Problem(title: "Got exception", detail: ex.Message, statusCode: (int)HttpStatusCode.InternalServerError);
+            }
         }
     }
 }
