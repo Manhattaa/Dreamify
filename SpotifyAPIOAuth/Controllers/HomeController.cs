@@ -54,7 +54,6 @@ namespace SpotifyAPIOAuth.Controllers
                 return Enumerable.Empty<Release>();
             }
         }
-
         public IActionResult Privacy()
         {
             return View();
