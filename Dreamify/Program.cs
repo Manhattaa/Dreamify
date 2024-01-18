@@ -33,6 +33,10 @@ namespace Dreamify
 
             app.MapPost("/artists", ArtistHandler.AddArtist);
             app.MapGet("/artists/{artistId}", ArtistHandler.GetArtist);
+
+
+            // Spotify endpoints
+            //app.MapGet("/search");
           
             app.Run();
         }
