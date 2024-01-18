@@ -1,8 +1,8 @@
-﻿using Dreamify.Models.Dtos;
-using Dreamify.Services;
+﻿using Dreamify.Services;
 using System.Net;
 using Dreamify.Data;
 using Dreamify.Models;
+using Dreamify.Models.Dtos.DreamifyDtos;
 
 namespace Dreamify.Handlers
 {
