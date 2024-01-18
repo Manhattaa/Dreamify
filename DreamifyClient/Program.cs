@@ -1,10 +1,10 @@
-﻿namespace DreamifyClient
-{
-    internal class Program
-    {
-        static void Main(string[] args)
-        {
-            Console.WriteLine("Hello, World!");
-        }
-    }
-}
+﻿//namespace DreamifyClient
+//{
+//    internal class Program
+//    {
+//        static void Main(string[] args)
+//        {
+//            Console.WriteLine("Hello, World!");
+//        }
+//    }
+//}
