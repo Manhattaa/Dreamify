@@ -1,4 +1,4 @@
-﻿namespace Dreamify.Models.ViewModels
+﻿namespace Dreamify.Models.ViewModels.DreamifyViewModels
 {
     public class GenresViewModel
     {
