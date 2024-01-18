@@ -1,4 +1,4 @@
-﻿namespace Dreamify.Models.Dtos
+﻿namespace Dreamify.Models.Dtos.DreamifyDtos
 {
     public class UsersDto
     {
