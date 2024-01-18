@@ -362,3 +362,4 @@ MigrationBackup/
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
 /Dreamify/appsettings.Development.json
+/Dreamify/appsettings.Development.json
