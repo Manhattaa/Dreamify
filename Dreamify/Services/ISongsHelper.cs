@@ -1,13 +1,13 @@
 ﻿using Dreamify.Data;
 using Dreamify.Models;
-using Dreamify.Models.Dtos;
-using Dreamify.Models.ViewModels;
+using Dreamify.Models.Dtos.DreamifyDtos;
+using Dreamify.Models.ViewModels.DreamifyViewModels;
 using Microsoft.EntityFrameworkCore;
 using System.Net;
 
 namespace Dreamify.Services
 {
-  
+
     public interface ISongsHelper
     {
         public IResult AddSong(int artistId, int genreId, SongDto songDto);

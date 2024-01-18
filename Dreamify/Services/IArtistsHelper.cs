@@ -1,9 +1,9 @@
 ﻿using Dreamify.Data;
-using Dreamify.Models.Dtos;
 using Dreamify.Models;
-using Dreamify.Models.ViewModels;
 using System.Net;
 using Microsoft.EntityFrameworkCore;
+using Dreamify.Models.ViewModels.DreamifyViewModels;
+using Dreamify.Models.Dtos.DreamifyDtos;
 
 namespace Dreamify.Services
 {
