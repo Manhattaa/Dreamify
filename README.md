@@ -26,9 +26,9 @@ Using the following instructions will get you the project up and running on your
 
 - [.NET SDK](https://dotnet.microsoft.com/download) (version .NET 6)
 - [Entity Framework Core](https://docs.microsoft.com/en-us/ef/core/):
-  * EntityFrameworkCore (version 6.0.24)
-  * EntityFrameworkCore.SqlServer (version 6.0.24)
-  * EntityFrameworkCore.Tools (version 6.0.24)
+  * EntityFrameworkCore (version 6.0.25)
+  * EntityFrameworkCore.SqlServer (version 6.0.25)
+  * EntityFrameworkCore.Tools (version 6.0.25)
 
 - An API development program such as [Postman](https://www.postman.com//). [Docker](https://www.docker.com/), [Swagger](https://swagger.io/), or our personal choice: [Insomnia](https://insomnia.rest/)
 
@@ -67,7 +67,7 @@ dotnet build
 * /user/{userId} - **Get a Specific User**
 * /user/{userId}/artists - **Get a Specific User and Artists**
 * /user/{userId}/genres - **Get a Specific User and Interests**
-* /user/{userId}/songs - **Get a Specific User and Tracks**
+* /user/{userId}/songs - **Get a Specific User and Songs**
 
   
 * /artists - **Get all Artists**
@@ -77,7 +77,7 @@ dotnet build
 
 * /user/{userId}/artist/{artistId} - **Link a Specific User and Artist**
 * /user/{userId}/genre/{genreId} - **Link a Specific User to a Genre**
-* /user/{userId}/tracks/{songId} - **Link a Specific User and Song**
+* /user/{userId}/songs/{songId} - **Link a Specific User and Song**
 
 
 * /artists/{artistId}/genre/{genreId}/songs
