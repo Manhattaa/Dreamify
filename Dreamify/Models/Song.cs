@@ -9,6 +9,6 @@ namespace Dreamify.Models
         public string Title { get; set; }
         public Artist Artist { get; set; }
         public Genre Genre { get; set; }
-        public ICollection<User> Users{ get; set;}
+        public virtual ICollection<User> Users{ get; set;}
     }
 }
