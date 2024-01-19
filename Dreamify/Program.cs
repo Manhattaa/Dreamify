@@ -25,6 +25,10 @@ namespace Dreamify
             app.MapPost("/artists", ArtistHandler.AddArtist);
             app.MapGet("/artists/{artistId}", ArtistHandler.GetArtist);
             app.Run();
+
+            app.MapPost("/genres", ArtistHandler.GetArtist);
+            app.MapGet("/genres/{genreId}", ArtistHandler.GetGenre);
+            app.Run();
         }
     }
 }
