@@ -1,6 +1,7 @@
 ﻿using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
+using System.Threading.Tasks;
 using Dreamify.Models.Dtos.DreamifyDtos;
 using Dreamify.Models.Dtos.SpotifyDtos.Artists;
 using Dreamify.Models.Dtos.SpotifyDtos.Songs;
@@ -11,6 +12,7 @@ namespace Dreamify.Services
     public interface ISpotifyHelper
     {
         Task<List<SongSearchViewModel>> SpotifySongSearch(string search, int? offset, string? countryCode);
+        Task<List<SpotifyArtistsSearchViewModel>> SpotifyArtistSearch(string search, int? offset, string? countryCode);
     }
 
     public class SpotifyHelper : ISpotifyHelper
@@ -157,7 +159,7 @@ namespace Dreamify.Services
             return result;
         }
 
-        public async Task<List<SpotifyArtistsSearchViewModel>> SpotifyArtistSearch(string search, int offset)
+        public async Task<List<SpotifyArtistsSearchViewModel>> SpotifyArtistSearch(string search, int? offset, string? countryCode)
         {
 
             var accessToken = await GetAccessToken();
@@ -179,7 +181,9 @@ namespace Dreamify.Services
                 {
                     Name = artistDto.Name,
                     SpotifyArtistId = artistDto.SpotifyArtistId,
-                    Genre = artistDto.Genre
+                    Description = artistDto.Description,
+                    Popularity = artistDto.Popularity,
+                    //Genre = artistDto.Genre
 
                 };
 
