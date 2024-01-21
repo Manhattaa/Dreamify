@@ -2,6 +2,7 @@
 using System.Text;
 using System.Text.Json;
 using Dreamify.Models.Dtos.DreamifyDtos;
+using Dreamify.Models.Dtos.SpotifyDtos.Artists;
 using Dreamify.Models.Dtos.SpotifyDtos.Songs;
 using Dreamify.Models.ViewModels.SpotifyViewModels;
 
@@ -156,5 +157,37 @@ namespace Dreamify.Services
             return result;
         }
 
+        public async Task<List<SpotifyArtistsSearchViewModel>> SpotifyArtistSearch(string search, int offset)
+        {
+
+            var accessToken = await GetAccessToken();
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+
+            var response = await _httpClient.GetAsync($"https://api.spotify.com/v1/search?q={search}&type=artist&limit={_limit}&offset={offset}");
+            response.EnsureSuccessStatusCode();
+
+            string responseBody = await response.Content.ReadAsStringAsync();
+            var searchResponse = JsonSerializer.Deserialize<ArtistSearchResponse>(responseBody);
+
+            var artistDtos = searchResponse.Artists.Items;
+
+            // Converts the Dto into a ViewModel before returning.
+            var artistViewModels = new List<SpotifyArtistsSearchViewModel>();
+            foreach (var artistDto in artistDtos)
+            {
+                var artistViewModel = new SpotifyArtistsSearchViewModel
+                {
+                    Name = artistDto.Name,
+                    SpotifyArtistId = artistDto.SpotifyArtistId,
+                    Genre = artistDto.Genre
+
+                };
+
+                artistViewModels.Add(artistViewModel);
+            }
+
+            return artistViewModels;
+        }
     }
+
 }
