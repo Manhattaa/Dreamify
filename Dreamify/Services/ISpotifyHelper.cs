@@ -5,7 +5,13 @@ using System.Threading.Tasks;
 using Dreamify.Models.Dtos.DreamifyDtos;
 using Dreamify.Models.Dtos.SpotifyDtos.Artists;
 using Dreamify.Models.Dtos.SpotifyDtos.Songs;
+using Dreamify.Models.ViewModels.SpotifyViewModels.Player_ViewModels;
 using Dreamify.Models.ViewModels.SpotifyViewModels;
+
+using static Dreamify.Models.Spotify;
+using Dreamify.Models;
+using System.Xml.Linq;
+using Dreamify.Models.ViewModels.DreamifyViewModels;
 
 namespace Dreamify.Services
 {
@@ -13,6 +19,7 @@ namespace Dreamify.Services
     {
         Task<List<SongSearchViewModel>> SpotifySongSearch(string search, int? offset, string? countryCode);
         Task<List<SpotifyArtistsSearchViewModel>> SpotifyArtistSearch(string search, int? offset, string? countryCode);
+        Task<CurrentlyPlayingTrackResponseViewModel> GetCurrentPlayingTrack(string accessToken);
     }
 
     public class SpotifyHelper : ISpotifyHelper
@@ -192,6 +199,68 @@ namespace Dreamify.Services
 
             return artistViewModels;
         }
-    }
 
+
+
+
+
+
+
+
+
+        //Playback
+        public async Task<CurrentlyPlayingTrackResponseViewModel> GetCurrentPlayingTrack(string accessToken)
+        {
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+
+            try
+            {
+                // Send GET request to the Spotify API for the currently playing track
+                HttpResponseMessage response = await _httpClient.GetAsync("https://api.spotify.com/v1/me/player/currently-playing");
+                response.EnsureSuccessStatusCode();
+
+                // Read response body and deserialize to CurrentlyPlayingTrackResponse
+                string responseBody = await response.Content.ReadAsStringAsync();
+                var currentlyPlayingTrack = JsonSerializer.Deserialize<Spotify.CurrentlyPlayingTrackResponse>(responseBody);
+
+                // Map the Spotify response to ViewModel
+                var currentlyPlayingTrackViewModel = new CurrentlyPlayingTrackResponseViewModel
+                {
+                    Device = new DeviceViewModel(currentlyPlayingTrack.Device),
+                    RepeatState = currentlyPlayingTrack.RepeatState,
+                    Timestamp = currentlyPlayingTrack.Timestamp,
+                    ProgressMs = currentlyPlayingTrack.ProgressMs,
+                    IsPlaying = currentlyPlayingTrack.IsPlaying,
+                    CurrentlyPlayingType = currentlyPlayingTrack.CurrentlyPlayingType,
+                    Actions = new ActionsViewModel(currentlyPlayingTrack.Actions)
+                };
+
+                // Check if Item is not null before mapping its properties
+                if (currentlyPlayingTrack.Item != null)
+                {
+                    currentlyPlayingTrackViewModel.Item = new ItemViewModel(
+                        id: currentlyPlayingTrack.Item.Id,
+                        name: currentlyPlayingTrack.Item.Name,
+                        artists: currentlyPlayingTrack.Item.Artists
+                            .Select(artistDto => new ArtistsViewModel(artistDto))
+                            .ToList()
+                    );
+                }
+
+                return currentlyPlayingTrackViewModel;
+            }
+            catch (HttpRequestException ex)
+            {
+                // Handle HTTP request exception
+                Console.WriteLine($"HTTP Request Exception: {ex.Message}");
+                throw;
+            }
+            catch (JsonException ex)
+            {
+                // Handle JSON deserialization exception
+                Console.WriteLine($"JSON Deserialization Exception: {ex.Message}");
+                throw;
+            }
+        }
+    }
 }
