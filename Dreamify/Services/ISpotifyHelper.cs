@@ -12,7 +12,7 @@ using static Dreamify.Models.Spotify;
 using Dreamify.Models;
 using System.Xml.Linq;
 using Dreamify.Models.ViewModels.DreamifyViewModels;
-<using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Dreamify.Services
 {
@@ -206,23 +206,23 @@ namespace Dreamify.Services
 
         public async Task StartOrResumePlayback([FromQuery] string accessToken)
         {
-            // Ensure the access token is valid
+            //Make sure the accessToken is valid
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
 
-            // Get the user's current playback state
+            // currentPlaybackState
             var playbackState = await GetCurrentPlaybackState(accessToken);
 
             if (playbackState != null && playbackState.IsPlaying)
             {
-                // If music is already playing, just return
+                // If music is already playing, then just return, dont do nothing
                 return;
             }
 
-            // If not playing, start or resume playback
+            // if theres no sound, then start playing!
             var request = new HttpRequestMessage(HttpMethod.Put, "https://api.spotify.com/v1/me/player/play");
             request.Headers.Add("Accept", "application/json");
 
-            // Omit specifying the device ID to use the active device
+            // specify the deviceId
             var response = await _httpClient.SendAsync(request);
             response.EnsureSuccessStatusCode();
         }
