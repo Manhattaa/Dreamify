@@ -1,7 +1,9 @@
 ﻿using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
+using System.Threading.Tasks;
 using Dreamify.Models.Dtos.DreamifyDtos;
+using Dreamify.Models.Dtos.SpotifyDtos.Artists;
 using Dreamify.Models.Dtos.SpotifyDtos.Songs;
 using Dreamify.Models.ViewModels.SpotifyViewModels;
 
@@ -10,6 +12,7 @@ namespace Dreamify.Services
     public interface ISpotifyHelper
     {
         Task<List<SongSearchViewModel>> SpotifySongSearch(string search, int? offset, string? countryCode);
+        Task<List<SpotifyArtistsSearchViewModel>> SpotifyArtistSearch(string search, int? offset, string? countryCode);
     }
 
     public class SpotifyHelper : ISpotifyHelper
@@ -78,8 +81,6 @@ namespace Dreamify.Services
                 throw new HttpRequestException($"Spotify API Error: {response.StatusCode} - {responseContent}");
             }
 
-           
-
             response.EnsureSuccessStatusCode();
 
             //We need to read the response. it gets returned as a Stream (https://learn.microsoft.com/en-us/dotnet/api/system.io.stream?view=net-8.0)
@@ -88,21 +89,7 @@ namespace Dreamify.Services
             var authResult = JsonSerializer.Deserialize<AuthResult>(responseString);
 
             return authResult.access_token;
-
         }
-
-
-        // Notes for Adrian 
-        // Search method (take in string query and int offset) return list of song view models
-
-        // 1 Get token
-
-        // 2 Call api with the search query and save in response variable
-        // $"https://api.spotify.com/v1/search?q={query}&type=track&limit=10&offset={offset}"
-        // query is what we're searching for, offset is how many things it should skip in the search
-        // limit is how many results we should get
-
-        // 3 Return list of songs based on search from user
 
 
         // Returns list of songs consisting of song id, song name, list of artists
@@ -118,7 +105,7 @@ namespace Dreamify.Services
                 countryCode = "SE";
 
             if (offset == null)
-                offset = 10;
+                offset = 0;
 
 
             // Create Spotify API query from parameters
@@ -156,5 +143,47 @@ namespace Dreamify.Services
             return result;
         }
 
+        public async Task<List<SpotifyArtistsSearchViewModel>> SpotifyArtistSearch(string search, int? offset, string? countryCode)
+        {
+
+            var accessToken = await GetAccessToken();
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+
+            // Set default values if parameters are null
+            if (string.IsNullOrEmpty(countryCode))
+                countryCode = "SE";
+
+            if (offset == null)
+                offset = 0;
+
+            string query = $"https://api.spotify.com/v1/search?q={search}&type=artist&market={countryCode}&limit={_limit}&offset={offset}";
+
+            var response = await _httpClient.GetAsync(query);
+            response.EnsureSuccessStatusCode();
+
+            string responseBody = await response.Content.ReadAsStringAsync();
+            ArtistSearchResponse searchResponse = JsonSerializer.Deserialize<ArtistSearchResponse>(responseBody);
+
+            var spotifyArtistDtos = searchResponse.ArtistsContainer.Items;
+
+
+            // Converts the Dto into a ViewModel before returning.
+            var artistViewModels = new List<SpotifyArtistsSearchViewModel>();
+            foreach (var artistDto in spotifyArtistDtos)
+            {
+                var artistViewModel = new SpotifyArtistsSearchViewModel
+                {
+                    SpotifyArtistId = artistDto.SpotifyArtistId,
+                    Name = artistDto.Name,
+                    Popularity = artistDto.Popularity,
+                    Followers = artistDto.Followers.totalFollowers,
+                    Genre = artistDto.Genres,
+                };
+
+                artistViewModels.Add(artistViewModel);
+            }
+            return artistViewModels;
+        }
     }
+
 }

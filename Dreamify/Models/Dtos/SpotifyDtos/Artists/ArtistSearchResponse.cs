@@ -5,6 +5,6 @@ namespace Dreamify.Models.Dtos.SpotifyDtos.Artists
     public class ArtistSearchResponse
     {
         [JsonPropertyName("artists")]
-        public ArtistContainer Artists { get; set; }
+        public ArtistContainer ArtistsContainer { get; set; }
     }
 }
