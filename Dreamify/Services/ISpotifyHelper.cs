@@ -181,7 +181,6 @@ namespace Dreamify.Services
                 {
                     Name = artistDto.Name,
                     SpotifyArtistId = artistDto.SpotifyArtistId,
-                    Description = artistDto.Description,
                     Popularity = artistDto.Popularity,
                     //Genre = artistDto.Genre
 
