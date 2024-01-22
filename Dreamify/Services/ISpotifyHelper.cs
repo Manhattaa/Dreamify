@@ -12,6 +12,7 @@ using static Dreamify.Models.Spotify;
 using Dreamify.Models;
 using System.Xml.Linq;
 using Dreamify.Models.ViewModels.DreamifyViewModels;
+<using Microsoft.AspNetCore.Mvc;
 
 namespace Dreamify.Services
 {
@@ -19,7 +20,8 @@ namespace Dreamify.Services
     {
         Task<List<SongSearchViewModel>> SpotifySongSearch(string search, int? offset, string? countryCode);
         Task<List<SpotifyArtistsSearchViewModel>> SpotifyArtistSearch(string search, int? offset, string? countryCode);
-        Task<CurrentlyPlayingTrackResponseViewModel> GetCurrentPlayingTrack(string accessToken);
+        //Task<CurrentlyPlayingTrackResponseViewModel> GetCurrentPlayingTrack(string accessToken);
+        Task StartOrResumePlayback(string accessToken);
     }
 
     public class SpotifyHelper : ISpotifyHelper
@@ -43,7 +45,7 @@ namespace Dreamify.Services
             _clientId = clientId;
             _clientSecret = clientSecret;
         }
-        
+
 
         private async Task<string> GetAccessToken()
         {
@@ -88,7 +90,7 @@ namespace Dreamify.Services
                 throw new HttpRequestException($"Spotify API Error: {response.StatusCode} - {responseContent}");
             }
 
-           
+
 
             response.EnsureSuccessStatusCode();
 
@@ -96,6 +98,8 @@ namespace Dreamify.Services
             //We then deserialize it to get an object that we can actually use.
             var responseString = await response.Content.ReadAsStringAsync();
             var authResult = JsonSerializer.Deserialize<AuthResult>(responseString);
+
+            Console.WriteLine($"Access Token: {authResult.access_token}");
 
             return authResult.access_token;
 
@@ -116,8 +120,8 @@ namespace Dreamify.Services
 
 
         // Returns list of songs consisting of song id, song name, list of artists
-        public async Task<List<SongSearchViewModel>>SpotifySongSearch(string search, int? offset, string? countryCode)
-        { 
+        public async Task<List<SongSearchViewModel>> SpotifySongSearch(string search, int? offset, string? countryCode)
+        {
             // Get access token
             string accessToken = await GetAccessToken();
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
@@ -143,7 +147,7 @@ namespace Dreamify.Services
             // Read response body and deserialize to Spotify song DTOs
             string responseBody = await response.Content.ReadAsStringAsync();
             SongSearchResponse searchResponse = JsonSerializer.Deserialize<SongSearchResponse>(responseBody);
-            
+
             // Access list of songs from songs container
             List<SpotifySongDto> spotifySongDto = searchResponse.SongsContainer.Items;
 
@@ -200,67 +204,47 @@ namespace Dreamify.Services
             return artistViewModels;
         }
 
-
-
-
-
-
-
-
-
-        //Playback
-        public async Task<CurrentlyPlayingTrackResponseViewModel> GetCurrentPlayingTrack(string accessToken)
+        public async Task StartOrResumePlayback([FromQuery] string accessToken)
         {
+            // Ensure the access token is valid
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
 
-            try
+            // Get the user's current playback state
+            var playbackState = await GetCurrentPlaybackState(accessToken);
+
+            if (playbackState != null && playbackState.IsPlaying)
             {
-                // Send GET request to the Spotify API for the currently playing track
-                HttpResponseMessage response = await _httpClient.GetAsync("https://api.spotify.com/v1/me/player/currently-playing");
-                response.EnsureSuccessStatusCode();
-
-                // Read response body and deserialize to CurrentlyPlayingTrackResponse
-                string responseBody = await response.Content.ReadAsStringAsync();
-                var currentlyPlayingTrack = JsonSerializer.Deserialize<Spotify.CurrentlyPlayingTrackResponse>(responseBody);
-
-                // Map the Spotify response to ViewModel
-                var currentlyPlayingTrackViewModel = new CurrentlyPlayingTrackResponseViewModel
-                {
-                    Device = new DeviceViewModel(currentlyPlayingTrack.Device),
-                    RepeatState = currentlyPlayingTrack.RepeatState,
-                    Timestamp = currentlyPlayingTrack.Timestamp,
-                    ProgressMs = currentlyPlayingTrack.ProgressMs,
-                    IsPlaying = currentlyPlayingTrack.IsPlaying,
-                    CurrentlyPlayingType = currentlyPlayingTrack.CurrentlyPlayingType,
-                    Actions = new ActionsViewModel(currentlyPlayingTrack.Actions)
-                };
-
-                // Check if Item is not null before mapping its properties
-                if (currentlyPlayingTrack.Item != null)
-                {
-                    currentlyPlayingTrackViewModel.Item = new ItemViewModel(
-                        id: currentlyPlayingTrack.Item.Id,
-                        name: currentlyPlayingTrack.Item.Name,
-                        artists: currentlyPlayingTrack.Item.Artists
-                            .Select(artistDto => new ArtistsViewModel(artistDto))
-                            .ToList()
-                    );
-                }
-
-                return currentlyPlayingTrackViewModel;
+                // If music is already playing, just return
+                return;
             }
-            catch (HttpRequestException ex)
+
+            // If not playing, start or resume playback
+            var request = new HttpRequestMessage(HttpMethod.Put, "https://api.spotify.com/v1/me/player/play");
+            request.Headers.Add("Accept", "application/json");
+
+            // Omit specifying the device ID to use the active device
+            var response = await _httpClient.SendAsync(request);
+            response.EnsureSuccessStatusCode();
+        }
+
+        private async Task<CurrentlyPlayingTrackResponseViewModel> GetCurrentPlaybackState(string accessToken)
+        {
+            // Send a request to get the user's current playback state
+            var request = new HttpRequestMessage(HttpMethod.Get, "https://api.spotify.com/v1/me/player/currently-playing");
+            request.Headers.Add("Accept", "application/json");
+            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+
+            var response = await _httpClient.SendAsync(request);
+
+            if (response.IsSuccessStatusCode)
             {
-                // Handle HTTP request exception
-                Console.WriteLine($"HTTP Request Exception: {ex.Message}");
-                throw;
+                // Deserialize the response to get the current playback state
+                var responseBody = await response.Content.ReadAsStringAsync();
+                return JsonSerializer.Deserialize<CurrentlyPlayingTrackResponseViewModel>(responseBody);
             }
-            catch (JsonException ex)
-            {
-                // Handle JSON deserialization exception
-                Console.WriteLine($"JSON Deserialization Exception: {ex.Message}");
-                throw;
-            }
+
+            // If there's no currently playing track or an error occurred, return null
+            return null;
         }
     }
 }
