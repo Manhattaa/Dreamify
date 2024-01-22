@@ -11,7 +11,7 @@ namespace Dreamify.Services
     public interface IUsersHelper
     {
         public IResult AddUser(UsersDto usersDto);
-        public IResult GetUser(int? userId);
+        public List<UsersViewModel> GetUser(int? userId);
         public IResult ConnectUserToArtist(int userId, int artistId);
         public IResult ConnectUserToGenre(int userId, int genreId);
         public IResult ConnectUserToSong(int userId, int songId);
@@ -51,42 +51,32 @@ namespace Dreamify.Services
         }
 
 
-        public IResult GetUser(int? userId)
+        public List<UsersViewModel> GetUser(int? userId)
         {
-            try
+            List<UsersViewModel> users;
+
+            if (userId == null)
             {
-                List<UsersViewModel> users;
-
-                if (userId == null)
+                users = _context.Users
+                .Select(u => new UsersViewModel
                 {
-                    users = _context.Users
-                    .Select(u => new UsersViewModel
-                    {
-                        Username = u.Username,
+                    Username = u.Username,
 
-                    })
-                    .ToList();
-                } 
-                else
-                {
-                    users = _context.Users
-                    .Where(u => u.UserId == userId)
-                    .Select(u => new UsersViewModel
-                    {
-                        Username = u.Username,
-
-                    }) 
-                    .ToList();
-                }
-                
-
-                return Results.Json(users);
+                })
+                .ToList();
             }
-            catch (Exception ex)
+            else
             {
-                
-                return Results.Text($"Error retrieving users from the database: {ex.Message}");
+                users = _context.Users
+                .Where(u => u.UserId == userId)
+                .Select(u => new UsersViewModel
+                {
+                    Username = u.Username,
+
+                })
+                .ToList();
             }
+            return users;
         }        
 
 
