@@ -13,6 +13,7 @@ namespace Dreamify
         {
             var builder = WebApplication.CreateBuilder(args);
             string connectionString = builder.Configuration.GetConnectionString("ApplicationContext");
+
             string clientId = builder.Configuration.GetValue<string>("Spotify:ClientId");
             string clientSecret = builder.Configuration.GetValue<string>("Spotify:ClientSecret");
             builder.Services.AddDbContext<ApplicationContext>(options => options.UseSqlServer(connectionString));
