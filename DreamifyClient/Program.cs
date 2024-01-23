@@ -5,7 +5,7 @@ namespace DreamifyClient
     internal class Program
     {
         private static readonly HttpClient httpClient = new HttpClient();
-        private static readonly string apiUrl = "Insert our api http here";
+        private static readonly string apiUrl = "http://localhost:5094/";
         private static int selectedOption = 1;
 
         static async Task Main()
@@ -79,10 +79,12 @@ namespace DreamifyClient
             {
                 string userJson = await response.Content.ReadAsStringAsync();
                 Console.WriteLine($"Selected user details:\n{userJson}");
+                Thread.Sleep(3000);
             }
             else
             {
                 Console.WriteLine($"Failed to get user details. Status code: {response.StatusCode}");
+                Thread.Sleep(3000);
             }
         }
 
