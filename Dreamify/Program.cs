@@ -13,10 +13,21 @@ namespace Dreamify
         {
             var builder = WebApplication.CreateBuilder(args);
             string connectionString = builder.Configuration.GetConnectionString("ApplicationContext");
+            string clientId = builder.Configuration.GetValue<string>("Spotify:ClientId");
+            string clientSecret = builder.Configuration.GetValue<string>("Spotify:ClientSecret");
             builder.Services.AddDbContext<ApplicationContext>(options => options.UseSqlServer(connectionString));
             builder.Services.AddScoped<ISongsHelper, SongsHelper>();
             builder.Services.AddScoped<IUsersHelper, UsersHelper>();
+            builder.Services.AddScoped<ISpotifyHelper>(s =>
+                new SpotifyHelper(
+                    builder.Configuration.GetValue<string>("Spotify:ClientId"),
+                    builder.Configuration.GetValue<string>("Spotify:ClientSecret"),
+                    new HttpClient()
+                )
+            );
+
             var app = builder.Build();
+
 
 
             app.MapGet("/", () => "Hello World!");
@@ -33,7 +44,13 @@ namespace Dreamify
 
             app.MapPost("/artists", ArtistHandler.AddArtist);
             //app.MapGet("/artists/{artistId}", ArtistHandler.GetArtist);
-          
+
+
+            // Spotify endpoints
+            app.MapGet("/search/song/{search}/{offset?}/{countryCode?}", SpotifyHandler.SpotifySongSearch);
+            app.MapGet("/search/artist/{search}/{offset?}/{countryCode?}", SpotifyHandler.SpotifyArtistSearch);
+
+
             app.Run();
         }
     }

@@ -1,8 +1,7 @@
 ﻿using Dreamify.Data;
 using Dreamify.Models;
-using Dreamify.Models.Dtos;
-using Dreamify.Models.ViewModels;
-using Microsoft.AspNetCore.Identity;
+using Dreamify.Models.Dtos.DreamifyDtos;
+using Dreamify.Models.ViewModels.DreamifyViewModels;
 using Microsoft.EntityFrameworkCore;
 using System.Net;
 

@@ -1,6 +1,6 @@
 using Dreamify.Data;
 using Dreamify.Models;
-using Dreamify.Models.Dtos;
+using Dreamify.Models.Dtos.DreamifyDtos;
 using Dreamify.Models.ViewModels;
 using Dreamify.Services;
 
@@ -22,17 +22,17 @@ namespace Dreamify.Handlers
 
         public static IResult ConnectUserToArtist(int userId, int artistId, IUsersHelper userHelper)
         {
-            return userHelper.ConnectUserToArtist(userId, artistId);  // Temp change this later
+            return userHelper.ConnectUserToArtist(userId, artistId);
         }
 
         public static IResult ConnectUserToGenre(int userId, int genreId, IUsersHelper userHelper)
         {
-            return userHelper.ConnectUserToGenre(userId, genreId);  // Temp change this later
+            return userHelper.ConnectUserToGenre(userId, genreId);
         }
 
         public static IResult ConnectUserToSong(int userId, int songId, IUsersHelper userHelper)
         {
-            return userHelper.ConnectUserToSong(userId, songId);  // Temp change this later
+            return userHelper.ConnectUserToSong(userId, songId);
         }
 
     }
