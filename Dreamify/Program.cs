@@ -41,7 +41,8 @@ namespace Dreamify
             app.MapPost("/users/{userId}/artists/{artistId}", UserHandler.ConnectUserToArtist);
             app.MapPost("/users/{userId}/genres/{genreId}", UserHandler.ConnectUserToGenre);
             app.MapPost("/users/{userId}/songs/{songId}", UserHandler.ConnectUserToSong);
-
+            app.MapPost("/genres", ArtistHandler.GetArtist);
+            app.MapGet("/genres/{genreId}", ArtistHandler.GetGenre);
             app.MapPost("/artists", ArtistHandler.AddArtist);
             //app.MapGet("/artists/{artistId}", ArtistHandler.GetArtist);
 
@@ -51,9 +52,8 @@ namespace Dreamify
 
             app.Run();
 
-            app.MapPost("/genres", ArtistHandler.GetArtist);
-            app.MapGet("/genres/{genreId}", ArtistHandler.GetGenre);
-            app.Run();
+      
+
         }
     }
 }
