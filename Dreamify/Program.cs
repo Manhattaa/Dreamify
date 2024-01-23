@@ -50,7 +50,7 @@ namespace Dreamify
             app.MapGet("/search/song/{search}/{offset?}/{countryCode?}", SpotifyHandler.SpotifySongSearch);
             app.MapGet("/search/artist/{search}/{offset?}/{countryCode?}", SpotifyHandler.SpotifyArtistSearch);
 
-            var spotifyService = new SpotifyHelper("b277a6ebdb0848c2a268f95c47fb4d53", "1ddfc209e12e4d07aa2e5baaed80ef6a");
+            var spotifyService = new SpotifyHelper("insert clientid here", "insert clientsecret here");
             app.MapGet("me/player", context => SpotifyHandler.GetCurrentPlaybackState(context, context.Request.Query["accessToken"], spotifyService));
             app.MapPut("me/player/play", SpotifyHandler.StartOrResumePlayback);
 
