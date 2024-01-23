@@ -8,7 +8,7 @@ namespace DreamifyClient
         private static readonly string apiUrl = "http://localhost:5094/";
         private static int selectedOption = 1;
 
-        static async Task Main()
+        public static void Main()
         {
             MenuFunctions.main_header();
 
@@ -44,7 +44,7 @@ namespace DreamifyClient
                 case 3:
                     return "\t\t  List and add genres, artists, and songs";
                 case 4:
-                    return "\t\t  Call other API endpoints";
+                    return "\t\t  Search for song";
                 case 5:
                     return "\t\t  Exit";
                 default:
@@ -79,12 +79,10 @@ namespace DreamifyClient
             {
                 string userJson = await response.Content.ReadAsStringAsync();
                 Console.WriteLine($"Selected user details:\n{userJson}");
-                Thread.Sleep(3000);
             }
             else
             {
                 Console.WriteLine($"Failed to get user details. Status code: {response.StatusCode}");
-                Thread.Sleep(3000);
             }
         }
 
@@ -112,7 +110,7 @@ namespace DreamifyClient
             Console.WriteLine("List and add genres, artists, and songs functionality goes here.");
         }
 
-        static void HandleSelection(int selectedOption)
+        static async void HandleSelection(int selectedOption)
         {
             switch (selectedOption)
             {
@@ -126,7 +124,7 @@ namespace DreamifyClient
                     ListAndAddGenresArtistsSongs();
                     break;
                 case 4:
-                    CallOtherApiEndpoints();
+                    await SpotifyFunctions.SaveSongToDb();
                     break;
                 case 5:
                     Console.WriteLine("Exiting the client. Goodbye!");
