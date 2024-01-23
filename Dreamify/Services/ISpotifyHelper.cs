@@ -20,9 +20,9 @@ namespace Dreamify.Services
     {
         Task<List<SongSearchViewModel>> SpotifySongSearch(string search, int? offset, string? countryCode);
         Task<List<SpotifyArtistsSearchViewModel>> SpotifyArtistSearch(string search, int? offset, string? countryCode);
-        //Task<CurrentlyPlayingTrackResponseViewModel> GetCurrentPlayingTrack(string accessToken);
+        Task<CurrentlyPlayingTrackResponseViewModel> GetCurrentPlaybackState(string accessToken);
         Task StartOrResumePlayback(string accessToken);
-        
+
     }
 
     public class SpotifyHelper : ISpotifyHelper
@@ -217,6 +217,10 @@ namespace Dreamify.Services
 
             // specify the deviceId; If a DeviceId isnt specified then it'll default to an active instance.
             var response = await _httpClient.SendAsync(request);
+            //if (!response.IsSuccessStatusCode)
+            //{
+            //    string responseString = await response.Content.ReadAsStringAsync();
+            //}
             response.EnsureSuccessStatusCode();
         }
 
@@ -229,15 +233,20 @@ namespace Dreamify.Services
 
             var response = await _httpClient.SendAsync(request);
 
-            if (response.IsSuccessStatusCode)
+            try
             {
+                response.EnsureSuccessStatusCode();
+
                 // Deserialize the response to get the current playback state
                 var responseBody = await response.Content.ReadAsStringAsync();
                 return JsonSerializer.Deserialize<CurrentlyPlayingTrackResponseViewModel>(responseBody);
             }
-
-            // If there's no currently playing track or an error occurred, return null
-            return null;
+            catch (HttpRequestException ex)
+            {
+                // Log or handle the exception as needed
+                Console.WriteLine($"Error getting current playback state: {ex.Message}");
+                return null;
+            }
         }
     }
 }

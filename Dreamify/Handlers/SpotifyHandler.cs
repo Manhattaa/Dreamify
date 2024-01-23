@@ -1,6 +1,6 @@
-﻿using Dreamify.Services;
-using System.Net.Http;
-using System.Net.Http.Headers;
+﻿    using Dreamify.Services;
+    using System.Net.Http;
+    using System.Net.Http.Headers;
 
 namespace Dreamify.Handlers
 {
@@ -20,7 +20,7 @@ namespace Dreamify.Handlers
             return Results.Json(result);
         }
 
-        public static async Task StartOrResumePlayback(HttpContext context)
+        public static async Task StartOrResumePlayback(HttpContext context, ISpotifyHelper spotifyService)
         {
             try
             {
@@ -35,6 +35,9 @@ namespace Dreamify.Handlers
                     return;
                 }
 
+                // Call the StartOrResumePlayback method from your Spotify service
+                await spotifyService.StartOrResumePlayback(accessToken);
+
                 context.Response.StatusCode = 200; // OK
                 await context.Response.WriteAsync("Playback started or resumed successfully!");
             }
@@ -44,11 +47,28 @@ namespace Dreamify.Handlers
                 await context.Response.WriteAsync($"An error occurred: {ex.Message}");
             }
         }
-        //public static async Task<IResult> GetCurrentPlaybackState(string accessToken)
-        //{
-        //    var result = await spotifyService.GetCurrentPlaybackState(accessToken);
+        public static async Task<IResult> GetCurrentPlaybackState(HttpContext context, string accessToken, ISpotifyHelper spotifyService)
+        {
+            //try
+            //{
+                //// Check if accessToken is provided
+                //if (string.IsNullOrEmpty(accessToken))
+                //{
+                //    context.Response.StatusCode = 400; // Bad Request
+                //    await context.Response.WriteAsync("Access token is required.");
+                //    return Results.Json("Access token is required.");
+                //}
 
-        //    return Results.Json(result);
-        //}
+                var result = await spotifyService.GetCurrentPlaybackState(accessToken);
+
+                return Results.Json(result);
+            //}
+            //catch (Exception ex)
+            //{
+            //    context.Response.StatusCode = 500; // Internal Server Error
+            //    await context.Response.WriteAsync($"An error occurred: {ex.Message}");
+            //    return Results.Json($"An error occurred: {ex.Message}");
+            //}
+        }
     }
 }
