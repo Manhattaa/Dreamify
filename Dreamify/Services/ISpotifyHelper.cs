@@ -22,6 +22,7 @@ namespace Dreamify.Services
         Task<List<SpotifyArtistsSearchViewModel>> SpotifyArtistSearch(string search, int? offset, string? countryCode);
         //Task<CurrentlyPlayingTrackResponseViewModel> GetCurrentPlayingTrack(string accessToken);
         Task StartOrResumePlayback(string accessToken);
+        
     }
 
     public class SpotifyHelper : ISpotifyHelper
@@ -196,7 +197,7 @@ namespace Dreamify.Services
             return artistViewModels;
         }
 
-        public async Task StartOrResumePlayback([FromQuery] string accessToken)
+        public async Task StartOrResumePlayback(string accessToken)
         {
             //Make sure the accessToken is valid
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
@@ -214,12 +215,12 @@ namespace Dreamify.Services
             var request = new HttpRequestMessage(HttpMethod.Put, "https://api.spotify.com/v1/me/player/play");
             request.Headers.Add("Accept", "application/json");
 
-            // specify the deviceId
+            // specify the deviceId; If a DeviceId isnt specified then it'll default to an active instance.
             var response = await _httpClient.SendAsync(request);
             response.EnsureSuccessStatusCode();
         }
 
-        private async Task<CurrentlyPlayingTrackResponseViewModel> GetCurrentPlaybackState(string accessToken)
+        public async Task<CurrentlyPlayingTrackResponseViewModel> GetCurrentPlaybackState(string accessToken)
         {
             // Send a request to get the user's current playback state
             var request = new HttpRequestMessage(HttpMethod.Get, "https://api.spotify.com/v1/me/player/currently-playing");
