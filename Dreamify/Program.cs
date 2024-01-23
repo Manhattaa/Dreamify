@@ -22,8 +22,8 @@ namespace Dreamify
             app.MapGet("/", () => "Hello World!");
 
             app.MapGet("/users", UserHandler.GetUser);
-            app.MapGet("/user/{userId}", UserHandler.GetUser);
-            app.MapPost("/user", UserHandler.AddUser);
+            app.MapGet("/users/{userId}", UserHandler.GetUser);
+            app.MapPost("/users", UserHandler.AddUser);
             app.MapGet("/songs", ArtistHandler.GetSongs);
             app.MapGet("/users/{userId}/songs", ArtistHandler.GetUserSongs);
             app.MapPost("/artists/{artistId}/genre/{genreId}/songs", ArtistHandler.AddSong);
@@ -32,7 +32,7 @@ namespace Dreamify
             app.MapPost("/users/{userId}/songs/{songId}", UserHandler.ConnectUserToSong);
 
             app.MapPost("/artists", ArtistHandler.AddArtist);
-            app.MapGet("/artists/{artistId}", ArtistHandler.GetArtist);
+            //app.MapGet("/artists/{artistId}", ArtistHandler.GetArtist);
           
             app.Run();
         }
