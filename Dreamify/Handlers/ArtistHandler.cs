@@ -3,6 +3,7 @@ using System.Net;
 using Dreamify.Data;
 using Dreamify.Models;
 using Dreamify.Models.Dtos.DreamifyDtos;
+using Dreamify.Models.ViewModels.DreamifyViewModels;
 
 namespace Dreamify.Handlers
 {
@@ -30,13 +31,15 @@ namespace Dreamify.Handlers
                 return Results.Text($"404: Not found! {ex}");
             }
         }
+
         public static IResult GetArtist(IArtistsHelper artistHelper)
         {
             artistHelper.GetArtists();
             return Results.StatusCode((int)HttpStatusCode.OK);
         }
 
-        // Post songs
+
+
         public static IResult AddSong(int artistId, int genreId, SongDto song, ISongsHelper songHelper)
         {
             songHelper.AddSong(artistId, genreId, song);
@@ -45,17 +48,19 @@ namespace Dreamify.Handlers
 
         public static IResult GetSongs(ISongsHelper songHelper)
         {
-            return Results.Json(songHelper.GetSongs());
+            songHelper.GetSongs();
+            return Results.StatusCode((int)HttpStatusCode.OK);
+
         }
 
-        // This is correctly formatted and structured
+
         public static IResult GetUserSongs(int userId, ISongsHelper songHelper)
         {
             try
             {
                 return Results.Json(songHelper.GetUserSongs(userId));
             }
-            catch (Exception ex) 
+            catch (Exception ex)
             {
                 return Results.Problem(title: "Got exception", detail: ex.Message, statusCode: (int)HttpStatusCode.InternalServerError);
             }
