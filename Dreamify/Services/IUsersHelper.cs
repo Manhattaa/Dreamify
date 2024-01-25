@@ -9,11 +9,12 @@ namespace Dreamify.Services
 {
     public interface IUsersHelper
     {
-        public IResult AddUser(UsersDto usersDto);
+
+        public User AddUser(UsersDto usersDto);
         public List<UsersViewModel> GetUser(int? userId);
-        public IResult ConnectUserToArtist(int userId, int artistId);
-        public IResult ConnectUserToGenre(int userId, int genreId);
-        public IResult ConnectUserToSong(int userId, int songId);
+        public User ConnectUserToArtist(int userId, int artistId);
+        public User ConnectUserToGenre(int userId, int genreId);
+        public User ConnectUserToSong(int userId, int songId);
     }
 
     public class UsersHelper : IUsersHelper
@@ -27,27 +28,22 @@ namespace Dreamify.Services
         }
 
 
-        public IResult AddUser(UsersDto usersDto)
-        {
-            try
+        public User AddUser(UsersDto usersDto)
+        {           
+            
+            User user = new User()
             {
-                User user = new User()
-                {
-                    Username = usersDto.Username,
+                 Username = usersDto.Username,
                     
-                };
+            };
 
-                _context.Users.Add(user);
-                _context.SaveChanges();
+            _context.Users.Add(user);
+            _context.SaveChanges();
 
-                return Results.StatusCode((int)HttpStatusCode.Created);
-            }
-            catch (Exception ex)
-            {
-                
-                return Results.Text($"Error adding user to the database: {ex.Message}");
-            }
+             return user; 
+          
         }
+
 
 
         public List<UsersViewModel> GetUser(int? userId)
@@ -79,96 +75,84 @@ namespace Dreamify.Services
         }        
 
 
-        public IResult ConnectUserToArtist(int userId, int artistId)
+        public User ConnectUserToArtist(int userId, int artistId)
         {
-            try
-            {
-                // Get user, and artist from IDs
-                User user = _context.Users
-                    .Include(u => u.Artists)
-                    .Where(u => u.UserId == userId).Single();
-                Artist artist = _context.Artists.Where(a => a.ArtistId == artistId).Single();
+          
+             // Get user and artist from IDs
+             User user = _context.Users
+                 .Include(u => u.Artists)
+                 .Where(u => u.UserId == userId)
+                 .Single();  //SingleOrDefault makes a green squiggley so i changed to Single(); for now. 
 
-                // Check if null
-                if (user == null || artist == null)
-                    return Results.NotFound((user == null)
-                        ? $"No user with id {userId} found"
-                        : $"No artist with id {artistId} found");
+             Artist artist = _context.Artists
+                 .Where(a => a.ArtistId == artistId)
+                 .Single();
 
+             // Check if null
+             if (user == null || artist == null)
+             {
+                 // Handle not found cases as needed
+                 throw new Exception((user == null)
+                     ? $"No user with id {userId} found"
+                     : $"No artist with id {artistId} found");
+             }
 
-                // Add and save to db
-                user.Artists.Add(artist);
-                _context.SaveChanges();
+             // Add and save to db
+             user.Artists.Add(artist);
+             _context.SaveChanges();
 
-                return Results.StatusCode((int)HttpStatusCode.Created);
-            }
-
-            catch (Exception ex) 
-            {
-                return Results.Text(ex.Message);
-            }
-        }
-        
-        
-        public IResult ConnectUserToGenre(int userId, int genreId)
-        {
-            try
-            {
-                // Get user, and genre from IDs
-                User user = _context.Users
-                    .Include(u => u.Genres)
-                    .Where(u => u.UserId == userId).Single();
-
-                Genre genre = _context.Genres.Where(g => g.GenreId == genreId).Single();
-
-                // Check if null
-                if (user == null || genre == null)
-                    return Results.NotFound((user == null)
-                        ? $"No user with id {userId} found"
-                        : $"No artist with id {genreId} found");
-
-
-                // Add and save to db
-                user.Genres.Add(genre);
-                _context.SaveChanges();
-
-                return Results.StatusCode((int)HttpStatusCode.Created);
-            }
-            catch (Exception ex)
-            {
-                return Results.Text(ex.Message);
-            }
+             return user; // Return the updated User object
+          
         }
 
 
-        public IResult ConnectUserToSong(int userId, int songId)
+        public User ConnectUserToGenre(int userId, int genreId)
         {
-            try
-            {
-                // Get user, and song from IDs
-                User user = _context.Users
-                    .Include(u => u.Songs)
-                    .Where(u => u.UserId == userId).Single();
+            
+             // Get user, and genre from IDs
+             User user = _context.Users
+                 .Include(u => u.Genres)
+                 .Where(u => u.UserId == userId).Single();
 
-                Song song = _context.Songs.Where(s => s.SongId == songId).Single();
+             Genre genre = _context.Genres.Where(g => g.GenreId == genreId).Single();
 
-                // Check if null
-                if (user == null || song == null)
-                    return Results.NotFound((user == null)
-                        ? $"No user with id {userId} found"
-                        : $"No artist with id {songId} found");
+             // Check if null
+             if (user == null || genre == null)
+
+                 throw new Exception((user == null)
+                     ? $"No user with id {userId} found"
+                     : $"No artist with id {genreId} found");
 
 
-                // Add and save to db
-                user.Songs.Add(song);
-                _context.SaveChanges();
+             // Add and save to db
+             user.Genres.Add(genre);
+             _context.SaveChanges();
 
-                return Results.StatusCode((int)HttpStatusCode.Created);
-            }
-            catch (Exception ex)
-            {
-                return Results.Text(ex.Message);
-            }
+             return user;           
+           
+        }
+
+        public User ConnectUserToSong(int userId, int songId)
+        {
+            // Get user, and song from IDs
+            User user = _context.Users
+                .Include(u => u.Songs)
+                .Where(u => u.UserId == userId).Single();
+
+            Song song = _context.Songs.Where(s => s.SongId == songId).Single();
+
+            // Check if null
+            if (user == null || song == null)
+                throw new Exception((user == null)
+                    ? $"No user with id {userId} found"
+                    : $"No artist with id {songId} found");
+
+
+            // Add and save to db
+            user.Songs.Add(song);
+            _context.SaveChanges();
+
+            return user;
         }
     }
 }
