@@ -61,7 +61,7 @@ namespace DreamifyClient
             //string[] choiceOptions = /*songList*/.ToArray();
             int selection = NavFunctions.Navigation(songList,alreadyShownArtists, "Press [Enter] on the song you want to save");
 
-
+            // make api call and send info to save in db in dreamify api
 
         }
 
