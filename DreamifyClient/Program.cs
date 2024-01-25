@@ -12,66 +12,15 @@ namespace DreamifyClient
         {
             MenuFunctions.main_header();
 
-            //while (true)
-            //{
-
-            //    Console.Clear();
-            //    MenuFunctions.header();
-            //    Console.WriteLine("\t\t  Choose an option:");
-            //    MenuFunctions.footer();
-
-            //    for (int i = 1; i <= 5; i++)
-            //    {
-            //        Console.ForegroundColor = (i == selectedOption) ? ConsoleColor.DarkMagenta : ConsoleColor.White;
-            //        Console.WriteLine($"{GetMenuText(i)}");
-            //    }
-
-            //    Console.ResetColor();
-
-            //    ConsoleKeyInfo keyInfo = Console.ReadKey();
-            //    HandleKeyPress(keyInfo);
-            //}
-
-                int selection = NavFunctions.NavigationMain();
-                await HandleSelection(selection);
+            // Before user gets to select option, give user 2 options. Login or create user. 
+            // Login if user exists else create user before we do anything. We need the user and its id to 
+            // Connect it to the db. This should just be text that is sent in a api post to our api add user
+            int selection = NavFunctions.NavigationMain();
+            await HandleSelection(selection);
             
         }
 
-        //static string GetMenuText(int option)
-        //{
-        //    switch (option)
-        //    {
-        //        case 1:
-        //            return "\t\t  Get a user from the API";
-        //        case 2:
-        //            return "\t\t  Add new user";
-        //        case 3:
-        //            return "\t\t  List and add genres, artists, and songs";
-        //        case 4:
-        //            return "\t\t  Search for song";
-        //        case 5:
-        //            return "\t\t  Exit";
-        //        default:
-        //            return "\t\t  Invalid Option";
-        //    }
-        //}
-
-        //static void HandleKeyPress(ConsoleKeyInfo keyInfo)
-        //{
-        //    switch (keyInfo.Key)
-        //    {
-        //        case ConsoleKey.UpArrow:
-        //            selectedOption = Math.Max(1, selectedOption - 1);
-        //            break;
-        //        case ConsoleKey.DownArrow:
-        //            selectedOption = Math.Min(5, selectedOption + 1);
-        //            break;
-        //        case ConsoleKey.Enter:
-        //            HandleSelection(selectedOption);
-        //            break;
-        //    }
-        //}
-
+        // Move these to separate method
         static async Task GetUser()
         {
             Console.Write("Enter the user ID to select: ");
@@ -128,7 +77,7 @@ namespace DreamifyClient
                     ListAndAddGenresArtistsSongs();
                     break;
                 case 3:
-                    await SpotifyFunctions.SaveSongToDb();
+                    await SpotifyFunctions.SongSearch();
                     break;
                 case 4:
                     Console.WriteLine("Exiting the client. Goodbye!");
