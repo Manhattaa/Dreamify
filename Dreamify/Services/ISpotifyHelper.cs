@@ -1,11 +1,15 @@
-﻿using System.Net.Http.Headers;
+﻿using System.Net;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
+using Dreamify.Data;
+using Dreamify.Models;
 using Dreamify.Models.Dtos.DreamifyDtos;
 using Dreamify.Models.Dtos.SpotifyDtos.Artists;
 using Dreamify.Models.Dtos.SpotifyDtos.Songs;
 using Dreamify.Models.ViewModels.SpotifyViewModels;
+using Microsoft.EntityFrameworkCore;
 
 namespace Dreamify.Services
 {
@@ -24,9 +28,9 @@ namespace Dreamify.Services
         private string _accessToken;
         private int _limit = 10; // Sets default search limit on queries
 
-
         // Constructor with default HttpClient
         public SpotifyHelper(string clientId, string clientSecret) : this(clientId, clientSecret, new HttpClient()) { }
+
 
 
         // Constructor with HttpClient provided

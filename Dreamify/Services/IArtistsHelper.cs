@@ -11,8 +11,8 @@ namespace Dreamify.Services
     {
         public Artist AddArtist(int genreId, ArtistDto artistDto);
         public List<ArtistsViewModel> GetArtists();
-        public List<UserArtistsViewModel>GetUserArtists(int userId);
-        public List<UserGenresViewModel> GetUserGenres(int userId);
+        public UserArtistsViewModel GetUserArtists(int userId);
+        public UserGenresViewModel GetUserGenres(int userId);
 
 
     }
@@ -56,7 +56,7 @@ namespace Dreamify.Services
                     
         }
 
-        public List<UserArtistsViewModel> GetUserArtists(int userId)
+        public UserArtistsViewModel GetUserArtists(int userId)
         {
             
              // Get user and their artists from id
@@ -86,7 +86,7 @@ namespace Dreamify.Services
             return userArtists; 
         }
 
-        public List<UserGenresViewModel> GetUserGenres(int userId)
+        public UserGenresViewModel GetUserGenres(int userId)
         {
            
              // Get user and their artists from id
