@@ -15,7 +15,7 @@ namespace DreamifyClient
         private static HttpClient httpClient = new HttpClient();
         private static string apiUrl = "http://localhost:5094"; //change this to some global variable so we don't need to re-declare it in each class
 
-        public static async Task SaveSongToDb()
+        public static async Task SongSearch()
         {
             // Ensure correct search
             string search;
@@ -62,14 +62,8 @@ namespace DreamifyClient
             int selection = NavFunctions.Navigation(songList,alreadyShownArtists, "Press [Enter] on the song you want to save");
 
             // make api call and send info to save in db in dreamify api
+            // send to api: userId, songName, songSpotifyId, artistName, artistSpotifyId
 
         }
-
-
-
-        
-
-
-
     }
 }
