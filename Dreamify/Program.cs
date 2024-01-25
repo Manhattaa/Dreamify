@@ -18,6 +18,7 @@ namespace Dreamify
             builder.Services.AddDbContext<ApplicationContext>(options => options.UseSqlServer(connectionString));
             builder.Services.AddScoped<ISongsHelper, SongsHelper>();
             builder.Services.AddScoped<IUsersHelper, UsersHelper>();
+            builder.Services.AddScoped<ISpotifyDbHelper, SpotifyDbHelper>();
             builder.Services.AddScoped<ISpotifyHelper>(s =>
                 new SpotifyHelper(
                     builder.Configuration.GetValue<string>("Spotify:ClientId"),
@@ -28,6 +29,7 @@ namespace Dreamify
 
             var app = builder.Build();
 
+            string version = "v1";
 
 
             app.MapGet("/", () => "Hello World!");
@@ -49,7 +51,7 @@ namespace Dreamify
             // Spotify endpoints
             app.MapGet("/search/song/{search}/{offset?}/{countryCode?}", SpotifyHandler.SpotifySongSearch);
             app.MapGet("/search/artist/{search}/{offset?}/{countryCode?}", SpotifyHandler.SpotifyArtistSearch);
-            app.MapPost("users/{userid}/artists/{artistName}/{spotifyArtistId}/songs/{songName}/{spotifySongId}", ArtistHandler.AddSong);
+            app.MapPost("/users/add-spotify-song", SpotifyHandler.AddSpotifySong);
 
 
             app.Run();
