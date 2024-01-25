@@ -17,7 +17,7 @@ namespace Dreamify.Services
 
     public class SpotifyHelper : ISpotifyHelper
     {
-        private HttpClient _httpClient;
+        public HttpClient _httpClient;
         private string _clientId;
         private string _clientSecret;
         private DateTime _hourlyToken;
@@ -38,7 +38,7 @@ namespace Dreamify.Services
         }
         
 
-        private async Task<string> GetAccessToken()
+        public async Task<string> GetAccessToken()
         {
             var hourlyUpdate = (DateTime.Now - _hourlyToken).TotalMinutes; //https://learn.microsoft.com/en-us/dotnet/api/system.timespan.totalminutes?view=net-8.0
 

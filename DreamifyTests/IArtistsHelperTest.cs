@@ -36,7 +36,7 @@ namespace DreamifyTests
                         ""genres"": [""Dance Pop"", ""Rock"", ""UK Pop""]
                     },
                     {
-                        ""spotifyArtistId"": """",
+                        ""spotifyArtistId"": ""5x7GdOcXcuViSVCbl0hEfm"",
                         ""name"": ""Günther"",
                         ""popularity"": 42,
                         ""followers"": { ""totalFollowers"": 42008 },
@@ -51,15 +51,15 @@ namespace DreamifyTests
             var result = await spotifyHelper.SpotifyArtistSearch("searchTerm", 0, "SE");
 
             // Assert
-            Assert.NotNull(result);
-            Assert.Equal(2, result.Count); // if two things are returned can be more
+            Assert.IsNotNull(result);
+            Assert.Equals(2, result.Count); // if two things are returned can be more
 
             // ADd more here if needed
-            Assert.Equal("123", result[0].SpotifyArtistId);
-            Assert.Equal("Artist1", result[0].Name);
-            Assert.Equal(80, result[0].Popularity);
-            Assert.Equal(1000, result[0].Followers);
-            Assert.Equal(2, result[0].Genre.Count);
+            Assert.Equals("6M2wZ9GZgrQXHCFfjv46we", result[0].SpotifyArtistId);
+            Assert.Equals("Dua Lipa", result[0].Name);
+            Assert.Equals(87, result[0].Popularity);
+            Assert.Equals(42596502, result[0].Followers);
+            Assert.Equals(3, result[0].Genre.Count);
         }
     }
 }
