@@ -1,3 +1,5 @@
+<img src="https://github.com/Manhattaa/Dreamify/blob/master/Dreamify.jpg" alt="Dreamify Logo" width="900" height="700">
+
 # Dreamify™
 Welcome to Dreamify. A project that involves creating a music themed Minimal API that uses the [Spotify Open Access API](https://developer.spotify.com/documentation/web-api)
 
