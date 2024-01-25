@@ -61,7 +61,8 @@ namespace Dreamify.Handlers
 
                 var result = await spotifyService.GetCurrentPlaybackState(accessToken);
 
-                return Results.Json(result);
+            Console.WriteLine(result);
+            return Results.Json(result);
             //}
             //catch (Exception ex)
             //{
