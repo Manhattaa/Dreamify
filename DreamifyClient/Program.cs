@@ -1,12 +1,16 @@
-﻿using System.Net.Http.Json;
+﻿using Microsoft.IdentityModel.Tokens;
+using System.Net.Http.Json;
 
 namespace DreamifyClient
 {
     internal class Program
     {
-        private static readonly HttpClient httpClient = new HttpClient();
-        private static readonly string apiUrl = "http://localhost:5094/";
-        private static int selectedOption = 1;
+        //private static readonly HttpClient _httpClient = new HttpClient();
+        //private static readonly string _apiUrl = "http://localhost:5094/";
+        //private static int _selectedOption = 1;
+        
+        //temp userid for testing
+        private static int _userId = 1;
 
         public static async Task Main(string[] args)
         {
@@ -15,81 +19,71 @@ namespace DreamifyClient
             // Before user gets to select option, give user 2 options. Login or create user. 
             // Login if user exists else create user before we do anything. We need the user and its id to 
             // Connect it to the db. This should just be text that is sent in a api post to our api add user
-            int selection = NavFunctions.NavigationMain();
-            await HandleSelection(selection);
-            
-        }
 
-        // Move these to separate method
-        static async Task GetUser()
-        {
-            Console.Write("Enter the user ID to select: ");
-            int userId = int.Parse(Console.ReadLine());
+            string user;
 
-            // Make an API request to get user details
-            HttpResponseMessage response = await httpClient.GetAsync($"{apiUrl}users/{userId}");
-            if (response.IsSuccessStatusCode)
+            while (true)
             {
-                string userJson = await response.Content.ReadAsStringAsync();
-                Console.WriteLine($"Selected user details:\n{userJson}");
+                string[] options = { "Choose existing user", "Create new user" };
+                int selection = NavFunctions.NavigationGenericArray(options, "Select an option:");
+
+                // Show all users and let use choose (DOES NOT WORK CONNECTION TIMED OUT ERROR!!!)
+                if (selection == 0)
+                {
+                    List<string> usersList = await ApiFunctions.GetAllUsers();
+                    if (usersList != null)
+                    {
+                        string[] userOptions = usersList.ToArray();
+                        int userSelection = NavFunctions.NavigationGenericArray(userOptions, "Select a user:");
+                        user = userOptions[userSelection];
+                        break;
+                    }
+                }
+                // Create new user
+                else if (selection == 1)
+                {
+                    ApiFunctions.AddUser();
+                }
+                else
+                    break; // for testing purposes
+                    //Environment.Exit(1);
             }
-            else
-            {
-                Console.WriteLine($"Failed to get user details. Status code: {response.StatusCode}");
-            }
-        }
 
-        static async Task AddUser()
-        {
-            Console.Write("Enter the username for the new user: ");
-            string username = Console.ReadLine();
-
-            // Make an API request to create a new user
-            var newUser = new { Username = username };
-            HttpResponseMessage response = await httpClient.PostAsJsonAsync($"{apiUrl}users", newUser);
-            if (response.IsSuccessStatusCode)
+            // Loop until user exits
+            while (true)
             {
-                Console.WriteLine("User created successfully.");
-            }
-            else
-            {
-                Console.WriteLine($"Failed to create user. Status code: {response.StatusCode}");
+                int selection = NavFunctions.NavigationMain();
+                await HandleSelection(selection);
             }
         }
 
-        static void ListAndAddGenresArtistsSongs()
-        {
-            // Implement logic for listing and adding genres, artists, and songs
-            Console.WriteLine("List and add genres, artists, and songs functionality goes here.");
-        }
 
         static async Task HandleSelection(int selectedOption)
         {
             switch (selectedOption)
             {
                 case 0:
-                    GetUser().Wait();
+                    ApiFunctions.ListSongs(); // NOT IMPLEMENTED
                     break;
                 case 1:
-                    AddUser().Wait();
+                    ApiFunctions.ListArtists(); // NOT IMPLEMENTED
                     break;
                 case 2:
-                    ListAndAddGenresArtistsSongs();
+                    ApiFunctions.ListGenres(); // NOT IMPLEMENTED
                     break;
                 case 3:
-                    await SpotifyFunctions.SongSearch();
+                    await SpotifyFunctions.AddSongViaSearch(_userId);
                     break;
                 case 4:
-                    Console.WriteLine("Exiting the client. Goodbye!");
+                    await SpotifyFunctions.AddArtistViaSearch(_userId); // NOT IMPLEMENTED
+                    break;
+                case 5:
+                    Console.WriteLine("\t\t  Exiting the client. Goodbye!");
                     Environment.Exit(0);
                     break;
             }
         }
 
-        static void CallOtherApiEndpoints()
-        {
-            // Implement logic for calling other API endpoints
-            Console.WriteLine("Call other API endpoints functionality goes here.");
-        }
+
     }
 }
