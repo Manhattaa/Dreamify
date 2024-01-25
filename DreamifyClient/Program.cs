@@ -8,65 +8,69 @@ namespace DreamifyClient
         private static readonly string apiUrl = "http://localhost:5094/";
         private static int selectedOption = 1;
 
-        public static void Main()
+        public static async Task Main(string[] args)
         {
             MenuFunctions.main_header();
 
-            while (true)
-            {
+            //while (true)
+            //{
 
-                Console.Clear();
-                MenuFunctions.header();
-                Console.WriteLine("\t\t  Choose an option:");
-                MenuFunctions.footer();
+            //    Console.Clear();
+            //    MenuFunctions.header();
+            //    Console.WriteLine("\t\t  Choose an option:");
+            //    MenuFunctions.footer();
 
-                for (int i = 1; i <= 5; i++)
-                {
-                    Console.ForegroundColor = (i == selectedOption) ? ConsoleColor.DarkMagenta : ConsoleColor.White;
-                    Console.WriteLine($"{GetMenuText(i)}");
-                }
+            //    for (int i = 1; i <= 5; i++)
+            //    {
+            //        Console.ForegroundColor = (i == selectedOption) ? ConsoleColor.DarkMagenta : ConsoleColor.White;
+            //        Console.WriteLine($"{GetMenuText(i)}");
+            //    }
 
-                Console.ResetColor();
+            //    Console.ResetColor();
 
-                ConsoleKeyInfo keyInfo = Console.ReadKey();
-                HandleKeyPress(keyInfo);
-            }
+            //    ConsoleKeyInfo keyInfo = Console.ReadKey();
+            //    HandleKeyPress(keyInfo);
+            //}
+
+                int selection = NavFunctions.NavigationMain();
+                await HandleSelection(selection);
+            
         }
 
-        static string GetMenuText(int option)
-        {
-            switch (option)
-            {
-                case 1:
-                    return "\t\t  Get a user from the API";
-                case 2:
-                    return "\t\t  Add new user";
-                case 3:
-                    return "\t\t  List and add genres, artists, and songs";
-                case 4:
-                    return "\t\t  Search for song";
-                case 5:
-                    return "\t\t  Exit";
-                default:
-                    return "\t\t  Invalid Option";
-            }
-        }
+        //static string GetMenuText(int option)
+        //{
+        //    switch (option)
+        //    {
+        //        case 1:
+        //            return "\t\t  Get a user from the API";
+        //        case 2:
+        //            return "\t\t  Add new user";
+        //        case 3:
+        //            return "\t\t  List and add genres, artists, and songs";
+        //        case 4:
+        //            return "\t\t  Search for song";
+        //        case 5:
+        //            return "\t\t  Exit";
+        //        default:
+        //            return "\t\t  Invalid Option";
+        //    }
+        //}
 
-        static void HandleKeyPress(ConsoleKeyInfo keyInfo)
-        {
-            switch (keyInfo.Key)
-            {
-                case ConsoleKey.UpArrow:
-                    selectedOption = Math.Max(1, selectedOption - 1);
-                    break;
-                case ConsoleKey.DownArrow:
-                    selectedOption = Math.Min(5, selectedOption + 1);
-                    break;
-                case ConsoleKey.Enter:
-                    HandleSelection(selectedOption);
-                    break;
-            }
-        }
+        //static void HandleKeyPress(ConsoleKeyInfo keyInfo)
+        //{
+        //    switch (keyInfo.Key)
+        //    {
+        //        case ConsoleKey.UpArrow:
+        //            selectedOption = Math.Max(1, selectedOption - 1);
+        //            break;
+        //        case ConsoleKey.DownArrow:
+        //            selectedOption = Math.Min(5, selectedOption + 1);
+        //            break;
+        //        case ConsoleKey.Enter:
+        //            HandleSelection(selectedOption);
+        //            break;
+        //    }
+        //}
 
         static async Task GetUser()
         {
@@ -110,23 +114,23 @@ namespace DreamifyClient
             Console.WriteLine("List and add genres, artists, and songs functionality goes here.");
         }
 
-        static async void HandleSelection(int selectedOption)
+        static async Task HandleSelection(int selectedOption)
         {
             switch (selectedOption)
             {
-                case 1:
+                case 0:
                     GetUser().Wait();
                     break;
-                case 2:
+                case 1:
                     AddUser().Wait();
                     break;
-                case 3:
+                case 2:
                     ListAndAddGenresArtistsSongs();
                     break;
-                case 4:
+                case 3:
                     await SpotifyFunctions.SaveSongToDb();
                     break;
-                case 5:
+                case 4:
                     Console.WriteLine("Exiting the client. Goodbye!");
                     Environment.Exit(0);
                     break;
@@ -140,7 +144,3 @@ namespace DreamifyClient
         }
     }
 }
-
-
-
-
