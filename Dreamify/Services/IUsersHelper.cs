@@ -9,6 +9,7 @@ namespace Dreamify.Services
 {
     public interface IUsersHelper
     {
+
         public User AddUser(UsersDto usersDto);
         public List<UsersViewModel> GetUser(int? userId);
         public User ConnectUserToArtist(int userId, int artistId);
@@ -44,37 +45,34 @@ namespace Dreamify.Services
         }
 
 
-        public List<UsersViewModel> GetUser(int? userId)  
+
+        public List<UsersViewModel> GetUser(int? userId)
         {
-                      
-             List<UsersViewModel> users;
+            List<UsersViewModel> users;
 
-             if (userId == null)
-             {
-                 users = _context.Users
-                 .Select(u => new UsersViewModel
-                 {
-                     Username = u.Username,
+            if (userId == null)
+            {
+                users = _context.Users
+                .Select(u => new UsersViewModel
+                {
+                    Username = u.Username,
 
-                 })
-                 .ToList();
-             } 
-             else
-             {
-                 users = _context.Users
-                 .Where(u => u.UserId == userId)
-                 .Select(u => new UsersViewModel
-                 {
-                     Username = u.Username,
+                })
+                .ToList();
+            }
+            else
+            {
+                users = _context.Users
+                .Where(u => u.UserId == userId)
+                .Select(u => new UsersViewModel
+                {
+                    Username = u.Username,
 
-                 }) 
-                 .ToList();
-             }
-                
-
-             return users;
-           
-        }
+                })
+                .ToList();
+            }
+            return users;
+        }        
 
 
         public User ConnectUserToArtist(int userId, int artistId)

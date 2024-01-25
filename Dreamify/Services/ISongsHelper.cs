@@ -17,7 +17,7 @@ namespace Dreamify.Services
 
     public class SongsHelper : ISongsHelper
     {
-        // Create context for SongsHelper
+        // Create context
         private ApplicationContext _context;
 
         public SongsHelper(ApplicationContext context)

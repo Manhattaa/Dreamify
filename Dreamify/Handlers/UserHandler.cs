@@ -11,7 +11,8 @@ namespace Dreamify.Handlers
 
         public static IResult GetUser(int? userId, IUsersHelper usersHelper)
         {
-            return usersHelper.GetUser(userId);
+            var results = usersHelper.GetUser(userId);
+            return Results.Json(results);
         }
 
         public static IResult AddUser(UsersDto usersDto, IUsersHelper usersHelper)
