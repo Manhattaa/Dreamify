@@ -18,7 +18,7 @@ namespace DreamifyClient.ViewModels
         private string _allArtists { get; set; }
 
         [JsonPropertyName("artists")]
-        public List<SongArtistViewModel> AllArtists 
+        public List<SongArtistViewModel> AllArtists // Save only the first artist in the list
         { 
             get { return AllArtists; } 
             set {
