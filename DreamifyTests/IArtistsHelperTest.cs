@@ -18,7 +18,7 @@ namespace DreamifyTests
         {
             // Arrange
             var httpClientMock = new Mock<HttpClient>();
-            var spotifyHelper = new SpotifyHelper(httpClientMock.Object);
+            var spotifyHelper = new SpotifyHelper("clientId", "clientSecret", httpClientMock.Object);
 
             // moqing getaccesstoken
             httpClientMock.Setup(h => h.GetAccessToken()).ReturnsAsync("moqAccessToken");
