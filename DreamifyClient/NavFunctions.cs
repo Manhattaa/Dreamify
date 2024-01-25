@@ -16,7 +16,7 @@ namespace DreamifyClient
             while (true)
             {
                 // Clears window and re-prints the sent in phrase on each loop
-                Console.Clear();
+                Console.Clear();                
                 Console.WriteLine(phrase);
 
                 // Forloop to print all the options 
@@ -40,7 +40,7 @@ namespace DreamifyClient
                 if (menuSelection == songs.Count)
                 {
                     Console.ForegroundColor = ConsoleColor.White;
-                    Console.BackgroundColor = ConsoleColor.DarkCyan;
+                    Console.BackgroundColor = ConsoleColor.DarkMagenta;
                 }
                 Console.WriteLine("Exit");
 
@@ -66,6 +66,80 @@ namespace DreamifyClient
 
                     // If we go out of bounds down it goes to the top of the list (+1 for the exit not included in the list)
                     if (menuSelection == songs.Count + 1)
+                        menuSelection = 0;
+
+                }
+                else if (key.Key == ConsoleKey.Enter)
+                {
+                    Console.WriteLine(); // New line for formatting - to look nicer
+                    return menuSelection;
+                }
+            }
+        }
+
+        public static int NavigationMain()
+        {
+            string[] options = { "\t\t  Get a user from the API", "\t\t  Add new user", "\t\t  List and add genres, artists, and songs",
+            "\t\t  Search for song", "\t\t  Exit"};
+
+
+            int menuSelection = 0;
+
+            // Loops until user presses enter on a choice
+            while (true)
+            {
+                // Clears window and re-prints the sent in phrase on each loop
+                Console.Clear();
+                MenuFunctions.header();
+                Console.WriteLine("\t\t  Choose an option:" );
+                MenuFunctions.divider();
+
+                // Forloop to print all the options 
+                for (int i = 0; i < options.Length; i++)
+                {
+                    // Changes color of the option we've currently selected so when menuSelection is for exemple "2" the second option will turn darkgrey
+                    if (i == menuSelection)
+                    {
+                        Console.ForegroundColor = ConsoleColor.White;
+                        Console.BackgroundColor = ConsoleColor.DarkMagenta;
+                    }
+
+                    // Prints all the options in the array along with the pointer arrow if on the current selection
+                    Console.WriteLine($"{options[i]}");
+
+                    // Reset color to default
+                    Console.ResetColor();
+                }
+
+                // If menu selection is 1 more than the list it points on exit so we need to change the color for the exit printout
+                if (menuSelection == options.Length)
+                {
+                    Console.ForegroundColor = ConsoleColor.White;
+                    Console.BackgroundColor = ConsoleColor.DarkMagenta;
+                }
+
+                // Reset color to default
+                Console.ResetColor();
+
+
+                //"Listen" to keystrokes from the user
+                ConsoleKeyInfo key = Console.ReadKey(true);
+
+                //Handles the arrow keys to move up and down the menu
+                if (key.Key == ConsoleKey.UpArrow)
+                {
+                    menuSelection--;
+
+                    // If we go out of bounds up it goes to the bottom of the list
+                    if (menuSelection == -1)
+                        menuSelection = options.Length - 1;
+                }
+                else if (key.Key == ConsoleKey.DownArrow)
+                {
+                    menuSelection++;
+
+                    // If we go out of bounds down it goes to the top of the list
+                        if (menuSelection == options.Length)
                         menuSelection = 0;
 
                 }
