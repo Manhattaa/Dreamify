@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DreamifyClient.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,7 +9,7 @@ namespace DreamifyClient
 {   
     public class NavFunctions
     {
-        public static int Navigation(List<string> songs, List<string> artists, string phrase)
+        public static int NavigationGenericArray(string[] options, string phrase)
         {
             int menuSelection = 0;
 
@@ -16,23 +17,86 @@ namespace DreamifyClient
             while (true)
             {
                 // Clears window and re-prints the sent in phrase on each loop
-                Console.Clear();                
-                Console.WriteLine(phrase);
+                Console.Clear();
+                Console.WriteLine($"\t\t  {phrase}");
+                MenuFunctions.divider();
 
-                // Forloop to print all the options 
+                for (int i = 0; i < options.Length; i++)
+                {
+                    // Changes color of the option we've currently selected so when menuSelection is for exemple "2" the second option will turn darkgrey
+                    if (i == menuSelection)
+                    {
+                        Console.ForegroundColor = ConsoleColor.White;
+                        Console.BackgroundColor = ConsoleColor.DarkMagenta;
+                    }
+
+                    Console.Write($"\t\t  {options[i]}\n");
+                    Console.ResetColor();
+                }
+
+                // If menu selection is 1 more than the list it points on exit so we need to change the color for the exit printout
+                if (menuSelection == options.Length)
+                {
+                    Console.ForegroundColor = ConsoleColor.White;
+                    Console.BackgroundColor = ConsoleColor.DarkMagenta;
+                }
+
+                Console.WriteLine("\t\t  Exit");
+                Console.ResetColor();
+
+
+                //"Listen" to keystrokes from the user
+                ConsoleKeyInfo key = Console.ReadKey(true);
+
+                //Handles the arrow keys to move up and down the menu
+                if (key.Key == ConsoleKey.UpArrow)
+                {
+                    menuSelection--;
+
+                    // If we go out of bounds up it goes to the bottom of the list
+                    if (menuSelection == -1)
+                        menuSelection = options.Length;
+                }
+                else if (key.Key == ConsoleKey.DownArrow)
+                {
+                    menuSelection++;
+
+                    // If we go out of bounds down it goes to the top of the list (+1 for the exit not included in the list)
+                    if (menuSelection == options.Length + 1)
+                        menuSelection = 0;
+
+                }
+                else if (key.Key == ConsoleKey.Enter)
+                {
+                    Console.WriteLine(); // New line for formatting - to look nicer
+                    return menuSelection;
+                }
+            }
+        }
+
+
+        public static int NavigationSongSearch(List<SongSearchViewModel> songs, List<SongArtistViewModel> artists, string phrase)
+        {
+            int menuSelection = 0;
+
+            while (true)
+            {
+                // Clears window and re-prints the sent in phrase on each loop
+                Console.Clear();                
+                Console.WriteLine($"\t\t  {phrase}");
+                MenuFunctions.divider();
+ 
                 for (int i = 0; i < songs.Count; i++)
                 {
                     // Changes color of the option we've currently selected so when menuSelection is for exemple "2" the second option will turn darkgrey
                     if (i == menuSelection)
                     {
                         Console.ForegroundColor = ConsoleColor.White;
-                        Console.BackgroundColor = ConsoleColor.DarkCyan;
+                        Console.BackgroundColor = ConsoleColor.DarkMagenta;
                     }
 
-                    // Prints all the options in the array along with the pointer arrow if on the current selection
-                    Console.Write($"Song: {songs.ElementAt(i)} Artist: {artists.ElementAt(i)}\n");
-
-                    // Reset color to default
+                    // Prints all the options
+                    Console.Write($"\t\t  Song: {songs.ElementAt(i).SongName} Artist: {artists.ElementAt(i).ArtistName}\n");
                     Console.ResetColor();
                 }
 
@@ -42,9 +106,8 @@ namespace DreamifyClient
                     Console.ForegroundColor = ConsoleColor.White;
                     Console.BackgroundColor = ConsoleColor.DarkMagenta;
                 }
-                Console.WriteLine("Exit");
 
-                // Reset color to default
+                Console.WriteLine("\t\t  Exit");
                 Console.ResetColor();
 
 
@@ -79,22 +142,18 @@ namespace DreamifyClient
 
         public static int NavigationMain()
         {
-            string[] options = { "\t\t  Get a user from the API", "\t\t  Add new user", "\t\t  List and add genres, artists, and songs",
-            "\t\t  Search for song", "\t\t  Exit"};
-
+            string[] options = { "List all songs", "List all artists", "List all genres",
+            "Add song via search", "Add artist via search", "Exit"};
 
             int menuSelection = 0;
 
-            // Loops until user presses enter on a choice
             while (true)
             {
-                // Clears window and re-prints the sent in phrase on each loop
                 Console.Clear();
                 MenuFunctions.header();
                 Console.WriteLine("\t\t  Choose an option:" );
                 MenuFunctions.divider();
 
-                // Forloop to print all the options 
                 for (int i = 0; i < options.Length; i++)
                 {
                     // Changes color of the option we've currently selected so when menuSelection is for exemple "2" the second option will turn darkgrey
@@ -104,10 +163,8 @@ namespace DreamifyClient
                         Console.BackgroundColor = ConsoleColor.DarkMagenta;
                     }
 
-                    // Prints all the options in the array along with the pointer arrow if on the current selection
-                    Console.WriteLine($"{options[i]}");
-
-                    // Reset color to default
+                    // Prints all the options
+                    Console.WriteLine($"\t\t  {options[i]}");
                     Console.ResetColor();
                 }
 
@@ -118,9 +175,9 @@ namespace DreamifyClient
                     Console.BackgroundColor = ConsoleColor.DarkMagenta;
                 }
 
-                // Reset color to default
                 Console.ResetColor();
 
+                MenuFunctions.footer();
 
                 //"Listen" to keystrokes from the user
                 ConsoleKeyInfo key = Console.ReadKey(true);
