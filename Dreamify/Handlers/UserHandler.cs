@@ -11,27 +11,28 @@ namespace Dreamify.Handlers
 
         public static IResult GetUser(int? userId, IUsersHelper usersHelper)
         {
-            return usersHelper.GetUser(userId);
+            var results = usersHelper.GetUser(userId);
+            return Results.Json(results);
         }
 
         public static IResult AddUser(UsersDto usersDto, IUsersHelper usersHelper)
         {
-            return usersHelper.AddUser(usersDto);
+            return (IResult)usersHelper.AddUser(usersDto);
         }
 
         public static IResult ConnectUserToArtist(int userId, int artistId, IUsersHelper userHelper)
         {
-            return userHelper.ConnectUserToArtist(userId, artistId);
+            return (IResult)userHelper.ConnectUserToArtist(userId, artistId);
         }
 
         public static IResult ConnectUserToGenre(int userId, int genreId, IUsersHelper userHelper)
         {
-            return userHelper.ConnectUserToGenre(userId, genreId);
+            return (IResult)userHelper.ConnectUserToGenre(userId, genreId);
         }
 
         public static IResult ConnectUserToSong(int userId, int songId, IUsersHelper userHelper)
         {
-            return userHelper.ConnectUserToSong(userId, songId);
+            return  (IResult)userHelper.ConnectUserToSong(userId, songId);
         }
 
     }

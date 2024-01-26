@@ -11,7 +11,7 @@ namespace Dreamify.Models
 
 
         public Artist Artist { get; set; }
-        public Genre Genre { get; set; }
-        public virtual ICollection<User> Users{ get; set;}
+        public Genre? Genre { get; set; }
+        public virtual ICollection<User>? Users{ get; set;}
     }
 }
