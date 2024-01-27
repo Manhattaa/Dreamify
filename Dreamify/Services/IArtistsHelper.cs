@@ -11,8 +11,8 @@ namespace Dreamify.Services
     {
         public Artist AddArtist(int genreId, ArtistDto artistDto);
         public List<ArtistsViewModel> GetArtists();
-        public List<UserArtistsViewModel>GetUserArtists(int userId);
-        public List<UserGenresViewModel> GetUserGenres(int userId);
+        public UserArtistsViewModel GetUserArtists(int userId);
+        public UserGenresViewModel GetUserGenres(int userId);
 
 
     }
@@ -56,64 +56,64 @@ namespace Dreamify.Services
                     
         }
 
-        public List<UserArtistsViewModel> GetUserArtists(int userId)
+        public UserArtistsViewModel GetUserArtists(int userId)
         {
-            
-             // Get user and their artists from id
-             User user = _context.Users
-             .Include(u => u.Artists)
-             .Where(u => u.UserId == userId)
-             .Single();
+
+            // Get user and their artists from id
+            User user = _context.Users
+            .Include(u => u.Artists)
+            .Where(u => u.UserId == userId)
+            .Single();
 
             if (user == null)
                 throw new Exception();
 
 
-             // Create viewmodel consisting of username and a list of all songs
-             UserArtistsViewModel userArtists = new UserArtistsViewModel
-             {
-                 Username = user.Username,
-                 Artists = user.Artists
-                 .Select(a => new ArtistsViewModel
-                 {
-                     Name = a.Name,
-                     Description = a.Description
-                 })
-                 .ToList()
-             };
+            // Create viewmodel consistin of username and a list of all songs
+            UserArtistsViewModel userArtists = new UserArtistsViewModel
+            {
+                Username = user.Username,
+                Artists = user.Artists
+                .Select(a => new ArtistsViewModel
+                {
+                    Name = a.Name,
+                    Description = a.Description
+                })
+                .ToList()
+            };
 
 
-            return userArtists; 
+            return userArtists;
         }
 
-        public List<UserGenresViewModel> GetUserGenres(int userId)
+        public UserGenresViewModel GetUserGenres(int userId)
         {
-           
-             // Get user and their artists from id
-             User user = _context.Users
-             .Include(u => u.Genres)
-             .Where(u => u.UserId == userId)
-             .Single();
 
-             if (user == null)
-                 throw new Exception();
+            // Get user and their artists from id
+            User user = _context.Users
+            .Include(u => u.Genres)
+            .Where(u => u.UserId == userId)
+            .Single();
 
-
-             // Create viewmodel consisting of username and a list of all songs
-             UserGenresViewModel userGenres = new UserGenresViewModel
-             {
-                 Username = user.Username,
-                 Genres = user.Genres
-                 .Select(a => new GenresViewModel
-                 {
-                     Title = a.Title,
-                 })
-                 .ToList()
-             };
+            if (user == null)
+                throw new Exception();
 
 
-             return userGenres;
-       
+            // Create viewmodel consisting of username and a list of all songs
+            UserGenresViewModel userGenres = new UserGenresViewModel
+            {
+                Username = user.Username,
+                Genres = user.Genres
+                .Select(a => new GenresViewModel
+                {
+                    Title = a.Title,
+                })
+                .ToList()  
+            };
+
+
+            return userGenres;
+
         }
     }
 }
