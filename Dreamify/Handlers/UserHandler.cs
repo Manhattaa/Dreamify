@@ -49,7 +49,6 @@ namespace Dreamify.Handlers
                 return Results.Problem(title: "Got exception", detail: ex.Message, statusCode: (int)HttpStatusCode.InternalServerError);
             }
             return Results.StatusCode((int)HttpStatusCode.OK);
-            
         }
 
         public static IResult ConnectUserToGenre(int userId, int genreId, IUsersHelper userHelper)

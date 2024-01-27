@@ -10,6 +10,9 @@ namespace DreamifyTests
     public class IArtistsHelperTest
     {
         [TestMethod]
-        public 
+        public async Task SpotifyArtistSearch_CheckIfArtistViewModelsGetsReturned()
+        {
+
+        }
     }
 }
