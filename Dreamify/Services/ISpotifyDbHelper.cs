@@ -41,7 +41,7 @@ namespace Dreamify.Services
             // Otherwise create new artist object
             else
             {
-                artist = new Models.Artist()
+                artist = new Artist()
                 {
                     SpotifyArtistId = spotifyArtistId,
                     Name = artistName,

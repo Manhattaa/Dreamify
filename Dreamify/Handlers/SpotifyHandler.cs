@@ -9,16 +9,31 @@ namespace Dreamify.Handlers
     {
         public static async Task<IResult> SpotifySongSearch(string search, int? offset, string? countryCode, ISpotifyHelper spotifyService)
         {
-            var result = await spotifyService.SpotifySongSearch(search, offset, countryCode);
+            try
+            {
+                var result = await spotifyService.SpotifySongSearch(search, offset, countryCode);
+                return Results.Json(result);
 
-            return Results.Json(result);
+            }
+            catch (Exception ex)
+            {
+                return Results.Problem(title: "Got exception", detail: ex.Message, statusCode: (int)HttpStatusCode.InternalServerError);
+            }
         }
 
         public static async Task<IResult> SpotifyArtistSearch(string search, int? offset, string? countryCode, ISpotifyHelper spotifyService)
         {
-            var result = await spotifyService.SpotifyArtistSearch(search, offset, countryCode);
+            try
+            {
+                var result = await spotifyService.SpotifyArtistSearch(search, offset, countryCode);
+                return Results.Json(result);
 
-            return Results.Json(result);
+            }
+            catch (Exception ex)
+            {
+                return Results.Problem(title: "Got exception", detail: ex.Message, statusCode: (int)HttpStatusCode.InternalServerError);
+
+            }
         }
 
         public static IResult AddSpotifySong([FromBody] AddSpotifySongDto sSongDto, ISpotifyDbHelper spotifyDbService)

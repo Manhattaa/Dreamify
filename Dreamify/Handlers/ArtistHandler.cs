@@ -4,19 +4,17 @@ using Dreamify.Data;
 using Dreamify.Models;
 using Dreamify.Models.Dtos.DreamifyDtos;
 using Dreamify.Models.ViewModels.DreamifyViewModels;
+using Microsoft.IdentityModel.Logging;
 
 namespace Dreamify.Handlers
 {
     public class ArtistHandler
     {
-        // Genres
-
-        // Artists
-
         public static IResult AddArtist(ApplicationContext context, string personId, ArtistDto artistDto)
         {
             try
             {
+                // move this code to the IArtistHelper
                 Artist artist = new Artist
                 {
                     Name = artistDto.Name,
@@ -28,29 +26,47 @@ namespace Dreamify.Handlers
             }
             catch (Exception ex)
             {
-                return Results.Text($"404: Not found! {ex}");
+                return Results.Problem(title: "Got exception", detail: ex.Message, statusCode: (int)HttpStatusCode.InternalServerError);
             }
         }
 
         public static IResult GetArtist(IArtistsHelper artistHelper)
         {
-            artistHelper.GetArtists();
-            return Results.StatusCode((int)HttpStatusCode.OK);
+            try
+            {
+                return Results.Json(artistHelper.GetArtists());
+            }
+            catch (Exception ex)
+            {
+                return Results.Problem(title: "Got exception", detail: ex.Message, statusCode: (int)HttpStatusCode.InternalServerError);
+            }
         }
-
 
 
         public static IResult AddSong(int artistId, int genreId, SongDto song, ISongsHelper songHelper)
         {
-            songHelper.AddSong(artistId, genreId, song);
-            return Results.StatusCode((int)HttpStatusCode.Created);
+            try
+            {
+                songHelper.AddSong(artistId, genreId, song);
+                return Results.StatusCode((int)HttpStatusCode.Created);
+            }
+            catch(Exception ex)
+            {
+                return Results.Problem(title: "Got exception", detail: ex.Message, statusCode: (int)HttpStatusCode.InternalServerError);
+            }
+
         }
 
         public static IResult GetSongs(ISongsHelper songHelper)
         {
-            songHelper.GetSongs();
-            return Results.StatusCode((int)HttpStatusCode.OK);
-
+            try
+            { 
+                return Results.Json(songHelper.GetSongs());
+            }
+            catch(Exception ex)
+            {
+                return Results.Problem(title: "Got exception", detail: ex.Message, statusCode: (int)HttpStatusCode.InternalServerError);
+            }
         }
 
 
