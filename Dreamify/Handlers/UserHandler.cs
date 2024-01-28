@@ -25,6 +25,18 @@ namespace Dreamify.Handlers
             return Results.Json(results);
         }
 
+        public static IResult GetUserAndId(IUsersHelper usersHelper)
+        {
+            try
+            {
+                return Results.Json(usersHelper.GetUserAndId());
+            }
+            catch (Exception ex)
+            {
+                return Results.Problem(title: "Got exception", detail: ex.Message, statusCode: (int)HttpStatusCode.InternalServerError);
+            }
+        }
+
         public static IResult AddUser(UsersDto usersDto, IUsersHelper usersHelper)
         {
             try

@@ -9,7 +9,7 @@ namespace DreamifyClient
 {   
     public class NavFunctions
     {
-        public static int NavigationGenericArray(string[] options, string phrase)
+        public static int NavigationGeneric(string[] options, string phrase)
         {
             int menuSelection = 0;
 
@@ -142,7 +142,7 @@ namespace DreamifyClient
 
         public static int NavigationMain()
         {
-            string[] options = { "List all songs", "List all artists", "List all genres",
+            string[] options = { "List all songs", "List all artists", "List all genres", "Add song", "Add artist", "Add genre",
             "Add song via search", "Add artist via search", "Exit"};
 
             int menuSelection = 0;

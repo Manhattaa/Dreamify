@@ -1,6 +1,5 @@
 ﻿using Dreamify.Data;
 using Dreamify.Models;
-using System.Net;
 using Microsoft.EntityFrameworkCore;
 using Dreamify.Models.ViewModels.DreamifyViewModels;
 using Dreamify.Models.Dtos.DreamifyDtos;
@@ -9,12 +8,12 @@ namespace Dreamify.Services
 {
     public interface IArtistsHelper
     {
-        public Artist AddArtist(int genreId, ArtistDto artistDto);
+        public void AddArtist(ArtistDto artistDto);
+        public void AddGenre(GenreDto genreDto);
         public List<ArtistsViewModel> GetArtists();
+        public List<GenresViewModel> GetGenres();
         public UserArtistsViewModel GetUserArtists(int userId);
         public UserGenresViewModel GetUserGenres(int userId);
-
-
     }
 
     public class ArtistsHelper : IArtistsHelper
@@ -25,23 +24,18 @@ namespace Dreamify.Services
             _context = context;
         }
 
-        public Artist AddArtist(int genreId, ArtistDto artistDto)
+        public void AddArtist(ArtistDto artistDto)
         {
-            
-            
-                Genre genre = _context.Genres.Where(g => g.GenreId == genreId).Single();
+            Artist artist = new Artist()
+            {
+                Name = artistDto.Name,
+                Description = artistDto.Description,
+                Popularity = artistDto.Popularity,
+                Genres = artistDto.Genres
+            };
 
-                Artist artist = new Artist()
-                {
-                    Name = artistDto.Name,
-                    Description = artistDto.Description
-                };
-
-                _context.Artists.Add(artist);
-                _context.SaveChanges();
-
-            return artist;
-                        
+            _context.Artists.Add(artist);
+            _context.SaveChanges();          
         }
 
         public List<ArtistsViewModel> GetArtists()
@@ -52,8 +46,7 @@ namespace Dreamify.Services
                      Name = a.Name,
                  })
                  .ToList();
-             return artists;
-                    
+             return artists;          
         }
 
         public UserArtistsViewModel GetUserArtists(int userId)
@@ -69,7 +62,7 @@ namespace Dreamify.Services
                 throw new Exception();
 
 
-            // Create viewmodel consistin of username and a list of all songs
+            // Create viewmodel consisting of username and a list of all songs
             UserArtistsViewModel userArtists = new UserArtistsViewModel
             {
                 Username = user.Username,
@@ -82,13 +75,11 @@ namespace Dreamify.Services
                 .ToList()
             };
 
-
             return userArtists;
         }
 
         public UserGenresViewModel GetUserGenres(int userId)
         {
-
             // Get user and their artists from id
             User user = _context.Users
             .Include(u => u.Genres)
@@ -111,9 +102,31 @@ namespace Dreamify.Services
                 .ToList()  
             };
 
-
             return userGenres;
-
         }
+
+        public List<GenresViewModel> GetGenres()
+        {
+            List<GenresViewModel> genres = _context.Genres
+                .Select(g => new GenresViewModel
+                {
+                    Title = g.Title,
+                })
+                .ToList();
+
+            return genres;
+        }
+
+        public void AddGenre(GenreDto genreDto)
+        {
+            Genre genre = new Genre()
+            {
+                Title = genreDto.Title
+            };
+
+            _context.Genres.Add(genre);
+            _context.SaveChanges();
+        }
+
     }
 }

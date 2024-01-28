@@ -1,28 +1,18 @@
 ﻿using Dreamify.Services;
 using System.Net;
-using Dreamify.Data;
-using Dreamify.Models;
 using Dreamify.Models.Dtos.DreamifyDtos;
-using Dreamify.Models.ViewModels.DreamifyViewModels;
-using Microsoft.IdentityModel.Logging;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Dreamify.Handlers
 {
     public class ArtistHandler
     {
-        public static IResult AddArtist(ApplicationContext context, string personId, ArtistDto artistDto)
+        public static IResult AddArtist([FromBody]ArtistDto artistDto, IArtistsHelper artistHelper)
         {
             try
             {
-                // move this code to the IArtistHelper
-                Artist artist = new Artist
-                {
-                    Name = artistDto.Name,
-                    Description = artistDto.Description
-                };
-                context.Artists.Add(artist);
-                context.SaveChanges();
-                return Results.Ok($"Artist {artist.Name} has been added to the database.");
+                artistHelper.AddArtist(artistDto);
+                return Results.StatusCode((int)HttpStatusCode.Created);
             }
             catch (Exception ex)
             {
@@ -42,12 +32,11 @@ namespace Dreamify.Handlers
             }
         }
 
-
-        public static IResult AddSong(int artistId, int genreId, SongDto song, ISongsHelper songHelper)
+        public static IResult AddSong([FromBody] SongDto songDto, ISongsHelper songHelper)
         {
             try
             {
-                songHelper.AddSong(artistId, genreId, song);
+                songHelper.AddSong(songDto);
                 return Results.StatusCode((int)HttpStatusCode.Created);
             }
             catch(Exception ex)
@@ -75,6 +64,31 @@ namespace Dreamify.Handlers
             try
             {
                 return Results.Json(songHelper.GetUserSongs(userId));
+            }
+            catch (Exception ex)
+            {
+                return Results.Problem(title: "Got exception", detail: ex.Message, statusCode: (int)HttpStatusCode.InternalServerError);
+            }
+        }
+
+        public static IResult GetGenres(IArtistsHelper artistHelper)
+        {
+            try
+            {
+                return Results.Json(artistHelper.GetGenres());
+            }
+            catch (Exception ex)
+            {
+                return Results.Problem(title: "Got exception", detail: ex.Message, statusCode: (int)HttpStatusCode.InternalServerError);
+            }
+        }
+
+        public static IResult AddGenres([FromBody] GenreDto genreDto, IArtistsHelper artistHelper)
+        {
+            try
+            {
+                artistHelper.AddGenre(genreDto);
+                return Results.StatusCode((int)HttpStatusCode.Created);
             }
             catch (Exception ex)
             {

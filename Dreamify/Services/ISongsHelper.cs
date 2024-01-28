@@ -10,7 +10,7 @@ namespace Dreamify.Services
 
     public interface ISongsHelper
     {
-        public Song AddSong(int artistId, int genreId, SongDto songDto);
+        public void AddSong(SongDto songDto);
         public List<SongsViewModel> GetSongs();
         public UserSongsViewModel GetUserSongs(int userId);
     }
@@ -25,34 +25,18 @@ namespace Dreamify.Services
             _context = context;
         }
 
-        public Song AddSong(int artistId, int genreId, SongDto songDto)
+        public void AddSong(SongDto songDto)
         {
-                      
-             // Get artist and genre from their IDs
-             Artist artist = _context.Artists.Where(a => a.ArtistId == artistId).Single();
-             Genre genre = _context.Genres.Where(g => g.GenreId == genreId).Single();
+            // Create new song object and save to db
+            Song song = new Song()
+            {
+                Title = songDto.Title,
+                Artist = null,
+                Genre = null
+            };
 
-             // Make sure artist and genre isn't null
-             if (artist == null)
-                 throw new Exception($"No artist found with the id {artistId}");
-
-             if (genre == null)
-                 throw new Exception($"No genre found with the id {genreId}");
-
-
-             // Create new song object and save to db
-             Song song = new Song()
-             {
-                 Title = songDto.Title,
-                 Artist = artist,
-                 Genre = genre
-             };
-
-             _context.Add(song);
-             _context.SaveChanges();
-
-             return song;
-                      
+            _context.Add(song);
+            _context.SaveChanges();
         }
 
         public List<SongsViewModel> GetSongs()
@@ -99,7 +83,5 @@ namespace Dreamify.Services
 
             return userSongs;
         }
-
     }
-    
 }

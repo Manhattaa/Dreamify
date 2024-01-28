@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace DreamifyClient.ViewModels
 {
-    public class UsersViewModel
+    public class SongsViewModel
     {
-        [JsonPropertyName("username")]
-        public string Username { get; set; }
+        [JsonPropertyName("title")]
+        public string Title { get; set; }
     }
 }

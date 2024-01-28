@@ -12,6 +12,7 @@ namespace Dreamify.Services
 
         public void AddUser(UsersDto usersDto);
         public List<UsersViewModel> GetUser(int? userId);
+        public List<UsersIdViewModel> GetUserAndId();
         public void ConnectUserToArtist(int userId, int artistId);
         public void ConnectUserToGenre(int userId, int genreId);
         public void ConnectUserToSong(int userId, int songId);
@@ -70,7 +71,23 @@ namespace Dreamify.Services
                 .ToList();
             }
             return users;
-        }        
+        }
+
+        public List<UsersIdViewModel> GetUserAndId()
+        {
+            List<UsersIdViewModel> users;
+
+            users = _context.Users
+            .Select(u => new UsersIdViewModel
+            {
+                Id = u.UserId,
+                Username = u.Username,
+
+            })
+            .ToList();
+            
+            return users;
+        }
 
 
         public void ConnectUserToArtist(int userId, int artistId)

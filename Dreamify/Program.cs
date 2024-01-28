@@ -17,6 +17,7 @@ namespace Dreamify
             string clientSecret = builder.Configuration.GetValue<string>("Spotify:ClientSecret");
             builder.Services.AddDbContext<ApplicationContext>(options => options.UseSqlServer(connectionString));
             builder.Services.AddScoped<ISongsHelper, SongsHelper>();
+            builder.Services.AddScoped<IArtistsHelper, ArtistsHelper>();
             builder.Services.AddScoped<IUsersHelper, UsersHelper>();
             builder.Services.AddScoped<ISpotifyDbHelper, SpotifyDbHelper>();
             builder.Services.AddScoped<ISpotifyHelper>(s =>
@@ -34,19 +35,28 @@ namespace Dreamify
 
             app.MapGet("/", () => "Hello World!");
 
+            // Users endpoints
             app.MapGet("/users", UserHandler.GetUser);
             app.MapGet("/users/{userId}", UserHandler.GetUser);
+            app.MapGet("/users-and-id", UserHandler.GetUserAndId);
             app.MapPost("/users", UserHandler.AddUser);
-            app.MapGet("/songs", ArtistHandler.GetSongs);
-            app.MapGet("/users/{userId}/songs", ArtistHandler.GetUserSongs);
-            app.MapPost("/artists/{artistId}/genre/{genreId}/songs", ArtistHandler.AddSong);
+
             app.MapPost("/users/{userId}/artists/{artistId}", UserHandler.ConnectUserToArtist);
             app.MapPost("/users/{userId}/genres/{genreId}", UserHandler.ConnectUserToGenre);
             app.MapPost("/users/{userId}/songs/{songId}", UserHandler.ConnectUserToSong);
 
-            app.MapPost("/artists", ArtistHandler.AddArtist);
-            //app.MapGet("/artists/{artistId}", ArtistHandler.GetArtist);
+            // Songs endpoints
+            app.MapGet("/songs", ArtistHandler.GetSongs);
+            app.MapGet("/users/{userId}/songs", ArtistHandler.GetUserSongs);
+            app.MapPost("/songs", ArtistHandler.AddSong);
 
+            // Artists endpoints
+            app.MapGet("/artists", ArtistHandler.GetArtist);
+            app.MapPost("/artists", ArtistHandler.AddArtist);
+
+            // Genre endpoints
+            app.MapGet("/genres", ArtistHandler.GetGenres); 
+            app.MapPost("/genres", ArtistHandler.AddGenres); 
 
             // Spotify endpoints
             app.MapGet("/search/song/{search}/{offset?}/{countryCode?}", SpotifyHandler.SpotifySongSearch);

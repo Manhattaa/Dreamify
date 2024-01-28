@@ -5,11 +5,10 @@ using System.Text;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
-namespace DreamifyClient.ViewModels
+namespace DreamifyClient.Dtos
 {
-    public class UsersViewModel
+    public class GenreDto
     {
-        [JsonPropertyName("username")]
-        public string Username { get; set; }
+        public string Title { get; set; }
     }
 }
