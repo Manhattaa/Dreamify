@@ -40,7 +40,5 @@ namespace DreamifyClient.ViewModels
         //    }
         //}
 
-        public ArtistGenreViewModel Artist { get; set; }
-        public ArtistGenreViewModel Genre { get; set; }
     }
 }
