@@ -17,12 +17,8 @@ namespace DreamifyClient
         {
             MenuFunctions.main_header();
 
-            // Before user gets to select option, give user 2 options. Login or create user. 
-            // Login if user exists else create user before we do anything. We need the user and its id to 
-            // Connect it to the db. This should just be text that is sent in a api post to our api add user
-
+  
             string user;
-
             while (true)
             {
                 string[] options = { "Choose existing user", "Create new user" };
@@ -44,14 +40,9 @@ namespace DreamifyClient
                         string[] userOptions = usersString.ToArray();
                         int userSelection = NavFunctions.NavigationGenericArray(userOptions, "Select a user:");
 
-                        // DEBUG PRINTS
-                        Console.WriteLine("INFO:");
-                        Console.WriteLine(userOptions);
-                        Console.WriteLine(userSelection);
-                        Thread.Sleep(2000);
 
                         // If selection is 1 more than the options it is Exit - exit to previous menu
-                        if (userSelection == allUsersList.Count + 1)
+                        if (userSelection == (allUsersList.Count + 1))
                             break;
                         
                         user = allUsersList.ElementAt(userSelection).Username;
