@@ -170,22 +170,30 @@ namespace DreamifyClient
                 Console.WriteLine($"Selected Artist: {JsonSerializer.Serialize(selectedArtist)}");
 
                 // Ensure that selectedArtist and its associated properties are not null before using them
-                if (selectedArtist != null && selectedArtist.Artist != null)
+                if (selectedArtist != null && selectedArtist.ArtistName != null)
                 {
-                    //LOGIC
+                    Console.WriteLine($"Selected Artist: {JsonSerializer.Serialize(selectedArtist)}");
+
+                    // Ensure that selectedArtist and its associated properties are not null before using them
+                    if (selectedArtist != null && selectedArtist.ArtistName != null)
+                    {
+                        Console.WriteLine($"Popularity: {selectedArtist.Popularity}%");
+                        Console.WriteLine($"Followers: {selectedArtist.Followers}");
+                        Console.WriteLine($"Genre: {selectedArtist.Title}");
+                    }
+
+                    {
+                        Console.WriteLine("Selected artist or artist details are null. Exiting artist search.");
+                        Thread.Sleep(3000);
+                        return;
+                    }
                 }
                 else
                 {
-                    Console.WriteLine("Selected artist or artist details are null. Exiting artist search.");
-                    Thread.Sleep(1000);
+                    Console.WriteLine("No artists to select. Exiting artist search.");
+                    Thread.Sleep(3000);
                     return;
                 }
-            }
-            else
-            {
-                Console.WriteLine("No artists to select. Exiting artist search.");
-                Thread.Sleep(1000);
-                return;
             }
         }
     }
