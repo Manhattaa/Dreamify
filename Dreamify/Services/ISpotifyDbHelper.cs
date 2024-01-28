@@ -45,7 +45,7 @@ namespace Dreamify.Services
                 artist = new Artist()
                 {
                     SpotifyArtistId = spotifyArtistId,
-                    Name = artistName,
+                    ArtistName = artistName,
                 };
                 _context.Add(artist);
                 _context.SaveChanges();
@@ -110,7 +110,7 @@ namespace Dreamify.Services
                 artist = new Artist()
                 {
                     SpotifyArtistId = spotifyArtistId,
-                    Name = name,
+                    ArtistName = name,
                     Description = "Placeholder Description", // a placeholder for the description
                 };
                 _context.Add(artist);

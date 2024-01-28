@@ -138,13 +138,13 @@ namespace DreamifyClient
 
             // List of all artists shown to keep track so no duplicate artists are shown
             List<string> alreadyShownArtists = new List<string>();
-            foreach (SpotifyArtistsSearchViewModel Artist in result)
+            foreach (SpotifyArtistsSearchViewModel artist in result)
             {
                 // Print out info if the list doesn't already contain the current artist
-                if (!alreadyShownArtists.Contains(Artist.Name))
+                if (!alreadyShownArtists.Contains(artist.ArtistName))
                 {
-                    alreadyShownArtists.Add(Artist.Name);
-                    artistList.Add(Artist);
+                    alreadyShownArtists.Add(artist.ArtistName);
+                    artistList.Add(artist);
                 }
             }
 
@@ -164,31 +164,22 @@ namespace DreamifyClient
             if (artistList.Count > 0)
             {
                 // Get the selected artist
-                SpotifyArtistsSearchViewModel selectedArtist = artistList.ElementAt(selection);
+                SpotifyArtistsSearchViewModel selectedArtist = artistList.ElementAtOrDefault(selection);
 
-                // Create DTO to send to the DreamifyAPI
-                SpotifyArtistDto artistDto = new SpotifyArtistDto
+                // Log the selected artist for debugging
+                Console.WriteLine($"Selected Artist: {JsonSerializer.Serialize(selectedArtist)}");
+
+                // Ensure that selectedArtist and its associated properties are not null before using them
+                if (selectedArtist != null && selectedArtist.Artist != null)
                 {
-                    UserId = userId,
-                    Name = selectedArtist.Artist.ArtistName,
-                    SpotifyArtistId = selectedArtist.Artist.ArtistId,
-                    //Genres = selectedArtist.Artist.Genre (WILL ADD LATER)
-                };
-
-                // Serialize the object to JSON
-                string jsonRequestData = JsonSerializer.Serialize(artistDto);
-
-                // Create StringContent with the serialized JSON data
-                var content = new StringContent(jsonRequestData, Encoding.UTF8, "application/json");
-
-                // Send content to the API
-                response = await httpClient.PostAsync($"{apiUrl}/users/add-spotify-artist", content);
-
-                // Log the response content
-                string responseContent = await response.Content.ReadAsStringAsync();
-                Console.WriteLine($"\t\t  API Response: {responseContent}");
-
-                response.EnsureSuccessStatusCode();
+                    //LOGIC
+                }
+                else
+                {
+                    Console.WriteLine("Selected artist or artist details are null. Exiting artist search.");
+                    Thread.Sleep(1000);
+                    return;
+                }
             }
             else
             {

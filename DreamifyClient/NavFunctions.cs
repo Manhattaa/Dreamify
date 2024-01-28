@@ -161,7 +161,7 @@ namespace DreamifyClient
                     }
 
                     // Prints all the options
-                    Console.Write($"\t\t  Artist: {artists.ElementAt(i).Name}\n");
+                    Console.Write($"\t\t  Artist: {artists.ElementAt(i).ArtistName}\n");
                     Console.ResetColor();
                 }
 

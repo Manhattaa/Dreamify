@@ -17,12 +17,12 @@ namespace Dreamify.Handlers
                 // move this code to the IArtistHelper
                 Artist artist = new Artist
                 {
-                    Name = artistDto.Name,
+                    ArtistName = artistDto.ArtistName,
                     Description = artistDto.Description
                 };
                 context.Artists.Add(artist);
                 context.SaveChanges();
-                return Results.Ok($"Artist {artist.Name} has been added to the database.");
+                return Results.Ok($"Artist {artist.ArtistName} has been added to the database.");
             }
             catch (Exception ex)
             {

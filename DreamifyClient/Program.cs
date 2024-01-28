@@ -11,7 +11,7 @@ namespace DreamifyClient
         //private static int _selectedOption = 1;
         
         //temp userid for testing
-        private static int _userId = 1;
+        private static int _userId = 2;
 
         public static async Task Main(string[] args)
         {
@@ -32,41 +32,42 @@ namespace DreamifyClient
                 if (selection == 0)
                 {
                     List<UsersViewModel> allUsersList = await ApiFunctions.GetAllUsers();
-                    if (allUsersList != null)
+                    if (allUsersList != null && allUsersList.Count > 0)
                     {
-                        List<string> usersString = new List<string>();
-                        foreach (UsersViewModel ul in allUsersList)
+                        List<string> usersString = allUsersList.Select(ul => ul.Username).ToList();
+
+                        int userSelection = NavFunctions.NavigationGenericArray(usersString.ToArray(), "Select a user:");
+
+                        // Check if the selection is valid
+                        if (userSelection >= 0 && userSelection < allUsersList.Count)
                         {
-                            usersString.Add(ul.Username);
-                            await Console.Out.WriteLineAsync($"Username: {ul.Username}");
-                        }
-
-                        string[] userOptions = usersString.ToArray();
-                        int userSelection = NavFunctions.NavigationGenericArray(userOptions, "Select a user:");
-
-                        // DEBUG PRINTS
-                        Console.WriteLine("INFO:");
-                        Console.WriteLine(userOptions);
-                        Console.WriteLine(userSelection);
-                        Thread.Sleep(2000);
-
-                        // If selection is 1 more than the options it is Exit - exit to previous menu
-                        if (userSelection == allUsersList.Count + 1)
+                            user = allUsersList[userSelection].Username;
+                            await Console.Out.WriteLineAsync(user);
                             break;
-                        
-                        user = allUsersList.ElementAt(userSelection).Username;
-                        await Console.Out.WriteLineAsync(user);
-                        break;
+                        }
+                        else
+                        {
+                            Console.WriteLine("Invalid user selection. Please try again.");
+                            Thread.Sleep(1000);
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine("No users found. Exiting user selection.");
+                        Thread.Sleep(1000);
+                        return;
                     }
                 }
-                // Create new user
                 else if (selection == 1)
                 {
+                    // Create a new user
                     ApiFunctions.AddUser();
+                    break;  // Exit the loop after creating a new user
                 }
                 else
-                    break; // for testing purposes remove when it works
-                    //Environment.Exit(1);
+                {
+                    break; // Exit the loop for testing purposes; remove when it works
+                }
             }
 
             // Loop until user exits

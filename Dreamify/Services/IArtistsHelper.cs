@@ -33,7 +33,7 @@ namespace Dreamify.Services
 
                 Artist artist = new Artist()
                 {
-                    Name = artistDto.Name,
+                    ArtistName = artistDto.ArtistName,
                     Description = artistDto.Description
                 };
 
@@ -49,7 +49,7 @@ namespace Dreamify.Services
              List<ArtistsViewModel> artists = _context.Artists
                  .Select(a => new ArtistsViewModel
                  {
-                     Name = a.Name,
+                     ArtistName = a.ArtistName,
                  })
                  .ToList();
              return artists;
@@ -76,7 +76,7 @@ namespace Dreamify.Services
                 Artists = user.Artists
                 .Select(a => new ArtistsViewModel
                 {
-                    Name = a.Name,
+                    ArtistName = a.ArtistName,
                     Description = a.Description
                 })
                 .ToList()

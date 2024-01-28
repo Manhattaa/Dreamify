@@ -16,7 +16,7 @@ namespace DreamifyClient.Dtos
         public string SpotifyArtistId { get; set; }
 
         [JsonPropertyName("name")]
-        public string Name { get; set; }
+        public string ArtistName { get; set; }
 
         [JsonPropertyName("description")]
         public string Description { get; set; }

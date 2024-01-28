@@ -13,11 +13,19 @@ namespace DreamifyClient.ViewModels
         public string SpotifyArtistId { get; set; }
 
         [JsonPropertyName("artistName")]
-        public string Name { get; set; }
+        public string ArtistName { get; set; }
 
+        [JsonPropertyName("Popularity")]
         public int Popularity { get; set; }
-        public int Followers {  get; set; }
+
+        [JsonPropertyName("Followers")]
+        public int Followers { get; set; }
+
+        [JsonPropertyName("Title")]
         public string Title { get; set; }
+
+        [JsonPropertyName("Artist")]
+
 
         private string _allArtists { get; set; }
 
