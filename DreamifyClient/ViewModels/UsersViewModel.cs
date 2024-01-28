@@ -9,7 +9,7 @@ namespace DreamifyClient.ViewModels
 {
     public class UsersViewModel
     {
-        [JsonPropertyName("Username")]
+        [JsonPropertyName("username")]
         public string Username { get; set; }
     }
 }
