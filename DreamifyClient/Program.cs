@@ -4,60 +4,52 @@ using System.Net.Http.Json;
 
 namespace DreamifyClient
 {
-    internal class Program
-    {
-        //private static readonly HttpClient _httpClient = new HttpClient();
-        //private static readonly string _apiUrl = "http://localhost:5094/";
-        //private static int _selectedOption = 1;
-        
-        //temp userid for testing
-        private static int _userId = 1;
+    public class Program
+    {       
+        // Declaring user id to be set and used later
+        private static int _userId;
 
         public static async Task Main(string[] args)
         {
+            // Removes so the blinking cursor isn't visible
+            Console.CursorVisible = false;
+
             MenuFunctions.main_header();
 
-  
-            string user;
             while (true)
             {
                 string[] options = { "Choose existing user", "Create new user" };
-                int selection = NavFunctions.NavigationGenericArray(options, "Select an option:");
+                int selection = NavFunctions.NavigationGeneric(options, "Select an option:");
 
-                // Show all users and let use choose (DOES NOT WORK CONNECTION TIMED OUT ERROR!!!)
-                if (selection == 0)
+                if (selection == 0) // Choose existing user
                 {
-                    List<UsersViewModel> allUsersList = await ApiFunctions.GetAllUsers();
+                    List<UsersIdViewModel> allUsersList = await ApiFunctions.GetAllUsers();
                     if (allUsersList != null)
                     {
                         List<string> usersString = new List<string>();
-                        foreach (UsersViewModel ul in allUsersList)
+                        foreach (UsersIdViewModel ul in allUsersList)
                         {
                             usersString.Add(ul.Username);
                             await Console.Out.WriteLineAsync($"Username: {ul.Username}");
                         }
 
                         string[] userOptions = usersString.ToArray();
-                        int userSelection = NavFunctions.NavigationGenericArray(userOptions, "Select a user:");
-
+                        int userSelection = NavFunctions.NavigationGeneric(userOptions, "Select a user:");
 
                         // If selection is 1 more than the options it is Exit - exit to previous menu
-                        if (userSelection == (allUsersList.Count + 1))
-                            break;
+                        if (userSelection == allUsersList.Count)
+                            continue;
                         
-                        user = allUsersList.ElementAt(userSelection).Username;
-                        await Console.Out.WriteLineAsync(user);
+                        _userId = allUsersList.ElementAt(userSelection).UserId;
                         break;
                     }
                 }
-                // Create new user
-                else if (selection == 1)
+                else if (selection == 1) // Create new user
                 {
                     ApiFunctions.AddUser();
                 }
-                else
-                    break; // for testing purposes remove when it works
-                    //Environment.Exit(1);
+                else // Exit
+                    Environment.Exit(1);
             }
 
             // Loop until user exits
@@ -74,21 +66,30 @@ namespace DreamifyClient
             switch (selectedOption)
             {
                 case 0:
-                    ApiFunctions.ListSongs(); // NOT IMPLEMENTED
+                    await ApiFunctions.ListSongs(); 
                     break;
                 case 1:
-                    ApiFunctions.ListArtists(); // NOT IMPLEMENTED
+                    await ApiFunctions.ListArtists(); 
                     break;
                 case 2:
-                    ApiFunctions.ListGenres(); // NOT IMPLEMENTED
+                    await ApiFunctions.ListGenres();
                     break;
                 case 3:
-                    await SpotifyFunctions.AddSongViaSearch(_userId);
+                    await ApiFunctions.AddSong(); // Error occurs
                     break;
                 case 4:
-                    await SpotifyFunctions.AddArtistViaSearch(_userId); // NOT IMPLEMENTED
+                    await ApiFunctions.AddArtist(); 
                     break;
                 case 5:
+                    await ApiFunctions.AddGenre(); // Press enter missing
+                    break;
+                case 6:
+                    await SpotifyFunctions.AddSongViaSearch(_userId);
+                    break;
+                case 7:
+                    await SpotifyFunctions.AddArtistViaSearch(_userId); // NOT IMPLEMENTED
+                    break;
+                case 8:
                     Console.WriteLine("\t\t  Exiting the client. Goodbye!");
                     Environment.Exit(0);
                     break;
