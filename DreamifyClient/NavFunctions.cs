@@ -140,6 +140,69 @@ namespace DreamifyClient
             }
         }
 
+        public static int NavigationArtistSearch(List<SpotifyArtistsSearchViewModel> artists, string phrase)
+        {
+            int menuSelection = 0;
+
+            while (true)
+            {
+                // Clears window and re-prints the sent in phrase on each loop
+                Console.Clear();
+                Console.WriteLine($"\t\t  {phrase}");
+                MenuFunctions.divider();
+
+                for (int i = 0; i < artists.Count; i++)
+                {
+                    // Changes color of the option we've currently selected so when menuSelection is for example "2" the second option will turn dark grey
+                    if (i == menuSelection)
+                    {
+                        Console.ForegroundColor = ConsoleColor.White;
+                        Console.BackgroundColor = ConsoleColor.DarkMagenta;
+                    }
+
+                    // Prints all the options
+                    Console.Write($"\t\t  Artist: {artists.ElementAt(i).Name}\n");
+                    Console.ResetColor();
+                }
+
+                // If menu selection is 1 more than the list it points on exit so we need to change the color for the exit printout
+                if (menuSelection == artists.Count)
+                {
+                    Console.ForegroundColor = ConsoleColor.White;
+                    Console.BackgroundColor = ConsoleColor.DarkMagenta;
+                }
+
+                Console.WriteLine("\t\t  Exit");
+                Console.ResetColor();
+
+                //"Listen" to keystrokes from the user
+                ConsoleKeyInfo key = Console.ReadKey(true);
+
+                //Handles the arrow keys to move up and down the menu
+                if (key.Key == ConsoleKey.UpArrow)
+                {
+                    menuSelection--;
+
+                    // If we go out of bounds up it goes to the bottom of the list
+                    if (menuSelection == -1)
+                        menuSelection = artists.Count;
+                }
+                else if (key.Key == ConsoleKey.DownArrow)
+                {
+                    menuSelection++;
+
+                    // If we go out of bounds down it goes to the top of the list (+1 for the exit not included in the list)
+                    if (menuSelection == artists.Count + 1)
+                        menuSelection = 0;
+                }
+                else if (key.Key == ConsoleKey.Enter)
+                {
+                    Console.WriteLine(); // New line for formatting - to look nicer
+                    return menuSelection;
+                }
+            }
+        }
+
         public static int NavigationMain()
         {
             string[] options = { "List all songs", "List all artists", "List all genres",

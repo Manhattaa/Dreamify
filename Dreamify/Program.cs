@@ -52,6 +52,7 @@ namespace Dreamify
             app.MapGet("/search/song/{search}/{offset?}/{countryCode?}", SpotifyHandler.SpotifySongSearch);
             app.MapGet("/search/artist/{search}/{offset?}/{countryCode?}", SpotifyHandler.SpotifyArtistSearch);
             app.MapPost("/users/add-spotify-song", SpotifyHandler.AddSpotifySong);
+            app.MapPost("/users/add-spotify-artist", SpotifyHandler.AddSpotifyArtist);
 
 
             app.Run();

@@ -124,77 +124,78 @@ namespace DreamifyClient
                 Console.WriteLine("\t\t  Invalid search. Try again.");
             }
 
-
             HttpResponseMessage response = await httpClient.GetAsync($"{apiUrl}/search/artist/{search}");
             response.EnsureSuccessStatusCode();
             string jsonResponse = await response.Content.ReadAsStringAsync();
 
-            List<SongSearchViewModel>? result = JsonSerializer.Deserialize<List<SongSearchViewModel>>(jsonResponse);
-
+            List<SpotifyArtistsSearchViewModel>? result = JsonSerializer.Deserialize<List<SpotifyArtistsSearchViewModel>>(jsonResponse);
 
             await Console.Out.WriteLineAsync($"\t\t  Here are the top results for \"{search}\"");
             MenuFunctions.divider();
 
+            // List of artists and genres to be displayed for the user ((WIP)
+            List<SpotifyArtistsSearchViewModel> artistList = new List<SpotifyArtistsSearchViewModel>();
 
-            // List of artists to be displayed for user
-            List<SongSearchViewModel> genreList = new List<SongSearchViewModel>();
-            List<SongSearchViewModel> artistList = new List<SongSearchViewModel>();
-
-
-            // List of all artists shown to keep track so no duplicate artists is shown
+            // List of all artists shown to keep track so no duplicate artists are shown
             List<string> alreadyShownArtists = new List<string>();
-            foreach (SongSearchViewModel artist in result)
+            foreach (SpotifyArtistsSearchViewModel Artist in result)
             {
-                // INCLUDE Genre
-                if (!alreadyShownArtists.Contains(artist.Artist.ArtistName))
+                // Print out info if the list doesn't already contain the current artist
+                if (!alreadyShownArtists.Contains(Artist.Name))
                 {
-
-                    alreadyShownArtists.Add(artist.Artist.ArtistName);
-                    artistList.Add(artist.Artist);
-                    //genreList.Add(artist.Genre);
+                    alreadyShownArtists.Add(Artist.Name);
+                    artistList.Add(Artist);
                 }
             }
 
             // Save selected artist number
-            int selection = NavFunctions.NavigationSongSearch(genreList, artistList, "Press [Enter] on the song you want to save");
+            int selection = NavFunctions.NavigationArtistSearch(artistList, "Press [Enter] on the artist you want to save");
             MenuFunctions.footer();
 
-            // If selection is 1 out of range of the list, then exit was chosen. Exit the method
-            if (selection == genreList.Count)
+            // If selection is out of the range of the list, then exit was chosen. Exit the method
+            if (selection == artistList.Count)
             {
-                await Console.Out.WriteLineAsync("\t\t  Exiting song search");
+                await Console.Out.WriteLineAsync("\t\t  Exiting artist search");
                 Thread.Sleep(1000);
                 return;
             }
 
-            // Get the selected song
-            SongSearchViewModel selectedArtist = genreList.ElementAt(selection);
-
-
-            // Create DTO to send to the DreamifyAPI
-            SpotifyArtistDto artistDto = new SpotifyArtistDto
+            // Ensure that artistList is not empty before trying to access elements from it
+            if (artistList.Count > 0)
             {
-                UserId = userId,
-                 = selectedArtist.Artist.ArtistName,
-                SpotifyArtistId = selectedArtist.Artist.ArtistId,
-                Genres = selectedArtist.Genre.Title
-            };
+                // Get the selected artist
+                SpotifyArtistsSearchViewModel selectedArtist = artistList.ElementAt(selection);
 
+                // Create DTO to send to the DreamifyAPI
+                SpotifyArtistDto artistDto = new SpotifyArtistDto
+                {
+                    UserId = userId,
+                    Name = selectedArtist.Artist.ArtistName,
+                    SpotifyArtistId = selectedArtist.Artist.ArtistId,
+                    //Genres = selectedArtist.Artist.Genre (WILL ADD LATER)
+                };
 
-            // Serialize the object to JSON
-            string jsonRequestData = JsonSerializer.Serialize(artistDto);
+                // Serialize the object to JSON
+                string jsonRequestData = JsonSerializer.Serialize(artistDto);
 
-            // Create StringContent with the serialized JSON data
-            var content = new StringContent(jsonRequestData, Encoding.UTF8, "application/json");
+                // Create StringContent with the serialized JSON data
+                var content = new StringContent(jsonRequestData, Encoding.UTF8, "application/json");
 
-            // Send content to the API
-            response = await httpClient.PostAsync($"{apiUrl}/users/add-spotify-artist", content);
+                // Send content to the API
+                response = await httpClient.PostAsync($"{apiUrl}/users/add-spotify-artist", content);
 
-            // Log the response content
-            string responseContent = await response.Content.ReadAsStringAsync();
-            Console.WriteLine($"\t\t  API Response: {responseContent}");
+                // Log the response content
+                string responseContent = await response.Content.ReadAsStringAsync();
+                Console.WriteLine($"\t\t  API Response: {responseContent}");
 
-            response.EnsureSuccessStatusCode();
+                response.EnsureSuccessStatusCode();
+            }
+            else
+            {
+                Console.WriteLine("No artists to select. Exiting artist search.");
+                Thread.Sleep(1000);
+                return;
+            }
         }
     }
 }
