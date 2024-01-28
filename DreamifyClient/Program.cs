@@ -1,4 +1,5 @@
-﻿using Microsoft.IdentityModel.Tokens;
+﻿using DreamifyClient.ViewModels;
+using Microsoft.IdentityModel.Tokens;
 using System.Net.Http.Json;
 
 namespace DreamifyClient
@@ -30,12 +31,31 @@ namespace DreamifyClient
                 // Show all users and let use choose (DOES NOT WORK CONNECTION TIMED OUT ERROR!!!)
                 if (selection == 0)
                 {
-                    List<string> usersList = await ApiFunctions.GetAllUsers();
-                    if (usersList != null)
+                    List<UsersViewModel> allUsersList = await ApiFunctions.GetAllUsers();
+                    if (allUsersList != null)
                     {
-                        string[] userOptions = usersList.ToArray();
+                        List<string> usersString = new List<string>();
+                        foreach (UsersViewModel ul in allUsersList)
+                        {
+                            usersString.Add(ul.Username);
+                            await Console.Out.WriteLineAsync($"Username: {ul.Username}");
+                        }
+
+                        string[] userOptions = usersString.ToArray();
                         int userSelection = NavFunctions.NavigationGenericArray(userOptions, "Select a user:");
-                        user = userOptions[userSelection];
+
+                        // DEBUG PRINTS
+                        Console.WriteLine("INFO:");
+                        Console.WriteLine(userOptions);
+                        Console.WriteLine(userSelection);
+                        Thread.Sleep(2000);
+
+                        // If selection is 1 more than the options it is Exit - exit to previous menu
+                        if (userSelection == allUsersList.Count + 1)
+                            break;
+                        
+                        user = allUsersList.ElementAt(userSelection).Username;
+                        await Console.Out.WriteLineAsync(user);
                         break;
                     }
                 }
@@ -45,7 +65,7 @@ namespace DreamifyClient
                     ApiFunctions.AddUser();
                 }
                 else
-                    break; // for testing purposes
+                    break; // for testing purposes remove when it works
                     //Environment.Exit(1);
             }
 

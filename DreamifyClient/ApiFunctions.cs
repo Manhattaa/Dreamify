@@ -34,37 +34,58 @@ namespace DreamifyClient
         }
 
         // ERROR! NEED TO FIX. TIMES OUT DOESN'T WORK ATM
-        public static async Task<List<string>> GetAllUsers()
+        public static async Task<List<UsersViewModel>> GetAllUsers()
         {
-            List<string> usernames = null;
-            
+            List<UsersViewModel> users = null;
+
             try
             {
                 // Make an API request to get all user details
-                HttpResponseMessage response = await _httpClient.GetAsync($"{_apiUrl}/users").ConfigureAwait(false);
-                if (response.IsSuccessStatusCode)
-                {
-                    string jsonResponse = await response.Content.ReadAsStringAsync();
-                    List<UsersViewModel> users = JsonSerializer.Deserialize<List<UsersViewModel>>(jsonResponse);
+                HttpResponseMessage response = await _httpClient.GetAsync($"{_apiUrl}/users");
+                response.EnsureSuccessStatusCode();
+                
+                string jsonResponse = await response.Content.ReadAsStringAsync();
 
-                    usernames = users.Select(u => u.Username).ToList();
+                // Here users are correct like this:
 
-                    if (usernames.Count == 0 || usernames == null)
-                    {
-                        await Console.Out.WriteLineAsync("\t\t  No users were found");
-                        return null;
-                    }
-                }
-                else
+                /*[
+	                    {
+		                    "username": "user1"
+	                    },
+	                    {
+		                    "username": "user2"
+	                    },
+	                    {
+		                    "username": "user3"
+	                    }
+                  ]*/
+
+
+                users = JsonSerializer.Deserialize<List<UsersViewModel>>(jsonResponse);
+
+                // DEBUG PRINT
+                foreach (UsersViewModel u in users)
                 {
-                    await Console.Out.WriteLineAsync($"\t\t  Failed to get user details. Status code: {response.StatusCode}");
+                    await Console.Out.WriteLineAsync($"USERS CLIENT: {u.Username}");
                 }
+                Thread.Sleep(2000);
+                await Console.Out.WriteLineAsync("End of user list from client");
+
+                // Here users are null (or at least prints out blank)
+                // But the users list is correct amount when doing users.count 
+
+                if (users.Count == 0 || users == null)
+                {
+                    await Console.Out.WriteLineAsync("\t\t  No users were found");
+                    throw new ArgumentNullException("No users were found");
+                }
+
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"\t\t  ERROR! {ex.Message}");
             }
-            return usernames;
+            return users;
         }
 
         public static async Task AddUser()

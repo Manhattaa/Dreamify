@@ -10,11 +10,11 @@ namespace Dreamify.Services
     public interface IUsersHelper
     {
 
-        public User AddUser(UsersDto usersDto);
+        public void AddUser(UsersDto usersDto);
         public List<UsersViewModel> GetUser(int? userId);
-        public User ConnectUserToArtist(int userId, int artistId);
-        public User ConnectUserToGenre(int userId, int genreId);
-        public User ConnectUserToSong(int userId, int songId);
+        public void ConnectUserToArtist(int userId, int artistId);
+        public void ConnectUserToGenre(int userId, int genreId);
+        public void ConnectUserToSong(int userId, int songId);
     }
 
     public class UsersHelper : IUsersHelper
@@ -28,7 +28,7 @@ namespace Dreamify.Services
         }
 
 
-        public User AddUser(UsersDto usersDto)
+        public void AddUser(UsersDto usersDto)
         {           
             
             User user = new User()
@@ -39,9 +39,6 @@ namespace Dreamify.Services
 
             _context.Users.Add(user);
             _context.SaveChanges();
-
-             return user; 
-          
         }
 
 
@@ -49,6 +46,7 @@ namespace Dreamify.Services
         public List<UsersViewModel> GetUser(int? userId)
         {
             List<UsersViewModel> users;
+            
 
             if (userId == null)
             {
@@ -75,9 +73,8 @@ namespace Dreamify.Services
         }        
 
 
-        public User ConnectUserToArtist(int userId, int artistId)
+        public void ConnectUserToArtist(int userId, int artistId)
         {
-          
              // Get user and artist from IDs
              User user = _context.Users
                  .Include(u => u.Artists)
@@ -99,16 +96,12 @@ namespace Dreamify.Services
 
              // Add and save to db
              user.Artists.Add(artist);
-             _context.SaveChanges();
-
-             return user; // Return the updated User object
-          
+             _context.SaveChanges();         
         }
 
 
-        public User ConnectUserToGenre(int userId, int genreId)
+        public void ConnectUserToGenre(int userId, int genreId)
         {
-            
              // Get user, and genre from IDs
              User user = _context.Users
                  .Include(u => u.Genres)
@@ -126,13 +119,10 @@ namespace Dreamify.Services
 
              // Add and save to db
              user.Genres.Add(genre);
-             _context.SaveChanges();
-
-             return user;           
-           
+             _context.SaveChanges();        
         }
 
-        public User ConnectUserToSong(int userId, int songId)
+        public void ConnectUserToSong(int userId, int songId)
         {
             // Get user, and song from IDs
             User user = _context.Users
@@ -151,8 +141,6 @@ namespace Dreamify.Services
             // Add and save to db
             user.Songs.Add(song);
             _context.SaveChanges();
-
-            return user;
         }
     }
 }

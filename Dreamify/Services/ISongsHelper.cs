@@ -66,9 +66,7 @@ namespace Dreamify.Services
                  })
                  .ToList();
 
-             return songs;
-                       
-        
+             return songs;   
         }
 
         // This is correctly formatted and structured
