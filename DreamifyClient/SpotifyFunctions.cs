@@ -14,8 +14,8 @@ namespace DreamifyClient
     public static class SpotifyFunctions
     {   
          
-        private static HttpClient httpClient = new HttpClient();
-        private static string apiUrl = "http://localhost:5094"; //change this to some global variable so we don't need to re-declare it in each class
+        private static HttpClient _httpClient = new HttpClient();
+        private static string _apiUrl = "http://localhost:5094"; //change this to some global variable so we don't need to re-declare it in each class
 
         public static async Task AddSongViaSearch(int userId)
         {
@@ -34,7 +34,7 @@ namespace DreamifyClient
             }
 
 
-            HttpResponseMessage response = await httpClient.GetAsync($"{apiUrl}/search/song/{search}");
+            HttpResponseMessage response = await _httpClient.GetAsync($"{_apiUrl}/search/song/{search}");
             response.EnsureSuccessStatusCode();
             string jsonResponse = await response.Content.ReadAsStringAsync();
 
@@ -99,7 +99,7 @@ namespace DreamifyClient
             var content = new StringContent(jsonRequestData, Encoding.UTF8, "application/json");
 
             // Send content to the API
-            response = await httpClient.PostAsync($"{apiUrl}/users/add-spotify-song", content);
+            response = await _httpClient.PostAsync($"{_apiUrl}/users/add-spotify-song", content);
 
             // Log the response content
             string responseContent = await response.Content.ReadAsStringAsync();
