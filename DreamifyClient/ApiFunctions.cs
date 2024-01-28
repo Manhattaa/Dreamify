@@ -33,7 +33,6 @@ namespace DreamifyClient
             }
         }
 
-        // ERROR! NEED TO FIX. TIMES OUT DOESN'T WORK ATM
         public static async Task<List<UsersViewModel>> GetAllUsers()
         {
             List<UsersViewModel> users = null;
@@ -44,24 +43,8 @@ namespace DreamifyClient
                 HttpResponseMessage response = await _httpClient.GetAsync($"{_apiUrl}/users");
                 response.EnsureSuccessStatusCode();
                 
-                string jsonResponse = await response.Content.ReadAsStringAsync();
-
-                // Here users are correct like this:
-
-                /*[
-	                    {
-		                    "username": "user1"
-	                    },
-	                    {
-		                    "username": "user2"
-	                    },
-	                    {
-		                    "username": "user3"
-	                    }
-                  ]*/
-
-
-                users = JsonSerializer.Deserialize<List<UsersViewModel>>(jsonResponse);
+                var jsonResponse = await response.Content.ReadAsStreamAsync();
+                users = await JsonSerializer.DeserializeAsync<List<UsersViewModel>>(jsonResponse);
 
                 // DEBUG PRINT
                 foreach (UsersViewModel u in users)
@@ -71,8 +54,6 @@ namespace DreamifyClient
                 Thread.Sleep(2000);
                 await Console.Out.WriteLineAsync("End of user list from client");
 
-                // Here users are null (or at least prints out blank)
-                // But the users list is correct amount when doing users.count 
 
                 if (users.Count == 0 || users == null)
                 {
@@ -107,12 +88,6 @@ namespace DreamifyClient
             }
         }
 
-        public static void ListAndAddGenresArtistsSongs()
-        {
-            // Implement logic for listing and adding genres, artists, and songs
-            Console.WriteLine("List and add genres, artists, and songs functionality goes here.");
-        }
-
         public static void CallOtherApiEndpoints()
         {
             // Implement logic for calling other API endpoints
@@ -129,8 +104,27 @@ namespace DreamifyClient
             throw new NotImplementedException();
         }
 
-        internal static void ListSongs()
+        internal static async Task ListSongs()
         {
+            HttpResponseMessage response = await _httpClient.GetAsync($"{_apiUrl}/songs");
+            response.EnsureSuccessStatusCode();
+
+            var jsonResponse = await response.Content.ReadAsStreamAsync();
+
+            List<SongsViewModel> songs = await JsonSerializer.DeserializeAsync<List<SongsViewModel>>(jsonResponse);
+
+            // Print out all songs in the list
+            await Console.Out.WriteLineAsync("Songs:");
+            MenuFunctions.divider();
+            foreach (SongsViewModel song in songs)
+            {
+                await Console.Out.WriteLineAsync(song.Title);
+            }
+            MenuFunctions.footer();
+
+
+
+
             throw new NotImplementedException();
         }
     }
