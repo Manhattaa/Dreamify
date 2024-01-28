@@ -34,18 +34,25 @@ namespace Dreamify
 
             app.MapGet("/", () => "Hello World!");
 
+            // Users endpoints
             app.MapGet("/users", UserHandler.GetUser);
             app.MapGet("/users/{userId}", UserHandler.GetUser);
             app.MapPost("/users", UserHandler.AddUser);
-            app.MapGet("/songs", ArtistHandler.GetSongs);
-            app.MapGet("/users/{userId}/songs", ArtistHandler.GetUserSongs);
-            app.MapPost("/artists/{artistId}/genre/{genreId}/songs", ArtistHandler.AddSong);
+
             app.MapPost("/users/{userId}/artists/{artistId}", UserHandler.ConnectUserToArtist);
             app.MapPost("/users/{userId}/genres/{genreId}", UserHandler.ConnectUserToGenre);
             app.MapPost("/users/{userId}/songs/{songId}", UserHandler.ConnectUserToSong);
 
-            app.MapPost("/artists", ArtistHandler.AddArtist);
-            //app.MapGet("/artists/{artistId}", ArtistHandler.GetArtist);
+            // Songs endpoints
+            app.MapGet("/songs", ArtistHandler.GetSongs);
+            app.MapGet("/users/{userId}/songs", ArtistHandler.GetUserSongs);
+            app.MapPost("/artists/{artistId}/genre/{genreId}/songs", ArtistHandler.AddSong);
+
+            // Artists endpoints
+            app.MapGet("/artists/", ArtistHandler.GetArtist);
+            //app.MapPost("/artists", ArtistHandler.AddArtist);
+
+            // Genre endpoints
 
 
             // Spotify endpoints
