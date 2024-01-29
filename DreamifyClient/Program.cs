@@ -30,7 +30,6 @@ namespace DreamifyClient
                         foreach (UsersIdViewModel ul in allUsersList)
                         {
                             usersString.Add(ul.Username);
-                            await Console.Out.WriteLineAsync($"Username: {ul.Username}");
                         }
 
                         string[] userOptions = usersString.ToArray();
