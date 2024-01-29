@@ -53,7 +53,7 @@ namespace Dreamify.Handlers
         {
             try
             {
-                spotifyDbService.AddSpotifyArtist(aArtistDto.UserId, aArtistDto.ArtistName, aArtistDto.SpotifyArtistId);
+                spotifyDbService.AddSpotifyArtist(aArtistDto.UserId, aArtistDto.ArtistName, aArtistDto.SpotifyArtistId, aArtistDto.Description, aArtistDto.Popularity);
             }
             catch (InvalidOperationException ex)
             {
