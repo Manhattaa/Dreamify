@@ -137,7 +137,7 @@ namespace Dreamify.Services
                 SongSearchViewModel songViewModel = new SongSearchViewModel
                 {
                     SpotifySongId = songDto.SpotifySongId,
-                    SongName = songDto.Name,
+                    SongName = songDto.ArtistName,
                     Artists = songDto.Artists.Select(artistDto => new SongArtistViewModel(artistDto)).ToList(), // list of artists, maybe we only want the main artist? Discuss in team
                 };
 
@@ -178,7 +178,7 @@ namespace Dreamify.Services
                 var artistViewModel = new SpotifyArtistsSearchViewModel
                 {
                     SpotifyArtistId = artistDto.SpotifyArtistId,
-                    Name = artistDto.Name,
+                    ArtistName = artistDto.ArtistName,
                     Popularity = artistDto.Popularity,
                     Followers = artistDto.Followers.totalFollowers,
                     Genre = artistDto.Genres,
