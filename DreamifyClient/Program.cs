@@ -75,19 +75,19 @@ namespace DreamifyClient
                     await ApiFunctions.ListGenres();
                     break;
                 case 3:
-                    await ApiFunctions.AddSong(); // Error occurs
+                    await ApiFunctions.AddSong();
                     break;
                 case 4:
                     await ApiFunctions.AddArtist(); 
                     break;
                 case 5:
-                    await ApiFunctions.AddGenre(); // Press enter missing
+                    await ApiFunctions.AddGenre();
                     break;
                 case 6:
                     await SpotifyFunctions.AddSongViaSearch(_userId);
                     break;
                 case 7:
-                    await SpotifyFunctions.AddArtistViaSearch(_userId); // NOT IMPLEMENTED
+                    await SpotifyFunctions.AddArtistViaSearch(_userId);
                     break;
                 case 8:
                     Console.WriteLine("\t\t  Exiting the client. Goodbye!");
