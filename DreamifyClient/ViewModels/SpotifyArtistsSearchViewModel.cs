@@ -15,18 +15,17 @@ namespace DreamifyClient.ViewModels
         [JsonPropertyName("artistName")]
         public string ArtistName { get; set; }
 
-        [JsonPropertyName("Popularity")]
+        [JsonPropertyName("popularity")]
         public int Popularity { get; set; }
 
-        [JsonPropertyName("Followers")]
+        [JsonPropertyName("followers")]
         public int Followers { get; set; }
 
-        [JsonPropertyName("Title")]
-        public string Title { get; set; }
-
-        [JsonPropertyName("Artist")]
+        [JsonPropertyName("genre")]
+        public List<string> Genre { get; set; }
 
 
+        //[JsonPropertyName("Artist")]
         private string _allArtists { get; set; }
 
         //[JsonPropertyName("artists")]
