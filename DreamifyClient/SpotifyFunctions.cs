@@ -166,25 +166,24 @@ namespace DreamifyClient
                 // Get the selected artist
                 SpotifyArtistsSearchViewModel selectedArtist = artistList.ElementAtOrDefault(selection);
 
-                // Log the selected artist for debugging
-                Console.WriteLine($"Selected Artist: {JsonSerializer.Serialize(selectedArtist)}");
-
                 // Ensure that selectedArtist and its associated properties are not null before using them
                 if (selectedArtist != null && selectedArtist.ArtistName != null)
                 {
-                    Console.WriteLine($"Selected Artist: {JsonSerializer.Serialize(selectedArtist)}");
 
                     // Ensure that selectedArtist and its associated properties are not null before using them
                     if (selectedArtist != null && selectedArtist.ArtistName != null)
                     {
+                        Console.WriteLine($"Artist: {selectedArtist.ArtistName}");
+                        Console.WriteLine($"Description: ");
                         Console.WriteLine($"Popularity: {selectedArtist.Popularity}%");
                         Console.WriteLine($"Followers: {selectedArtist.Followers}");
-                        Console.WriteLine($"Genre: {selectedArtist.Title}");
+                        Console.WriteLine($"Genre: {selectedArtist.Genre.First()}");
                     }
-
+                    else
                     {
                         Console.WriteLine("Selected artist or artist details are null. Exiting artist search.");
                         Thread.Sleep(3000);
+                        Console.ReadKey();
                         return;
                     }
                 }
