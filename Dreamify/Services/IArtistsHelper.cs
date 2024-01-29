@@ -30,7 +30,6 @@ namespace Dreamify.Services
             {
                 Name = artistDto.Name,
                 Description = artistDto.Description,
-                Popularity = artistDto.Popularity,
                 Genres = artistDto.Genres
             };
 
