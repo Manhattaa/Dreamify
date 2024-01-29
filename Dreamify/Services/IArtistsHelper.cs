@@ -28,7 +28,7 @@ namespace Dreamify.Services
         {
             Artist artist = new Artist()
             {
-                ArtistName = artistDto.Name,
+                ArtistName = artistDto.ArtistName,
                 Description = artistDto.Description,
                 Popularity = artistDto.Popularity,
                 Genres = artistDto.Genres
