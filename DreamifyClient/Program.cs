@@ -77,13 +77,13 @@ namespace DreamifyClient
                     await ApiFunctions.ListGenres();
                     break;
                 case 3:
-                    await ApiFunctions.AddSong(); 
+                    await ApiFunctions.AddSong();
                     break;
                 case 4:
                     await ApiFunctions.AddArtist(); 
                     break;
                 case 5:
-                    await ApiFunctions.AddGenre(); 
+                    await ApiFunctions.AddGenre();
                     break;
                 case 6:
                     await SpotifyFunctions.AddSongViaSearch(_userId);

@@ -163,7 +163,7 @@ namespace DreamifyClient
                 var content = new StringContent(jsonRequestData, Encoding.UTF8, "application/json");
 
                 // Send content to the API
-                HttpResponseMessage response = await _httpClient.PostAsync($"{_apiUrl}/genre", content);
+                HttpResponseMessage response = await _httpClient.PostAsync($"{_apiUrl}/genres", content);
                 response.EnsureSuccessStatusCode();
 
 
