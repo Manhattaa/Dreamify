@@ -46,7 +46,9 @@ namespace DreamifyClient
                 }
                 else if (selection == 1) // Create new user
                 {
+                    // Create a new user
                     ApiFunctions.AddUser();
+                    break;  // Exit the loop after creating a new user
                 }
                 else // Exit
                     Environment.Exit(1);
