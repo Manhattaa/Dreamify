@@ -203,7 +203,7 @@ namespace DreamifyClient
                 MenuFunctions.divider();
                 foreach (ArtistsViewModel artist in artists)
                 {
-                    await Console.Out.WriteLineAsync($"\t\t  {artist.Name}");
+                    await Console.Out.WriteLineAsync($"\t\t  {artist.ArtistName}");
                     
                     // If there is a description, print it out
                     if (artist.Description != null)
@@ -247,7 +247,7 @@ namespace DreamifyClient
                 // Create DTO to send to the DreamifyAPI
                 ArtistDto artistDto = new ArtistDto()
                 {
-                    Name = name,
+                    ArtistName = name,
                     Description = description,
                     Popularity = null,
                     SpotifyArtistId = null,
