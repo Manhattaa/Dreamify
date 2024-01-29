@@ -6,7 +6,7 @@ namespace Dreamify.Services
     public interface ISpotifyDbHelper
     {
         void AddSpotifySong(int userId, string songName, string spotifySongId, string artistName, string spotifyArtistId);
-        void AddSpotifyArtist(int userId, string artistname, string spotifyArtistId);
+        void AddSpotifyArtist(int userId, string artistname, string spotifyArtistId, string description, int? popularity);
     }
 
     public class SpotifyDbHelper : ISpotifyDbHelper
@@ -76,14 +76,15 @@ namespace Dreamify.Services
             _context.SaveChanges();
         }
 
-        public void AddSpotifyArtist(int userId, string name, string spotifyArtistId)
+        public void AddSpotifyArtist(int userId, string name, string spotifyArtistId, string description, int? popularity)
         {
-            if (userId <= 0) //make sure userId is never 0. As it can never be 0.
-            {
-                throw new ArgumentException($"Invalid user ID: {userId}", nameof(userId));
-            }
+            //if (userId <= 0) //make sure userId is never 0. As it can never be 0.
+            //{
+            //    throw new ArgumentException($"Invalid user ID: {userId}", nameof(userId));
+            //}
 
-            User user = _context.Users.SingleOrDefault(u => u.UserId == userId);
+            //User user = _context.Users.SingleOrDefault(u => u.UserId == userId);
+            User user = _context.Users.Where(u => u.UserId == userId).Single();
 
             if (user == null)
             {
@@ -96,29 +97,32 @@ namespace Dreamify.Services
             }
 
             // Ensure the SpotifyArtistId is not null or empty before querying the database
-            if (string.IsNullOrEmpty(spotifyArtistId))
-            {
-                throw new ArgumentException("Invalid SpotifyArtistId", nameof(spotifyArtistId));
-            }
+            //if (string.IsNullOrEmpty(spotifyArtistId))
+            //{
+            //    throw new ArgumentException("Invalid SpotifyArtistId", nameof(spotifyArtistId));
+            //}
 
             // Retrieve the artist from the database
-            Artist artist = _context.Artists.SingleOrDefault(a => a.SpotifyArtistId == spotifyArtistId);
+            //Artist artist = _context.Artists.SingleOrDefault(a => a.SpotifyArtistId == spotifyArtistId);
+
+            Artist artist;
 
             // If the artist is not found, create a new one
-            if (artist == null)
-            {
+            //if (!_context.Artists.Any(a => a.SpotifyArtistId == spotifyArtistId));
+            //{
                 artist = new Artist()
                 {
                     SpotifyArtistId = spotifyArtistId,
                     ArtistName = name,
-                    Description = "Placeholder Description", // a placeholder for the description
+                    Description = description,
+                    Popularity = popularity
                 };
                 _context.Add(artist);
                 _context.SaveChanges();
-            }
+            //}
 
-            user.Artists.Add(artist);
-            _context.SaveChanges();
+            //user.Artists.Add(artist);
+            //_context.SaveChanges();
         }
     }
 }
