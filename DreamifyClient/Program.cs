@@ -46,7 +46,9 @@ namespace DreamifyClient
                 }
                 else if (selection == 1) // Create new user
                 {
+                    // Create a new user
                     ApiFunctions.AddUser();
+                    break;  // Exit the loop after creating a new user
                 }
                 else // Exit
                     Environment.Exit(1);
@@ -75,19 +77,19 @@ namespace DreamifyClient
                     await ApiFunctions.ListGenres();
                     break;
                 case 3:
-                    await ApiFunctions.AddSong(); // Error occurs
+                    await ApiFunctions.AddSong(); 
                     break;
                 case 4:
                     await ApiFunctions.AddArtist(); 
                     break;
                 case 5:
-                    await ApiFunctions.AddGenre(); // Press enter missing
+                    await ApiFunctions.AddGenre(); 
                     break;
                 case 6:
                     await SpotifyFunctions.AddSongViaSearch(_userId);
                     break;
                 case 7:
-                    await SpotifyFunctions.AddArtistViaSearch(_userId); // NOT IMPLEMENTED
+                    await SpotifyFunctions.AddArtistViaSearch(_userId);
                     break;
                 case 8:
                     Console.WriteLine("\t\t  Exiting the client. Goodbye!");
