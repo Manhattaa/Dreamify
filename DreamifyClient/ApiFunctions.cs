@@ -285,6 +285,12 @@ namespace DreamifyClient
 
                 List<SongsViewModel>? songs = await JsonSerializer.DeserializeAsync<List<SongsViewModel>>(jsonResponse);
 
+                if (songs == null || songs.Count == 0)
+                {
+                    await Console.Out.WriteLineAsync("\t\t  No songs were found");
+                    throw new ArgumentNullException("No songs were found");
+                }
+
                 // Print out all songs in the list
                 Console.Clear();
                 Console.ForegroundColor = ConsoleColor.DarkMagenta;
