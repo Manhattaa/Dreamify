@@ -178,6 +178,8 @@ namespace DreamifyClient
                         Console.WriteLine($"Popularity: {selectedArtist.Popularity}%");
                         Console.WriteLine($"Followers: {selectedArtist.Followers}");
                         Console.WriteLine($"Genre: {selectedArtist.Genre.First()}");
+
+                        Console.WriteLine($"\nThe Artist: {selectedArtist} has been added to the Database.");
                     }
                     else
                     {
