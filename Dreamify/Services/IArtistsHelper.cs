@@ -1,6 +1,5 @@
 ﻿using Dreamify.Data;
 using Dreamify.Models;
-using System.Net;
 using Microsoft.EntityFrameworkCore;
 using Dreamify.Models.ViewModels.DreamifyViewModels;
 using Dreamify.Models.Dtos.DreamifyDtos;
@@ -9,12 +8,12 @@ namespace Dreamify.Services
 {
     public interface IArtistsHelper
     {
-        public IResult AddArtist(int genreId, ArtistDto artistDto);
-        public IResult GetArtists();
-        public IResult GetUserArtists(int userId);
-        public IResult GetUserGenres(int userId);
-
-
+        public void AddArtist(ArtistDto artistDto);
+        public void AddGenre(GenreDto genreDto);
+        public List<ArtistsViewModel> GetArtists();
+        public List<GenresViewModel> GetGenres();
+        public UserArtistsViewModel GetUserArtists(int userId);
+        public UserGenresViewModel GetUserGenres(int userId);
     }
 
     public class ArtistsHelper : IArtistsHelper
@@ -25,116 +24,108 @@ namespace Dreamify.Services
             _context = context;
         }
 
-        public IResult AddArtist(int genreId, ArtistDto artistDto)
+        public void AddArtist(ArtistDto artistDto)
         {
-            try
+            Artist artist = new Artist()
             {
-                Genre genre = _context.Genres.Where(g => g.GenreId == genreId).Single();
+                ArtistName = artistDto.ArtistName,
+                Description = artistDto.Description,
+                Genres = artistDto.Genres
+            };
 
-                Artist artist = new Artist()
+            _context.Artists.Add(artist);
+            _context.SaveChanges();          
+        }
+
+        public List<ArtistsViewModel> GetArtists()
+        {            
+             List<ArtistsViewModel> artists = _context.Artists
+                 .Select(a => new ArtistsViewModel
+                 {
+                     ArtistName = a.ArtistName,
+                 })
+                 .ToList();
+             return artists;          
+        }
+
+        public UserArtistsViewModel GetUserArtists(int userId)
+        {
+
+            // Get user and their artists from id
+            User user = _context.Users
+            .Include(u => u.Artists)
+            .Where(u => u.UserId == userId)
+            .Single();
+
+            if (user == null)
+                throw new Exception();
+
+
+            // Create viewmodel consisting of username and a list of all songs
+            UserArtistsViewModel userArtists = new UserArtistsViewModel
+            {
+                Username = user.Username,
+                Artists = user.Artists
+                .Select(a => new ArtistsViewModel
                 {
-                    Name = artistDto.Name,
-                    Description = artistDto.Description
-                };
+                    ArtistName = a.ArtistName,
+                    Description = a.Description
+                })
+                .ToList()
+            };
 
-                _context.Artists.Add(artist);
-                _context.SaveChanges();
-
-                return Results.StatusCode((int)HttpStatusCode.Created);
-            }
-            catch (Exception ex)
-            {
-                return Results.Text(ex.Message);
-            }
+            return userArtists;
         }
 
-        public IResult GetArtists()
+        public UserGenresViewModel GetUserGenres(int userId)
         {
-            try
+            // Get user and their artists from id
+            User user = _context.Users
+            .Include(u => u.Genres)
+            .Where(u => u.UserId == userId)
+            .Single();
+
+            if (user == null)
+                throw new Exception();
+
+
+            // Create viewmodel consisting of username and a list of all songs
+            UserGenresViewModel userGenres = new UserGenresViewModel
             {
-                List<ArtistsViewModel> artists = _context.Artists
-                    .Select(a => new ArtistsViewModel
-                    {
-                        Name = a.Name,
-                    })
-                    .ToList();
-                return Results.Json(artists);
-            }
-            catch (Exception ex)
-            {
-                return Results.Text(ex.Message);
-            }
-        }
-
-        public IResult GetUserArtists(int userId)
-        {
-            try
-            {
-                // Get user and their artists from id
-                User user = _context.Users
-                .Include(u => u.Artists)
-                .Where(u => u.UserId == userId)
-                .Single();
-
-                if (user == null)
-                    return Results.NotFound($"No user found with id {userId}");
-
-
-                // Create viewmodel consisting of username and a list of all songs
-                UserArtistsViewModel userArtists = new UserArtistsViewModel
+                Username = user.Username,
+                Genres = user.Genres
+                .Select(a => new GenresViewModel
                 {
-                    Username = user.Username,
-                    Artists = user.Artists
-                    .Select(a => new ArtistsViewModel
-                    {
-                        Name = a.Name,
-                        Description = a.Description
-                    })
-                    .ToList()
-                };
+                    Title = a.Title,
+                })
+                .ToList()  
+            };
 
-
-                return Results.Json(userArtists);
-            }
-            catch (Exception ex)
-            {
-                return Results.Text(ex.Message);
-            }
+            return userGenres;
         }
 
-        public IResult GetUserGenres(int userId)
+        public List<GenresViewModel> GetGenres()
         {
-            try
-            {
-                // Get user and their artists from id
-                User user = _context.Users
-                .Include(u => u.Genres)
-                .Where(u => u.UserId == userId)
-                .Single();
-
-                if (user == null)
-                    return Results.NotFound($"No user found with id {userId}");
-
-
-                // Create viewmodel consisting of username and a list of all songs
-                UserGenresViewModel userGenres = new UserGenresViewModel
+            List<GenresViewModel> genres = _context.Genres
+                .Select(g => new GenresViewModel
                 {
-                    Username = user.Username,
-                    Genres = user.Genres
-                    .Select(a => new GenresViewModel
-                    {
-                        Title = a.Title,
-                    })
-                    .ToList()
-                };
+                    Title = g.Title,
+                })
+                .ToList();
 
-
-                return Results.Json(userGenres);
-            }
-            catch (Exception ex)
-            {
-                return Results.Text(ex.Message);
-            }
+            return genres;
         }
+
+        public void AddGenre(GenreDto genreDto)
+        {
+            Genre genre = new Genre()
+            {
+                Title = genreDto.Title
+            };
+
+            _context.Genres.Add(genre);
+            _context.SaveChanges();
+        }
+
     }
 }

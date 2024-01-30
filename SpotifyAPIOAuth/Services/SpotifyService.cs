@@ -27,7 +27,7 @@ namespace SpotifyAPIOAuth.Services
 
             return responseObject?.albums?.items.Select(i => new Release
             {
-                Name = i.name,
+                ArtistName = i.name,
                 Date = i.release_date,
                 ImageUrl = i.images.FirstOrDefault().url,
                 Link = i.external_urls.spotify,
