@@ -52,6 +52,9 @@ namespace Dreamify
 
             // Artists endpoints
             app.MapGet("/artists", ArtistHandler.GetArtist);
+            app.MapPost("/genres", ArtistHandler.GetArtist);
+            app.MapPost("/genres", ArtistHandler.AddGenre);
+            app.MapGet("/genres/{genreId}", ArtistHandler.GetGenre);
             app.MapPost("/artists", ArtistHandler.AddArtist);
 
             // Genre endpoints
@@ -66,6 +69,9 @@ namespace Dreamify
 
 
             app.Run();
+
+      
+
         }
     }
 }

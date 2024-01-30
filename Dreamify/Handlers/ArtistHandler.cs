@@ -7,6 +7,19 @@ namespace Dreamify.Handlers
 {
     public class ArtistHandler
     {
+        // Genres
+        public static IResult AddGenre(GenreDto genreDto, IGenresHelper genreHelper)
+        {
+            genreHelper.AddGenre(genreDto);
+            return Results.StatusCode((int)HttpStatusCode.Created);
+        }
+        public static IResult GetGenre(IGenresHelper genreHelper)
+        {
+            return Results.Json(genreHelper.GetGenre());
+        }
+        // Artists
+
+        public static IResult AddArtist(ApplicationContext context, string personId, ArtistDto artistDto)
         public static IResult AddArtist([FromBody]ArtistDto artistDto, IArtistsHelper artistHelper)
         {
             try
