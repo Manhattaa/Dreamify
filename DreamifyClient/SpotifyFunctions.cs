@@ -152,8 +152,8 @@ namespace DreamifyClient
                 Console.ForegroundColor = ConsoleColor.DarkMagenta;
                 await Console.Out.WriteAsync("\t\t  Enter search: ");
                 Console.ResetColor();
-                MenuFunctions.divider();
                 search = Console.ReadLine();
+                MenuFunctions.divider();
 
                 if (!string.IsNullOrEmpty(search))
                     break;
