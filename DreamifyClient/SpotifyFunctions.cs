@@ -24,8 +24,14 @@ namespace DreamifyClient
             while (true)
             {
                 Console.Clear();
+                MenuFunctions.footer();
+                Console.ForegroundColor = ConsoleColor.DarkMagenta;
                 await Console.Out.WriteAsync("\t\t  Enter search: ");
+                Console.ResetColor();
                 search = Console.ReadLine();
+                MenuFunctions.divider();
+
+
 
                 if (!string.IsNullOrEmpty(search))
                     break;
@@ -33,6 +39,7 @@ namespace DreamifyClient
                 Console.WriteLine("\t\t  Invalid search. Try again.");
             }
 
+           
 
             HttpResponseMessage response = await _httpClient.GetAsync($"{_apiUrl}/search/song/{search}");
             response.EnsureSuccessStatusCode();
@@ -40,8 +47,11 @@ namespace DreamifyClient
 
             List<SongSearchViewModel>? result = JsonSerializer.Deserialize<List<SongSearchViewModel>>(jsonResponse);
 
-
+            Console.Clear();
+            MenuFunctions.footer();
+            Console.ForegroundColor = ConsoleColor.DarkMagenta;
             await Console.Out.WriteLineAsync($"\t\t  Here are the top results for \"{search}\"");
+            Console.ResetColor();
             MenuFunctions.divider();
 
 
@@ -138,7 +148,11 @@ namespace DreamifyClient
             while (true)
             {
                 Console.Clear();
+                MenuFunctions.footer();
+                Console.ForegroundColor = ConsoleColor.DarkMagenta;
                 await Console.Out.WriteAsync("\t\t  Enter search: ");
+                Console.ResetColor();
+                MenuFunctions.divider();
                 search = Console.ReadLine();
 
                 if (!string.IsNullOrEmpty(search))
@@ -153,7 +167,11 @@ namespace DreamifyClient
 
             List<SpotifyArtistsSearchViewModel>? result = JsonSerializer.Deserialize<List<SpotifyArtistsSearchViewModel>>(jsonResponse);
 
+            Console.Clear();
+            MenuFunctions.footer();
+            Console.ForegroundColor = ConsoleColor.DarkMagenta;
             await Console.Out.WriteLineAsync($"\t\t  Here are the top results for \"{search}\"");
+            Console.ResetColor();
             MenuFunctions.divider();
 
             // List of artists and genres to be displayed for the user ((WIP)
