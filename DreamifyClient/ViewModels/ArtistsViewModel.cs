@@ -13,9 +13,9 @@ namespace DreamifyClient.ViewModels
         public string ArtistName { get; set; }
 
         [JsonPropertyName("description")]
-        public string Description { get; set; }
+        public string? Description { get; set; }
 
         [JsonPropertyName("popularity")]
-        public int Popularity { get; set; }
+        public int? Popularity { get; set; }
     }
 }
