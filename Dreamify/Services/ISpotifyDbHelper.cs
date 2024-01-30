@@ -119,10 +119,10 @@ namespace Dreamify.Services
                 };
                 _context.Add(artist);
                 _context.SaveChanges();
-            //}
 
-            //user.Artists.Add(artist);
-            //_context.SaveChanges();
+
+            user.Artists.Add(artist);
+            _context.SaveChanges();
         }
     }
 }

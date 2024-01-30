@@ -13,5 +13,6 @@ namespace DreamifyClient.Dtos
         public string? Description { get; set; }
         public string? SpotifyArtistId { get; set; }
         public int? Popularity { get; set; }
+        public string? Genre { get; set; }
     }
 }
