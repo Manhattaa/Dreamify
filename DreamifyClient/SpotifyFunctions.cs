@@ -103,12 +103,35 @@ namespace DreamifyClient
 
             // Log the response content
             string responseContent = await response.Content.ReadAsStringAsync();
-            Console.WriteLine($"\t\t  API Response: {responseContent}");
 
             response.EnsureSuccessStatusCode();
+
+            await Task.Run(() =>
+            {
+                Console.ForegroundColor = ConsoleColor.Magenta;
+                Console.Write("\t\tSong: ");
+                Console.ResetColor();
+                Console.ForegroundColor = ConsoleColor.DarkYellow;
+                Console.WriteLine(selectedSong.SongName);
+                Console.ResetColor();
+
+                Console.ForegroundColor = ConsoleColor.Magenta;
+                Console.Write("\t\tArtist: ");
+                Console.ResetColor();
+                Console.ForegroundColor = ConsoleColor.DarkYellow;
+                Console.WriteLine(selectedSong.Artist.ArtistName);
+                Console.ResetColor();
+            });
+            MenuFunctions.footer();
+            Console.Write("\n\t\t  Press [Enter] to continue");
+            ConsoleKeyInfo keyPressed = Console.ReadKey(true);
+            while (keyPressed.Key != ConsoleKey.Enter)
+            {
+                keyPressed = Console.ReadKey(true);
+            }
         }
 
-        public static async Task AddArtistViaSearch(int userId)
+            public static async Task AddArtistViaSearch(int userId)
         {
             // Ensure correct search
             string search;
@@ -149,8 +172,8 @@ namespace DreamifyClient
             }
 
 
-
             // Save selected artist number
+            MenuFunctions.footer();
             int selection = NavFunctions.NavigationArtistSearch(artistList, "Press [Enter] on the artist you want to save");
             MenuFunctions.footer();
 
@@ -192,23 +215,59 @@ namespace DreamifyClient
 
                 // Log the response content
                 string responseContent = await response.Content.ReadAsStringAsync();
-                Console.WriteLine($"\t\t  API Response: {responseContent}");
 
                 response.EnsureSuccessStatusCode();
 
-                // Ensure that selectedArtist and its associated properties are not null before using them
-                if (selectedArtist != null)
+                await Task.Run(() =>
                 {
-                    Console.WriteLine($"Artist: {selectedArtist.ArtistName}");
-                    Console.WriteLine($"Description: {description}");
-                    Console.WriteLine($"Popularity: {selectedArtist.Popularity}%");
-                    Console.WriteLine($"Followers: {selectedArtist.Followers}");
-                    Console.WriteLine($"Genre: {(selectedArtist.Genre.Any() ? string.Join(", ", selectedArtist.Genre) : "No Genre Available")}");
+                    Console.ForegroundColor = ConsoleColor.Magenta;
+                    Console.Write("\t\tArtist: ");
+                    Console.ResetColor();
+                    Console.ForegroundColor = ConsoleColor.DarkYellow;
+                    Console.WriteLine(selectedArtist.ArtistName);
+                    Console.ResetColor();
 
-                    Console.WriteLine($"\nThe Artist: {selectedArtist.ArtistName} has been added to the Database.");
+                    Console.ForegroundColor = ConsoleColor.Magenta;
+                    Console.Write("\t\tDescription: ");
+                    Console.ResetColor();
+                    Console.ForegroundColor = ConsoleColor.DarkYellow;
+                    Console.WriteLine(description);
+                    Console.ResetColor();
+
+                    Console.ForegroundColor = ConsoleColor.Magenta;
+                    Console.Write("\t\tPopularity: ");
+                    Console.ResetColor();
+                    Console.ForegroundColor = ConsoleColor.DarkYellow;
+                    Console.WriteLine($"{selectedArtist.Popularity}%");
+                    Console.ResetColor();
+
+                    Console.ForegroundColor = ConsoleColor.Magenta;
+                    Console.Write("\t\tFollowers: ");
+                    Console.ResetColor();
+                    Console.ForegroundColor = ConsoleColor.DarkYellow;
+                    Console.WriteLine(selectedArtist.Followers);
+                    Console.ResetColor();
+
+                    Console.ForegroundColor = ConsoleColor.Magenta;
+                    Console.Write("\t\tGenre: ");
+                    Console.ResetColor();
+                    Console.ForegroundColor = ConsoleColor.DarkYellow;
+                    Console.WriteLine(selectedArtist.Genre.Any() ? string.Join(", ", selectedArtist.Genre) : "No Genre Available");
+                    Console.ResetColor();
+                });
+
+                MenuFunctions.footer();
+                Console.Write("\n\t\t  Press [Enter] to continue");
+                ConsoleKeyInfo keyPressed = Console.ReadKey(true);
+                while (keyPressed.Key != ConsoleKey.Enter)
+                {
+                    keyPressed = Console.ReadKey(true);
                 }
-                else
-                    {
+
+
+
+                if (selectedArtist == null)
+                {
                         Console.WriteLine("Selected artist or artist details are null. Exiting artist search.");
                         Thread.Sleep(3000);
                         Console.ReadKey();
