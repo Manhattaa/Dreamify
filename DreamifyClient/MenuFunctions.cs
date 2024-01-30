@@ -56,6 +56,11 @@ namespace DreamifyClient
             Console.WriteLine("\t\t-----------------------------------");
         }
 
+        public static void bigboydivider()
+        {
+            Console.WriteLine("\t----------------------------------------------------");
+        }
+
 
         // Promts user to press enter key doesn't accept any other input
         public static void PressEnter()

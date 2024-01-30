@@ -16,6 +16,9 @@ namespace Dreamify.Models
         public User()
         {
             Songs = new List<Song>();
+            Artists = new List<Artist>();
+            Genres = new List<Genre>();
+
         }
     }
 }

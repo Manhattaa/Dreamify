@@ -12,22 +12,22 @@ namespace DreamifyClient.Dtos
         [JsonPropertyName("userId")]
         public int UserId { get; set; }
 
-        [JsonPropertyName("id")]
+        [JsonPropertyName("spotifyArtistId")]
         public string SpotifyArtistId { get; set; }
 
-        [JsonPropertyName("name")]
+        [JsonPropertyName("artistName")]
         public string ArtistName { get; set; }
 
         [JsonPropertyName("description")]
-        public string Description { get; set; }
+        public string? Description { get; set; }
 
         [JsonPropertyName("genres")]
-        public List<string> Genres { get; set; }
+        public List<string>? Genres { get; set; }
 
         [JsonPropertyName("popularity")]
-        public int Popularity { get; set; }
+        public int? Popularity { get; set; }
 
         [JsonPropertyName("followers")]
-        public int Followers { get; set; }
+        public int? Followers { get; set; }
     }
 }

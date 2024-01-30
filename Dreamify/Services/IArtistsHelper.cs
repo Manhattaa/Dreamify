@@ -41,6 +41,8 @@ namespace Dreamify.Services
                  .Select(a => new ArtistsViewModel
                  {
                      ArtistName = a.ArtistName,
+                     Description = a.Description,
+                     Popularity = a.Popularity
                  })
                  .ToList();
              return artists;          

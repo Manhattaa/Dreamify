@@ -9,10 +9,13 @@ namespace DreamifyClient.ViewModels
 {
     public class ArtistsViewModel
     {
-        [JsonPropertyName("name")]
-        public string Name { get; set; }
+        [JsonPropertyName("artistName")]
+        public string ArtistName { get; set; }
 
         [JsonPropertyName("description")]
         public string? Description { get; set; }
+
+        [JsonPropertyName("popularity")]
+        public int? Popularity { get; set; }
     }
 }

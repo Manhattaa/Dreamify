@@ -148,6 +148,8 @@ namespace DreamifyClient
                 }
             }
 
+
+
             // Save selected artist number
             int selection = NavFunctions.NavigationArtistSearch(artistList, "Press [Enter] on the artist you want to save");
             MenuFunctions.footer();
@@ -160,28 +162,52 @@ namespace DreamifyClient
                 return;
             }
 
+            Console.Write($"\t\t  Description (optional press [Enter] to skip): ");
+            string description = Console.ReadLine();
+
             // Ensure that artistList is not empty before trying to access elements from it
             if (artistList.Count > 0)
             {
                 // Get the selected artist
                 SpotifyArtistsSearchViewModel selectedArtist = artistList.ElementAtOrDefault(selection);
 
-                // Ensure that selectedArtist and its associated properties are not null before using them
-                if (selectedArtist != null && selectedArtist.ArtistName != null)
+                SpotifyArtistDto artistDto = new SpotifyArtistDto
                 {
+                    UserId = userId,
+                    ArtistName = selectedArtist.ArtistName,
+                    SpotifyArtistId = selectedArtist.SpotifyArtistId,
+                    Description = description,
+                    Popularity = selectedArtist.Popularity,
+                    Genres = selectedArtist.Genre,
+                };
 
-                    // Ensure that selectedArtist and its associated properties are not null before using them
-                    if (selectedArtist != null && selectedArtist.ArtistName != null)
-                    {
-                        Console.WriteLine($"Artist: {selectedArtist.ArtistName}");
-                        Console.WriteLine($"Description: ");
-                        Console.WriteLine($"Popularity: {selectedArtist.Popularity}%");
-                        Console.WriteLine($"Followers: {selectedArtist.Followers}");
-                        Console.WriteLine($"Genre: {selectedArtist.Genre.First()}");
+                // Serialize the object to JSON
+                string jsonRequestData = JsonSerializer.Serialize(artistDto);
 
-                        Console.WriteLine($"\nThe Artist: {selectedArtist} has been added to the Database.");
-                    }
-                    else
+                // Create StringContent with the serialized JSON data
+                var content = new StringContent(jsonRequestData, Encoding.UTF8, "application/json");
+
+                // Send content to the API
+                response = await _httpClient.PostAsync($"{_apiUrl}/users/add-spotify-artist", content);
+
+                // Log the response content
+                string responseContent = await response.Content.ReadAsStringAsync();
+                Console.WriteLine($"\t\t  API Response: {responseContent}");
+
+                response.EnsureSuccessStatusCode();
+
+                // Ensure that selectedArtist and its associated properties are not null before using them
+                if (selectedArtist != null)
+                {
+                    Console.WriteLine($"Artist: {selectedArtist.ArtistName}");
+                    Console.WriteLine($"Description: {description}");
+                    Console.WriteLine($"Popularity: {selectedArtist.Popularity}%");
+                    Console.WriteLine($"Followers: {selectedArtist.Followers}");
+                    Console.WriteLine($"Genre: {(selectedArtist.Genre.Any() ? string.Join(", ", selectedArtist.Genre) : "No Genre Available")}");
+
+                    Console.WriteLine($"\nThe Artist: {selectedArtist.ArtistName} has been added to the Database.");
+                }
+                else
                     {
                         Console.WriteLine("Selected artist or artist details are null. Exiting artist search.");
                         Thread.Sleep(3000);
@@ -198,4 +224,3 @@ namespace DreamifyClient
             }
         }
     }
-}
