@@ -63,14 +63,16 @@ namespace DreamifyClient
             try
             {
                 Console.Clear();
+                MenuFunctions.footer();
                 Console.ForegroundColor = ConsoleColor.DarkMagenta;
                 Console.CursorVisible = true;
-
-                Console.Write("\t\t  Enter the username for the new user: ");
+                Console.WriteLine("\t\t Enter the username for the new user: ");
+                Console.ResetColor();
+                MenuFunctions.divider();
+                Console.Write("\t\t ");
                 string username = Console.ReadLine();
 
                 Console.CursorVisible = false;
-                Console.ResetColor();
                 MenuFunctions.divider();
 
 
@@ -113,6 +115,7 @@ namespace DreamifyClient
 
                 // Print out all genres
                 Console.Clear();
+                MenuFunctions.footer();
                 Console.ForegroundColor = ConsoleColor.DarkMagenta;
                 await Console.Out.WriteLineAsync("\t\t  Genres:");
                 Console.ResetColor();
@@ -138,6 +141,7 @@ namespace DreamifyClient
             try
             {
                 Console.Clear();
+                MenuFunctions.footer();
                 Console.ForegroundColor = ConsoleColor.DarkMagenta;
                 Console.WriteLine($"\t\t  Enter the following details for a new genre: ");
                 Console.ResetColor();
@@ -196,20 +200,20 @@ namespace DreamifyClient
 
                 // Print out all artists
                 Console.Clear();
+                MenuFunctions.footer();
                 Console.ForegroundColor = ConsoleColor.DarkMagenta;
-                await Console.Out.WriteLineAsync("\t\t  Artists: \t\t Description: \t\t Popularity:");
+                await Console.Out.WriteLineAsync("\t\t Artists:  Description:  Popularity:");
+                Console.ResetColor();
+                MenuFunctions.divider();
 
                 foreach (ArtistsViewModel artist in artists)
                 {
-                    Console.WriteLine($"\t\t  {artist.ArtistName} - {artist.Description} - {artist.Popularity}\n ");
+                    string description = string.IsNullOrWhiteSpace(artist.Description) ? "No Result" : artist.Description;
+                    string popularity = artist.Popularity.HasValue && artist.Popularity.Value != 0
+                        ? artist.Popularity.Value.ToString()
+                        : "No Result";
 
-                    ////If there is a description, print it out
-                    //if (artist.Description != null)
-                    //{
-                    //    await Console.Out.WriteLineAsync($"\t\t  {artist.Description}");
-                    //    await Console.Out.WriteLineAsync();
-                    //}
-
+                    Console.WriteLine($"\t\t  {artist.ArtistName} - {description} - {popularity}\n ");
                 }
                 MenuFunctions.footer();
 
@@ -227,6 +231,7 @@ namespace DreamifyClient
             try
             {
                 Console.Clear();
+                MenuFunctions.footer();
                 Console.ForegroundColor = ConsoleColor.DarkMagenta;
                 Console.WriteLine($"\t\t  Enter the following details for a new artists: ");
                 Console.ResetColor();
@@ -292,6 +297,7 @@ namespace DreamifyClient
 
                 // Print out all songs in the list
                 Console.Clear();
+                MenuFunctions.footer();
                 Console.ForegroundColor = ConsoleColor.DarkMagenta;
                 await Console.Out.WriteLineAsync("\t\t  Songs:");
                 Console.ResetColor();
@@ -317,6 +323,7 @@ namespace DreamifyClient
             try
             {
                 Console.Clear();
+                MenuFunctions.footer();
                 Console.ForegroundColor = ConsoleColor.DarkMagenta;
                 Console.WriteLine($"\t\t  Enter the following details for a new song: ");
                 Console.ResetColor();
