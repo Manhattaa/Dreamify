@@ -9,8 +9,10 @@ using System.Net;
 
 namespace Dreamify.Handlers
 {
+   
     public class UserHandler
     {
+        
         public static IResult GetUser(int? userId, IUsersHelper usersHelper)
         {
             List<UsersViewModel> results;
