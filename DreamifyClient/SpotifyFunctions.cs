@@ -149,6 +149,7 @@ namespace DreamifyClient
             }
 
 
+
             // Save selected artist number
             int selection = NavFunctions.NavigationArtistSearch(artistList, "Press [Enter] on the artist you want to save");
             MenuFunctions.footer();
@@ -160,6 +161,7 @@ namespace DreamifyClient
                 Thread.Sleep(1000);
                 return;
             }
+
             Console.Write($"\t\t  Description (optional press [Enter] to skip): ");
             string description = Console.ReadLine();
 
@@ -174,7 +176,9 @@ namespace DreamifyClient
                     UserId = userId,
                     ArtistName = selectedArtist.ArtistName,
                     SpotifyArtistId = selectedArtist.SpotifyArtistId,
-                    Description = description
+                    Description = description,
+                    Popularity = selectedArtist.Popularity,
+                    Genres = selectedArtist.Genre,
                 };
 
                 // Serialize the object to JSON
@@ -193,21 +197,17 @@ namespace DreamifyClient
                 response.EnsureSuccessStatusCode();
 
                 // Ensure that selectedArtist and its associated properties are not null before using them
-                if (selectedArtist != null && selectedArtist.ArtistName != null)
+                if (selectedArtist != null)
                 {
+                    Console.WriteLine($"Artist: {selectedArtist.ArtistName}");
+                    Console.WriteLine($"Description: {description}");
+                    Console.WriteLine($"Popularity: {selectedArtist.Popularity}%");
+                    Console.WriteLine($"Followers: {selectedArtist.Followers}");
+                    Console.WriteLine($"Genre: {(selectedArtist.Genre.Any() ? string.Join(", ", selectedArtist.Genre) : "No Genre Available")}");
 
-                    // Ensure that selectedArtist and its associated properties are not null before using them
-                    if (selectedArtist != null && selectedArtist.ArtistName != null)
-                    {
-                        Console.WriteLine($"Artist: {selectedArtist.ArtistName}");
-                        Console.WriteLine($"Description: {description}");
-                        Console.WriteLine($"Popularity: {selectedArtist.Popularity}%");
-                        Console.WriteLine($"Followers: {selectedArtist.Followers}");
-                        Console.WriteLine($"Genre: {selectedArtist.Genre.First()}");
-
-                        Console.WriteLine($"\nThe Artist: {selectedArtist} has been added to the Database.");
-                    }
-                    else
+                    Console.WriteLine($"\nThe Artist: {selectedArtist.ArtistName} has been added to the Database.");
+                }
+                else
                     {
                         Console.WriteLine("Selected artist or artist details are null. Exiting artist search.");
                         Thread.Sleep(3000);
@@ -224,4 +224,3 @@ namespace DreamifyClient
             }
         }
     }
-}
