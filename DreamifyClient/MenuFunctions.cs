@@ -54,6 +54,19 @@ namespace DreamifyClient
         public static void divider()
         {
             Console.WriteLine("\t\t-----------------------------------");
-        }   
+        }
+
+
+        // Promts user to press enter key doesn't accept any other input
+        public static void PressEnter()
+        {
+            Console.Write("\t\t  Press [Enter] to continue");
+            ConsoleKeyInfo keyPressed = Console.ReadKey(true);
+            while (keyPressed.Key != ConsoleKey.Enter)
+            {
+                keyPressed = Console.ReadKey(true);
+            }
+        }
+
     }
 }

@@ -1,9 +1,7 @@
 ﻿using Dreamify.Services;
 using System.Net;
-using Dreamify.Data;
-using Dreamify.Models;
 using Dreamify.Models.Dtos.DreamifyDtos;
-using Dreamify.Models.ViewModels.DreamifyViewModels;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Dreamify.Handlers
 {
@@ -22,43 +20,55 @@ namespace Dreamify.Handlers
         // Artists
 
         public static IResult AddArtist(ApplicationContext context, string personId, ArtistDto artistDto)
+        public static IResult AddArtist([FromBody]ArtistDto artistDto, IArtistsHelper artistHelper)
         {
             try
             {
-                Artist artist = new Artist
-                {
-                    Name = artistDto.Name,
-                    Description = artistDto.Description
-                };
-                context.Artists.Add(artist);
-                context.SaveChanges();
-                return Results.Ok($"Artist {artist.Name} has been added to the database.");
+                artistHelper.AddArtist(artistDto);
+                return Results.StatusCode((int)HttpStatusCode.Created);
             }
             catch (Exception ex)
             {
-                return Results.Text($"404: Not found! {ex}");
+                return Results.Problem(title: "Got exception", detail: ex.Message, statusCode: (int)HttpStatusCode.InternalServerError);
             }
         }
 
         public static IResult GetArtist(IArtistsHelper artistHelper)
         {
-            artistHelper.GetArtists();
-            return Results.StatusCode((int)HttpStatusCode.OK);
+            try
+            {
+                return Results.Json(artistHelper.GetArtists());
+            }
+            catch (Exception ex)
+            {
+                return Results.Problem(title: "Got exception", detail: ex.Message, statusCode: (int)HttpStatusCode.InternalServerError);
+            }
         }
 
-
-
-        public static IResult AddSong(int artistId, int genreId, SongDto song, ISongsHelper songHelper)
+        public static IResult AddSong([FromBody] SongDto songDto, ISongsHelper songHelper)
         {
-            songHelper.AddSong(artistId, genreId, song);
-            return Results.StatusCode((int)HttpStatusCode.Created);
+            try
+            {
+                songHelper.AddSong(songDto);
+                return Results.StatusCode((int)HttpStatusCode.Created);
+            }
+            catch(Exception ex)
+            {
+                return Results.Problem(title: "Got exception", detail: ex.Message, statusCode: (int)HttpStatusCode.InternalServerError);
+            }
+
         }
 
         public static IResult GetSongs(ISongsHelper songHelper)
         {
-            songHelper.GetSongs();
-            return Results.StatusCode((int)HttpStatusCode.OK);
-
+            try
+            { 
+                return Results.Json(songHelper.GetSongs());
+            }
+            catch(Exception ex)
+            {
+                return Results.Problem(title: "Got exception", detail: ex.Message, statusCode: (int)HttpStatusCode.InternalServerError);
+            }
         }
 
 
@@ -67,6 +77,31 @@ namespace Dreamify.Handlers
             try
             {
                 return Results.Json(songHelper.GetUserSongs(userId));
+            }
+            catch (Exception ex)
+            {
+                return Results.Problem(title: "Got exception", detail: ex.Message, statusCode: (int)HttpStatusCode.InternalServerError);
+            }
+        }
+
+        public static IResult GetGenres(IArtistsHelper artistHelper)
+        {
+            try
+            {
+                return Results.Json(artistHelper.GetGenres());
+            }
+            catch (Exception ex)
+            {
+                return Results.Problem(title: "Got exception", detail: ex.Message, statusCode: (int)HttpStatusCode.InternalServerError);
+            }
+        }
+
+        public static IResult AddGenres([FromBody] GenreDto genreDto, IArtistsHelper artistHelper)
+        {
+            try
+            {
+                artistHelper.AddGenre(genreDto);
+                return Results.StatusCode((int)HttpStatusCode.Created);
             }
             catch (Exception ex)
             {

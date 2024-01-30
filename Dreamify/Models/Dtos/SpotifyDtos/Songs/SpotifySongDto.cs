@@ -10,7 +10,7 @@ namespace Dreamify.Models.Dtos.SpotifyDtos.Songs
         public string SpotifySongId { get; set; }
 
         [JsonPropertyName("name")]
-        public string Name { get; set; }
+        public string ArtistName { get; set; }
 
         [JsonPropertyName("artists")]
         public List<SongArtistDto> Artists { get; set; }
