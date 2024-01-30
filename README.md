@@ -1,3 +1,5 @@
+<img src="https://github.com/Manhattaa/Dreamify/blob/master/Dreamify.jpg" alt="Dreamify Logo" width="900" height="700">
+
 # Dreamify™
 Welcome to Dreamify. A project that involves creating a music themed Minimal API that uses the [Spotify Open Access API](https://developer.spotify.com/documentation/web-api)
 
@@ -61,29 +63,129 @@ dotnet build
 ```
 
 ## Endpoints
-**GET** endpoints
+### GET endpoints
 
-* /users - **Get All Users**
-* /user/{userId} - **Get a Specific User**
-* /user/{userId}/artists - **Get a Specific User and Artists**
-* /user/{userId}/genres - **Get a Specific User and Interests**
-* /user/{userId}/songs - **Get a Specific User and Songs**
+**Users endpoints**
+* /users - **Get all Users**
+
+_Ex: http://localhost:5094/users_
+* /users/{userId} - **Get a specific user**
+
+_Ex: http://localhost:5094/users/4_
+* /users-and-id - **Gets all users names and id's**
+
+_Ex: http://localhost:5094/users-and-id_
+
+ **Songs endpoints**
+* /songs - **Get all songs**
+
+_Ex: http://localhost:5094/songs_
+* /users/{userId}/songs - **Get all songs connected to a specific user**
+
+ _Ex: http://localhost:5094/users/4_
+
+ **Artists endpoints**
+ * /artists - **Get all artists**
+
+_Ex: http://localhost:5094/artists_
+
+ **Genres endpoints**
+* /genres - **Get all genres**
+
+_Ex: http://localhost:5094/genres_
+
+* /search/song/{search}/{offset?}/{countryCode?} - **Get a list of songs via search query from Spotify's database**
+
+_Ex: http://localhost:5094/search/song/Thunderstruck_
+
+  Output: Top 10 search results
+  
+  JSON structure:
+  
+  "string" : "SpotifySongId"
+  
+  "string" : "SongName"
+  
+  "List<Artists>" : "Artists" \[
+  
+  "string" : "SpotifyArtistId"
+  
+  "string" : "ArtistName" \]
+* /search/artist/{search}/{offset?}/{countryCode?} - **Get a list of artists via search query from Spotify's database**
+
+  _Ex:_(http://localhost:5094/search/artist/Taylor Swift/3/SE)
+
+  Output: Top 10 search results skipping the top 3 filtered for the Swedish market
+  
+  JSON structure:
+  
+  "string" : "SpotifySongId"
+  
+  "string" : "SongName"
+  
+  "List<Artists>" : "Artists" \[
+  
+  "string" : "SpotifyArtistId"
+  
+  "string" : "ArtistName" \]
+  
+### POST endpoints
+* /users - **Add a user with JSON**
+
+  _Ex: http://localhost:5094/users_
+
+  JSON structure: "string" : "Username"
+* /songs - **Add song with JSON**
+
+   _Ex: http://localhost:5094/songs_
+
+  JSON structure: "string" : "Title"
+* /artists - **Add artists with JSON**
+
+  _Ex: http://localhost:5094/artsts_
+
+  JSON structure:
 
   
-* /artists - **Get all Artists**
-* /songs - **Get all Songs**
+  "string" : "Title"
 
-**POST** endpoints
+  
+  "string?" : "Description"
 
-* /user/{userId}/artist/{artistId} - **Link a Specific User and Artist**
-* /user/{userId}/genre/{genreId} - **Link a Specific User to a Genre**
-* /user/{userId}/songs/{songId} - **Link a Specific User and Song**
+  
+  "List\<Genre\?" : "Genres"
+
+* /artists - **Add artists with JSON** _Ex: http://localhost:5094/artsts_
+
+    JSON structure: "string" : "Title"
+  
+* /users/{userId}/artists/{artistId} - **Link a Specific User and Artist**
+
+_Ex: http://localhost:5094/users/4/artists/6_
+* /users/{userId}/genres/{genreId} - **Link a Specific User to a Genre**
+
+_Ex: http://localhost:5094/users/11/genres/7_
+* /users/{userId}/songs/{songId} - **Link a Specific User and Song*** 
+
+_Ex: http://localhost:5094/users/3/songs/9_
+* /users/add-spotify-song - **Connects a song with the spotify song and artist id to the users**
 
 
-* /artists/{artistId}/genre/{genreId}/songs
-* /artists/
+  _Ex: http://localhost:5094/users/add-spotify-song_
 
-## References
+  Json structure:
+  
+  "int" : "UserID"
+  
+  "string" : "SongName"
+  
+  "string" : "SpotifySongId"
+  
+  "string" : "ArtistName"
+  
+  "string" : "SpotifyArtistId"
+
+## Credit & References
 - [Spotify Open Access API](https://developer.spotify.com/documentation/web-api)
 
 ## Built with

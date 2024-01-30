@@ -1,56 +1,99 @@
-﻿using Dreamify.Models.Dtos;
-using Dreamify.Services;
+﻿using Dreamify.Services;
 using System.Net;
-using Dreamify.Data;
-using Dreamify.Models;
+using Dreamify.Models.Dtos.DreamifyDtos;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Dreamify.Handlers
 {
     public class ArtistHandler
     {
-        // Genres
-
-        // Artists
-
-        public static IResult AddArtist(ApplicationContext context, string personId, ArtistDto artistDto)
+        public static IResult AddGenres([FromBody] GenreDto genreDto, IGenresHelper genreHelper)
         {
             try
             {
-                Artist artist = new Artist
-                {
-                    Name = artistDto.Name,
-                    Description = artistDto.Description
-                };
-                context.Artists.Add(artist);
-                context.SaveChanges();
-                return Results.Ok($"Artist {artist.Name} has been added to the database.");
+                genreHelper.AddGenre(genreDto);
+                return Results.StatusCode((int)HttpStatusCode.Created);
             }
             catch (Exception ex)
             {
-                return Results.Text($"404: Not found! {ex}");
+                return Results.Problem(title: "Got exception", detail: ex.Message, statusCode: (int)HttpStatusCode.InternalServerError);
             }
         }
-        public static IResult GetArtist(IArtistsHelper artistHelper)
+
+        public static IResult GetGenres(IGenresHelper genreHelper)
         {
-            artistHelper.GetArtists();
-            return Results.StatusCode((int)HttpStatusCode.OK);
+            try
+            {
+                return Results.Json(genreHelper.GetGenres());
+            }
+            catch (Exception ex)
+            {
+                return Results.Problem(title: "Got exception", detail: ex.Message, statusCode: (int)HttpStatusCode.InternalServerError);
+            }
         }
 
-        // Post songs
-        public static IResult AddSong(int artistId, int genreId, SongDto song, ISongsHelper songHelper)
+        public static IResult AddArtist([FromBody]ArtistDto artistDto, IArtistsHelper artistHelper)
         {
-            songHelper.AddSong(artistId, genreId, song);
-            return Results.StatusCode((int)HttpStatusCode.Created);
+            try
+            {
+                artistHelper.AddArtist(artistDto);
+                return Results.StatusCode((int)HttpStatusCode.Created);
+            }
+            catch (Exception ex)
+            {
+                return Results.Problem(title: "Got exception", detail: ex.Message, statusCode: (int)HttpStatusCode.InternalServerError);
+            }
+        }
+
+        public static IResult GetArtist(IArtistsHelper artistHelper)
+        {
+            try
+            {
+                return Results.Json(artistHelper.GetArtists());
+            }
+            catch (Exception ex)
+            {
+                return Results.Problem(title: "Got exception", detail: ex.Message, statusCode: (int)HttpStatusCode.InternalServerError);
+            }
+        }
+
+        public static IResult AddSong([FromBody] SongDto songDto, ISongsHelper songHelper)
+        {
+            try
+            {
+                songHelper.AddSong(songDto);
+                return Results.StatusCode((int)HttpStatusCode.Created);
+            }
+            catch(Exception ex)
+            {
+                return Results.Problem(title: "Got exception", detail: ex.Message, statusCode: (int)HttpStatusCode.InternalServerError);
+            }
+
         }
 
         public static IResult GetSongs(ISongsHelper songHelper)
         {
-            return Results.Json(songHelper.GetSongs());
+            try
+            { 
+                return Results.Json(songHelper.GetSongs());
+            }
+            catch(Exception ex)
+            {
+                return Results.Problem(title: "Got exception", detail: ex.Message, statusCode: (int)HttpStatusCode.InternalServerError);
+            }
         }
+
 
         public static IResult GetUserSongs(int userId, ISongsHelper songHelper)
         {
-            return Results.Json(songHelper.GetUserSongs(userId));
-        }
+            try
+            {
+                return Results.Json(songHelper.GetUserSongs(userId));
+            }
+            catch (Exception ex)
+            {
+                return Results.Problem(title: "Got exception", detail: ex.Message, statusCode: (int)HttpStatusCode.InternalServerError);
+            }
+        }        
     }
 }

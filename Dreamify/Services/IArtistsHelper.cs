@@ -1,66 +1,80 @@
 ﻿using Dreamify.Data;
-using Dreamify.Models.Dtos;
 using Dreamify.Models;
-using Dreamify.Models.ViewModels;
-using System.Net;
 using Microsoft.EntityFrameworkCore;
+using Dreamify.Models.ViewModels.DreamifyViewModels;
+using Dreamify.Models.Dtos.DreamifyDtos;
 
 namespace Dreamify.Services
 {
     public interface IArtistsHelper
     {
-        public IResult AddArtist(int genreId, ArtistDto artistDto, IArtistsHelper artistHelper);
+        public void AddArtist(ArtistDto artistDto);
+        public List<ArtistsViewModel> GetArtists();
+        public UserArtistsViewModel GetUserArtists(int userId);
 
-
-        public IResult GetArtists();
     }
 
     public class ArtistsHelper : IArtistsHelper
     {
-        private ApplicationContext artistContext { get; set; }
+        private ApplicationContext _context { get; set; }
         public ArtistsHelper(ApplicationContext context)
         {
-            artistContext = context;
+            _context = context;
         }
 
-        public IResult AddArtist(int genreId, ArtistDto artistDto, IArtistsHelper artistHelper)
+        public void AddArtist(ArtistDto artistDto)
         {
-            try
+            Artist artist = new Artist()
             {
-                Genre genre = artistContext.Genres.Where(g => g.GenreId == genreId).Single();
+                ArtistName = artistDto.ArtistName,
+                Description = artistDto.Description,
+                Genres = artistDto.Genres
+            };
 
-                Artist artist = new Artist()
+            _context.Artists.Add(artist);
+            _context.SaveChanges();          
+        }
+
+        public List<ArtistsViewModel> GetArtists()
+        {            
+             List<ArtistsViewModel> artists = _context.Artists
+                 .Select(a => new ArtistsViewModel
+                 {
+                     ArtistName = a.ArtistName,
+                     Description = a.Description,
+                     Popularity = a.Popularity
+                 })
+                 .ToList();
+             return artists;          
+        }
+
+        public UserArtistsViewModel GetUserArtists(int userId)
+        {
+
+            // Get user and their artists from id
+            User user = _context.Users
+            .Include(u => u.Artists)
+            .Where(u => u.UserId == userId)
+            .Single();
+
+            if (user == null)
+                throw new Exception();
+
+
+            // Create viewmodel consisting of username and a list of all songs
+            UserArtistsViewModel userArtists = new UserArtistsViewModel
+            {
+                Username = user.Username,
+                Artists = user.Artists
+                .Select(a => new ArtistsViewModel
                 {
-                    Name = artistDto.Name,
-                    Description = artistDto.Description
-                };
+                    ArtistName = a.ArtistName,
+                    Description = a.Description
+                })
+                .ToList()
+            };
 
-                artistContext.Artists.Add(artist);
-                artistContext.SaveChanges();
-
-                return Results.StatusCode((int)HttpStatusCode.Created);
-            }
-            catch (Exception ex)
-            {
-                return Results.Text(ex.Message);
-            }
-        }
-        public IResult GetArtists()
-        {
-            try
-            {
-                List<ArtistsViewModel> artists = artistContext.Artists
-                    .Select(a => new ArtistsViewModel
-                    {
-                        Name = a.Name,
-                    })
-                    .ToList();
-                return Results.Json(artists);
-            }
-            catch (Exception ex)
-            {
-                return Results.Text(ex.Message);
-            }
-            }
+            return userArtists;
         }
     }
+}
