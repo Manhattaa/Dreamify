@@ -196,22 +196,34 @@ namespace DreamifyClient
 
                 // Print out all artists
                 Console.Clear();
-                Console.ForegroundColor = ConsoleColor.DarkMagenta;
-                await Console.Out.WriteLineAsync("\t\t  Artists:");
+                //Console.ForegroundColor = ConsoleColor.DarkMagenta;
+                //await Console.Out.WriteLineAsync("\t\t  Artists: \t Description: \t Popularity:");
+                Console.Write("\t");
+                Console.ForegroundColor = ConsoleColor.Magenta;
+                Console.Write("Artists:");
                 Console.ResetColor();
-
-                MenuFunctions.divider();
+                Console.Write("\t");
+                Console.ForegroundColor = ConsoleColor.White;
+                Console.Write("Description:");
+                Console.ResetColor();
+                Console.Write("\t");
+                Console.ForegroundColor = ConsoleColor.DarkYellow;
+                Console.Write("Popularity:");
+                Console.ResetColor();
+                
+                Console.Write("\n");
+                MenuFunctions.bigboydivider();
                 foreach (ArtistsViewModel artist in artists)
                 {
-                    await Console.Out.WriteLineAsync($"\t\t  {artist.ArtistName}");
-                    
-                    // If there is a description, print it out
+                    Console.WriteLine($"\t\t  {artist.ArtistName} - {artist.Description} - {artist.Popularity}\n ");
+
+                    //If there is a description, print it out
                     if (artist.Description != null)
                     {
                         await Console.Out.WriteLineAsync($"\t\t  {artist.Description}");
                         await Console.Out.WriteLineAsync();
                     }
-                    
+
                 }
                 MenuFunctions.footer();
 
@@ -251,6 +263,7 @@ namespace DreamifyClient
                     Description = description,
                     Popularity = null,
                     SpotifyArtistId = null,
+                    Genre = null,
                 };
 
                 // Serialize the object to JSON
