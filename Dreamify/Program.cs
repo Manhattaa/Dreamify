@@ -18,6 +18,7 @@ namespace Dreamify
             builder.Services.AddDbContext<ApplicationContext>(options => options.UseSqlServer(connectionString));
             builder.Services.AddScoped<ISongsHelper, SongsHelper>();
             builder.Services.AddScoped<IArtistsHelper, ArtistsHelper>();
+            builder.Services.AddScoped<IGenresHelper, GenresHelper>();
             builder.Services.AddScoped<IUsersHelper, UsersHelper>();
             builder.Services.AddScoped<ISpotifyDbHelper, SpotifyDbHelper>();
             builder.Services.AddScoped<ISpotifyHelper>(s =>
