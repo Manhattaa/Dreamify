@@ -82,7 +82,8 @@ namespace DreamifyClient
             while (true)
             {
                 // Clears window and re-prints the sent in phrase on each loop
-                Console.Clear();                
+                Console.Clear();
+                MenuFunctions.footer();
                 Console.WriteLine($"\t\t  {phrase}");
                 MenuFunctions.divider();
  
@@ -148,6 +149,7 @@ namespace DreamifyClient
             {
                 // Clears window and re-prints the sent in phrase on each loop
                 Console.Clear();
+                MenuFunctions.footer();
                 Console.WriteLine($"\t\t  {phrase}");
                 MenuFunctions.divider();
 
