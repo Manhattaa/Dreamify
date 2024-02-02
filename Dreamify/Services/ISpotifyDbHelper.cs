@@ -25,7 +25,7 @@ namespace Dreamify.Services
             User user = _context.Users.Where(u => u.UserId == userId).Single();
 
             if (user == null)
-                throw new NullReferenceException($"No user found with the id \"{userId}\"");
+                throw new InvalidOperationException($"No user found with the id \"{userId}\"");
 
 
             //Check if user already is connected to this song
@@ -71,8 +71,9 @@ namespace Dreamify.Services
                 _context.SaveChanges();
             }
 
-            // Connect song to user
+            // Connect song and artist to user
             user.Songs.Add(song);
+            user.Artists.Add(artist);
             _context.SaveChanges();
         }
 
