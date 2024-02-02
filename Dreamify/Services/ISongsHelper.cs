@@ -53,7 +53,6 @@ namespace Dreamify.Services
              return songs;   
         }
 
-        // This is correctly formatted and structured
         public UserSongsViewModel GetUserSongs(int userId)
         {
 
@@ -65,7 +64,7 @@ namespace Dreamify.Services
 
             if (user == null)
             {
-                throw new Exception($"User was not found");
+                throw new ArgumentNullException($"User was not found");
             }
                       
 

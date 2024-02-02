@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace DreamifyTests
 {
     [TestClass]
-    public class IArtistsHelperTest
+    public class IArtistsHelperTests
     {
         [TestMethod]
         public async Task SpotifyArtistSearch_CheckIfArtistViewModelsGetsReturned()

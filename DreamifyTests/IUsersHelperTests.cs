@@ -1,3 +1,4 @@
+﻿using System;
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.InMemory;
 using Dreamify.Data;
@@ -181,6 +182,5 @@ namespace DreamifyTests
             Assert.AreEqual(songId, result.Songs.Single().SongId);
 
         }
-
     }
 }
