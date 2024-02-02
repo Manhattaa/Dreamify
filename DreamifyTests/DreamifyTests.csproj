@@ -20,6 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\DreamifyClient\DreamifyClient.csproj" />
     <ProjectReference Include="..\Dreamify\Dreamify.csproj" />
   </ItemGroup>
 
