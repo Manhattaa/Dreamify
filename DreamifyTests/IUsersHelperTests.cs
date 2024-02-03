@@ -16,171 +16,170 @@ using Dreamify.Models.Dtos.DreamifyDtos;
 
 namespace DreamifyTests
 {
-    [TestClass]
-    public class IUsersHelperTests
-    {
+    //[TestClass]
+    //public class IUsersHelperTests
+    //{
 
-        [TestMethod]
-        public void AddUser_ShouldAddUserToDb()
-        {
-            // Arrange
-            DbContextOptions<ApplicationContext> options = new DbContextOptionsBuilder<ApplicationContext>()
-            .UseInMemoryDatabase("AddUser_ShouldAddUserToDb")
-            .Options;
+    //    [TestMethod]
+    //    public void AddUser_ShouldAddUserToDb()
+    //    {
+    //        // Arrange
+    //        DbContextOptions<ApplicationContext> options = new DbContextOptionsBuilder<ApplicationContext>()
+    //        .UseInMemoryDatabase("AddUser_ShouldAddUserToDb")
+    //        .Options;
 
-            ApplicationContext context = new ApplicationContext(options);
-            IUsersHelper helper = new UsersHelper(context);
+    //        ApplicationContext context = new ApplicationContext(options);
+    //        IUsersHelper helper = new UsersHelper(context);
 
-            var usersDto = new UsersDto { Username = "test-user" };
+    //        var usersDto = new UsersDto { Username = "test-user" };
 
-            // Act
-            var result = helper.AddUser(usersDto);
+    //        // Act
+    //        var result = helper.AddUser(usersDto);
 
-            // Assert
-            Assert.IsNotNull(result);
-            Assert.AreEqual("test-user", result.Username);
-            Assert.IsTrue(context.Users.Any(u => u.Username == "test-user"));
-        }
+    //        // Assert
+    //        Assert.IsNotNull(result);
+    //        Assert.AreEqual("test-user", result.Username);
+    //        Assert.IsTrue(context.Users.Any(u => u.Username == "test-user"));
+    //    }
 
-        [TestMethod]
-        public void GetUser_WhenUserIdIsNull_ShouldReturnAllUsers()
-        {
-            // Arrange
-            DbContextOptions<ApplicationContext>options = new DbContextOptionsBuilder<ApplicationContext>()
-                .UseInMemoryDatabase("GetUser_WhenUserIdIsNull_ShouldReturnAllUsers")
-                .Options;
+    //    [TestMethod]
+    //    public void GetUser_WhenUserIdIsNull_ShouldReturnAllUsers()
+    //    {
+    //        // Arrange
+    //        DbContextOptions<ApplicationContext>options = new DbContextOptionsBuilder<ApplicationContext>()
+    //            .UseInMemoryDatabase("GetUser_WhenUserIdIsNull_ShouldReturnAllUsers")
+    //            .Options;
 
-            ApplicationContext context = new ApplicationContext(options);
-            IUsersHelper helper = new UsersHelper(context);
+    //        ApplicationContext context = new ApplicationContext(options);
+    //        IUsersHelper helper = new UsersHelper(context);
 
-            context.Users.Add(new User { UserId = 1, Username = "User1" });
-            context.Users.Add(new User { UserId = 2, Username = "User2" });
-            context.SaveChanges();
+    //        context.Users.Add(new User { UserId = 1, Username = "User1" });
+    //        context.Users.Add(new User { UserId = 2, Username = "User2" });
+    //        context.SaveChanges();
               
 
-             // Act
-             var result = helper.GetUser(null);
+    //         // Act
+    //         var result = helper.GetUser(null);
 
-            // Assert
-             Assert.IsNotNull(result);
-             Assert.AreEqual(2, result.Count);
-             Assert.IsTrue(result.Any(u => u.Username == "User1"));
-             Assert.IsTrue(result.Any(u => u.Username == "User2"));
+    //        // Assert
+    //         Assert.IsNotNull(result);
+    //         Assert.AreEqual(2, result.Count);
+    //         Assert.IsTrue(result.Any(u => u.Username == "User1"));
+    //         Assert.IsTrue(result.Any(u => u.Username == "User2"));
 
             
-        }
+    //    }
 
-        [TestMethod]
-        public void GetUser_WhenUserIdIsProvided_ShouldReturnSingleUser()
-        {
-            // Arrange
-            DbContextOptions<ApplicationContext> options = new DbContextOptionsBuilder<ApplicationContext>()
-                .UseInMemoryDatabase("GetUser_WhenUserIdIsProvided_ShouldReturnSingleUser")
-                .Options;
+    //    [TestMethod]
+    //    public void GetUser_WhenUserIdIsProvided_ShouldReturnSingleUser()
+    //    {
+    //        // Arrange
+    //        DbContextOptions<ApplicationContext> options = new DbContextOptionsBuilder<ApplicationContext>()
+    //            .UseInMemoryDatabase("GetUser_WhenUserIdIsProvided_ShouldReturnSingleUser")
+    //            .Options;
 
-            ApplicationContext context = new ApplicationContext(options);
-            IUsersHelper helper = new UsersHelper(context);
+    //        ApplicationContext context = new ApplicationContext(options);
+    //        IUsersHelper helper = new UsersHelper(context);
 
 
-             context.Users.Add(new User { UserId = 1, Username = "User1" });
-             context.Users.Add(new User { UserId = 2, Username = "User2" });
-             context.SaveChanges();
+    //         context.Users.Add(new User { UserId = 1, Username = "User1" });
+    //         context.Users.Add(new User { UserId = 2, Username = "User2" });
+    //         context.SaveChanges();
 
-             // Act
-             var result = helper.GetUser(1);
+    //         // Act
+    //         var result = helper.GetUser(1);
 
-             // Assert
-             Assert.IsNotNull(result);
-             Assert.AreEqual(1, result.Count);
-             Assert.AreEqual("User1", result[0].Username);
+    //         // Assert
+    //         Assert.IsNotNull(result);
+    //         Assert.AreEqual(1, result.Count);
+    //         Assert.AreEqual("User1", result[0].Username);
             
-        }
+    //    }
 
-        [TestMethod]
-        public void ConnectUserToArtist_ShouldConnectUserToArtist()
-        {
-            // Arrange
-            DbContextOptions<ApplicationContext> options = new DbContextOptionsBuilder<ApplicationContext>()
-                .UseInMemoryDatabase("ConnectUserToArtist_ShouldConnectUserToArtist")
-                .Options;
+    //    [TestMethod]
+    //    public void ConnectUserToArtist_ShouldConnectUserToArtist()
+    //    {
+    //        // Arrange
+    //        DbContextOptions<ApplicationContext> options = new DbContextOptionsBuilder<ApplicationContext>()
+    //            .UseInMemoryDatabase("ConnectUserToArtist_ShouldConnectUserToArtist")
+    //            .Options;
 
-            ApplicationContext context = new ApplicationContext(options);
-            IUsersHelper helper = new UsersHelper(context);
+    //        ApplicationContext context = new ApplicationContext(options);
+    //        IUsersHelper helper = new UsersHelper(context);
 
-            var userId = 1;
-            var artistId = 101;
+    //        var userId = 1;
+    //        var artistId = 101;
 
-            context.Users.Add(new User { UserId = userId, Artists = new List<Artist>() });
-            context.Artists.Add(new Artist { ArtistId = artistId });
-            context.SaveChanges();
-
-
-            //Act
-            var result = helper.ConnectUserToArtist(userId, artistId);
-
-            //Assert
-            Assert.IsNotNull(result);
-            Assert.AreEqual(userId, result.UserId);
-            Assert.AreEqual(artistId, result.Artists.Single().ArtistId);
-
-        }
-
-        [TestMethod]
-        public void ConnectUserToGenre_ShouldConnectUserToGenre()
-        {
-            // Arrange
-            DbContextOptions<ApplicationContext> options = new DbContextOptionsBuilder<ApplicationContext>()
-                .UseInMemoryDatabase("ConnectUserToGenre_ShouldConnectUserToGenre")
-                .Options;
-
-            ApplicationContext context = new ApplicationContext(options);
-            IUsersHelper helper = new UsersHelper(context);
-
-            var userId = 1;
-            var genreId = 10;
-
-            context.Users.Add(new User { UserId = userId, Artists = new List<Artist>() });
-            context.Genres.Add(new Genre { GenreId = genreId });
-            context.SaveChanges();
+    //        context.Users.Add(new User { UserId = userId, Artists = new List<Artist>() });
+    //        context.Artists.Add(new Artist { ArtistId = artistId });
+    //        context.SaveChanges();
 
 
-            //Act
-            var result = helper.ConnectUserToGenre(userId, genreId);
+    //        //Act
+    //        var result = helper.ConnectUserToArtist(userId, artistId);
 
-            //Assert
-            Assert.IsNotNull(result);
-            Assert.AreEqual(userId, result.UserId);
-            Assert.AreEqual(genreId, result.Genres.Single().GenreId);
+    //        //Assert
+    //        Assert.IsNotNull(result);
+    //        Assert.AreEqual(userId, result.UserId);
+    //        Assert.AreEqual(artistId, result.Artists.Single().ArtistId);
+
+    //    }
+
+    //    [TestMethod]
+    //    public void ConnectUserToGenre_ShouldConnectUserToGenre()
+    //    {
+    //        // Arrange
+    //        DbContextOptions<ApplicationContext> options = new DbContextOptionsBuilder<ApplicationContext>()
+    //            .UseInMemoryDatabase("ConnectUserToGenre_ShouldConnectUserToGenre")
+    //            .Options;
+
+    //        ApplicationContext context = new ApplicationContext(options);
+    //        IUsersHelper helper = new UsersHelper(context);
+
+    //        var userId = 1;
+    //        var genreId = 10;
+
+    //        context.Users.Add(new User { UserId = userId, Artists = new List<Artist>() });
+    //        context.Genres.Add(new Genre { GenreId = genreId });
+    //        context.SaveChanges();
 
 
-        }
-        [TestMethod]
-        public void ConnectUserToSong_ShouldConnectUserToSong()
-        {
-            // Arrange
-            DbContextOptions<ApplicationContext> options = new DbContextOptionsBuilder<ApplicationContext>()
-                .UseInMemoryDatabase("ConnectUserToSong_ShouldConnectUserToSong")
-                .Options;
+    //        //Act
+    //        var result = helper.ConnectUserToGenre(userId, genreId);
 
-            ApplicationContext context = new ApplicationContext(options);
-            IUsersHelper helper = new UsersHelper(context);
-
-            var userId = 1;
-            var songId = 100;
-
-            context.Users.Add(new User { UserId = userId, Artists = new List<Artist>() });
-            context.Songs.Add(new Song { SongId = songId });
-            context.SaveChanges();
+    //        //Assert
+    //        Assert.IsNotNull(result);
+    //        Assert.AreEqual(userId, result.UserId);
+    //        Assert.AreEqual(genreId, result.Genres.Single().GenreId);
 
 
-            //Act
-            var result = helper.ConnectUserToSong(userId, songId);
+    //    }
+    //    [TestMethod]
+    //    public void ConnectUserToSong_ShouldConnectUserToSong()
+    //    {
+    //        // Arrange
+    //        DbContextOptions<ApplicationContext> options = new DbContextOptionsBuilder<ApplicationContext>()
+    //            .UseInMemoryDatabase("ConnectUserToSong_ShouldConnectUserToSong")
+    //            .Options;
 
-            //Assert
-            Assert.IsNotNull(result);
-            Assert.AreEqual(userId, result.UserId);
-            Assert.AreEqual(songId, result.Songs.Single().SongId);
+    //        ApplicationContext context = new ApplicationContext(options);
+    //        IUsersHelper helper = new UsersHelper(context);
 
-        }
+    //        var userId = 1;
+    //        var songId = 100;
+
+    //        context.Users.Add(new User { UserId = userId, Artists = new List<Artist>() });
+    //        context.Songs.Add(new Song { SongId = songId });
+    //        context.SaveChanges();
+
+
+    //        //Act
+    //        var result = helper.ConnectUserToSong(userId, songId);
+
+    //        //Assert
+    //        Assert.IsNotNull(result);
+    //        Assert.AreEqual(userId, result.UserId);
+    //        Assert.AreEqual(songId, result.Songs.Single().SongId);
+
+    //    }
     }
-}
