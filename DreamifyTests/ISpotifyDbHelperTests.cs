@@ -140,5 +140,55 @@ namespace DreamifyTests
             // Act
             spotifyDbHelper.AddSpotifySong(2, "test-songName", "test-spotifySongId", "test-artistName", "test-spotifyArtistId");
         }
+
+        [TestMethod]
+        public async Task AddSpotifyArtist_CheckIfArtistMakesItToDB()
+        {
+            // Arrange
+            DbContextOptions<ApplicationContext> options = new DbContextOptionsBuilder<ApplicationContext>()
+                .UseInMemoryDatabase("AddSpotifyArtist_CheckIfArtistMakesItToDB")
+                .Options;
+
+            ApplicationContext context = new ApplicationContext(options);
+            ISpotifyDbHelper spotifyDbHelper = new SpotifyDbHelper(context);
+
+            User user = new User()
+            {
+                UserId = 1,
+                Username = "UserTest",
+            };
+            context.Users.Add(user);
+            context.SaveChanges();
+
+            // Act
+            spotifyDbHelper.AddSpotifyArtist(1, "spotifyArtistIdTest", "artistNameTest", "descriptionTest", 0);
+
+            // Assert
+            Assert.AreEqual(1, context.Artists.Count());
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(InvalidOperationException))]
+        public async Task AddSpotifyArtist_ThrowsExceptionIfUserIsNull()
+        {
+            // Arrange
+            DbContextOptions<ApplicationContext> options = new DbContextOptionsBuilder<ApplicationContext>()
+                .UseInMemoryDatabase("AddSpotifyArtist_ThrowsExceptionIfUserIsNull")
+                .Options;
+
+            ApplicationContext context = new ApplicationContext(options);
+            ISpotifyDbHelper spotifyDbHelper = new SpotifyDbHelper(context);
+
+            User user = new User()
+            {
+                UserId = 1,
+                Username = "UserTest",
+            };
+            context.Users.Add(user);
+            context.SaveChanges();
+
+            // Act
+            spotifyDbHelper.AddSpotifyArtist(2, "spotifyArtistIdTest", "artistNameTest", "descriptionTest", 0);
+        }
     }
 }
