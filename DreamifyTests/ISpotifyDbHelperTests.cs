@@ -160,7 +160,7 @@ namespace DreamifyTests
             context.Users.Add(user);
             context.SaveChanges();
 
-            // Act
+            // Act - gave "popularityTests" an implicit value, as its a nullable int.
             spotifyDbHelper.AddSpotifyArtist(1, "spotifyArtistIdTest", "artistNameTest", "descriptionTest", 0);
 
             // Assert
@@ -187,7 +187,7 @@ namespace DreamifyTests
             context.Users.Add(user);
             context.SaveChanges();
 
-            // Act
+            // Act - Gave "popularityTests" an implicit value as its a nullable int.
             spotifyDbHelper.AddSpotifyArtist(2, "spotifyArtistIdTest", "artistNameTest", "descriptionTest", 0);
         }
     }
